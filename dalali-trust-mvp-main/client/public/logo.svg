@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+    <rect width="256" height="256" rx="64" fill="#0F172A"/>
+    <!-- Storefront/Roof shape -->
+    <path d="M64 120L128 72L192 120V184H64V120Z" fill="url(#emerald)"/>
+    <!-- Share lines -->
+    <path d="M128 184V112" stroke="white" stroke-width="16" stroke-linecap="round"/>
+    <path d="M128 144L176 96" stroke="white" stroke-width="16" stroke-linecap="round"/>
+    <!-- Connecting dots for "share" -->
+    <circle cx="176" cy="96" r="16" fill="#F59E0B"/>
+    <circle cx="128" cy="112" r="16" fill="#F59E0B"/>
+    <defs>
+        <linearGradient id="emerald" x1="64" y1="72" x2="192" y2="184" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#10B981"/>
+            <stop offset="1" stop-color="#047857"/>
+        </linearGradient>
+    </defs>
+</svg>

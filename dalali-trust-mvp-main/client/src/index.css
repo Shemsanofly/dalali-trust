@@ -1,0 +1,209 @@
+/* ── Google Font ─────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Tailwind v4 theme tokens ────────────────────────────────────────────── */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Investment Green Palette */
+  --color-invest-50: #edfcf2;
+  --color-invest-100: #d3f8e0;
+  --color-invest-200: #aaf0c4;
+  --color-invest-300: #73e2a3;
+  --color-invest-400: #3bcc7e;
+  --color-invest-500: #16b364;
+  --color-invest-600: #0a9050;
+  --color-invest-700: #087342;
+  --color-invest-800: #095c37;
+  --color-invest-900: #084c2e;
+  --color-invest-950: #032b19;
+
+  /* Elegant Gold Palette */
+  --color-gold-50: #fbf9f1;
+  --color-gold-100: #f6f0db;
+  --color-gold-200: #ece1b5;
+  --color-gold-300: #e0cd86;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #c59b27;
+  --color-gold-600: #b8860b;
+  --color-gold-700: #946908;
+  --color-gold-800: #77520c;
+  --color-gold-900: #62430f;
+  --color-gold-950: #382405;
+
+  /* Trustworthy Navy Palette */
+  --color-navy-50: #f3f5f8;
+  --color-navy-100: #e3e8ef;
+  --color-navy-200: #c2d1e2;
+  --color-navy-300: #a2b4cd;
+  --color-navy-400: #748fb2;
+  --color-navy-500: #547499;
+  --color-navy-600: #405b7f;
+  --color-navy-700: #354a67;
+  --color-navy-800: #1a2639;
+  --color-navy-900: #0a1128;
+  --color-navy-950: #050a1f;
+}
+
+/* ── Base styles ─────────────────────────────────────────────────────────── */
+html {
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-navy-950 text-slate-100;
+}
+
+/* ── Animated background orbs ────────────────────────────────────────────── */
+.orb {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: -1;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(30px, -40px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(15px, 30px) scale(1.02);
+  }
+}
+
+/* ── Noise texture ────────────────────────────────────────────────────────── */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+/* ── Gold shimmer gradient ────────────────────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(135deg, #d4af37, #ece1b5, #d4af37);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ── Pulsing dot ─────────────────────────────────────────────────────────── */
+.pulse-dot {
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+}
+
+/* ── Page entry animation ─────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.5s ease both;
+}
+
+/* ── Progress bar animation ───────────────────────────────────────────────── */
+@keyframes progressGrow {
+  from {
+    width: 0%;
+  }
+}
+
+.animate-progress {
+  animation: progressGrow 1s ease-out both;
+}
+
+/* ── Shared Tailwind components ───────────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-invest-500 to-invest-600 text-white font-bold text-sm shadow-lg shadow-invest-500/20 hover:shadow-invest-500/40 hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 cursor-pointer;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-gold-400 to-gold-600 text-white font-bold text-sm shadow-lg shadow-gold-500/20 hover:shadow-gold-500/40 hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 cursor-pointer;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 dark:border-navy-800 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:border-invest-500 dark:hover:border-invest-500 hover:text-invest-600 dark:hover:text-invest-400 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 cursor-pointer;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-invest-500/50 focus:border-invest-500 dark:focus:border-invest-500 transition-colors duration-200;
+  }
+
+  .card-base {
+    @apply bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 rounded-2xl;
+  }
+
+  .badge-funding {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-gold-50 dark:bg-gold-900/20 text-gold-700 dark:text-gold-400 border border-gold-200 dark:border-gold-800/50;
+  }
+
+  .badge-active {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-invest-50 dark:bg-invest-900/20 text-invest-700 dark:text-invest-400 border border-invest-200 dark:border-invest-800/50;
+  }
+
+  .badge-closed {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700;
+  }
+}
