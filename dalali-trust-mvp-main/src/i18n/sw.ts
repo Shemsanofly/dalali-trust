@@ -83,6 +83,37 @@ export const sw: Dictionary = {
     disclaimer:
       "Dalali Trust hukagua matangazo na kufanya uthibitisho wa mkono, lakini hatuwezi kumhakikishia kila mtangazaji au kila nyumba. Usilipe pesa kabla ya kuona nyumba na kuthibitisha unashughulika na nani.",
     emptyLatest: "Bado hakuna nyumba zilizochapishwa. Rudi baadaye — au tangaza yako.",
+    titleHighlight: "ujue unachokiendea.",
+    stats: {
+      published: "Nyumba zilizochapishwa",
+      reviewed: "Matangazo yanayokaguliwa na mtu kabla ya kuchapishwa",
+      free: "Gharama ya kutafuta au kutangaza",
+    },
+    showcase: {
+      label: "Kila tangazo linaonyesha",
+      steps: [
+        "Limekaguliwa na msimamizi kabla ya kuchapishwa",
+        "Nani anatangaza — mwenye nyumba au dalali",
+        "Gharama kamili ya kuhamia, kabla hujasafiri",
+        "Kitufe cha kuripoti chochote chenye shaka",
+      ],
+      verified: "Utambulisho umethibitishwa",
+      verifiedNote: "Huonyeshwa tu baada ya ukaguzi wa mkono",
+      noUpfront: "Usilipe kabla ya kuona nyumba",
+    },
+    calculator: {
+      title: "Kuhamia kutagharimu kiasi gani hasa?",
+      body: "Nyumba nyingi huomba kodi ya miezi kadhaa mapema. Sogeza vitelezi uone pesa utakazohitaji siku ya kwanza.",
+      rent: "Kodi ya mwezi",
+      advance: "Miezi ya kulipa mapema",
+      deposit: "Amana",
+      agentFee: "Ada ya dalali",
+      months: "Miezi {count}",
+      total: "Pesa zinazohitajika kabla ya kuhamia",
+      breakdown: "{advance} kodi ya mapema + {deposit} amana + {fee} ada ya dalali",
+      note: "Kila tangazo kwenye Dalali Trust linaonyesha kiasi hiki kabla hujasafiri.",
+      cta: "Tafuta nyumba za kodi hii",
+    },
   },
   search: {
     title: "Nyumba za kupanga",

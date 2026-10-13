@@ -63,16 +63,28 @@ export async function SiteHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-navy-100 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-navy-100/80 bg-white/80 shadow-sm shadow-navy-900/5 backdrop-blur-xl">
+      <div
+        className="h-0.5 bg-linear-to-r from-brand-500 via-gold-400 to-brand-500 bg-[length:200%_100%] animate-shimmer"
+        aria-hidden
+      />
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2.5 font-extrabold text-navy-900">
+        <Link href="/" className="group flex items-center gap-2.5 font-extrabold text-navy-900">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="" width={36} height={36} />
-          <span className="text-lg tracking-tight">Dalali Trust</span>
+          <img
+            src="/logo.svg"
+            alt=""
+            width={36}
+            height={36}
+            className="transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110"
+          />
+          <span className="text-lg tracking-tight">
+            Dalali <span className="text-brand-600">Trust</span>
+          </span>
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="btn-ghost px-3">
+            <Link key={l.href} href={l.href} className="nav-link">
               {l.label}
             </Link>
           ))}
@@ -89,7 +101,7 @@ export async function SiteHeader() {
           >
             <Menu className="h-6 w-6" aria-hidden />
           </summary>
-          <div className="absolute right-0 mt-2 flex w-72 flex-col gap-1 rounded-2xl border border-navy-100 bg-white p-3 shadow-xl">
+          <div className="glass-light absolute right-0 mt-2 flex w-72 animate-fade-up flex-col gap-1 rounded-2xl p-3 [animation-duration:0.25s]">
             {links.map((l) => (
               <Link key={l.href} href={l.href} className="btn-ghost justify-start">
                 {l.label}

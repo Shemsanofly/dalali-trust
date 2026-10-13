@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { PointerEffects, revealBootstrap } from "@/components/fx/pointer-effects";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getDictionary } from "@/i18n/server";
@@ -21,7 +22,10 @@ export const viewport: Viewport = { themeColor: "#1a2639", width: "device-width"
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { locale, t } = await getDictionary();
   return (
-    <html lang={locale} className={jakarta.variable}>
+    <html lang={locale} className={jakarta.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
+      </head>
       <body className="flex min-h-screen flex-col font-sans">
         <a
           href="#main"
@@ -34,6 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {children}
         </main>
         <SiteFooter />
+        <PointerEffects />
       </body>
     </html>
   );
