@@ -1,0 +1,9 @@
+node_modules
+.next
+src/generated
+legacy-sahashares
+prisma/migrations
+storage
+playwright-report
+test-results
+package-lock.json

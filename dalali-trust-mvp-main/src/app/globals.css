@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. The navy / green / gold palette is carried over from the original
+ * SahaShares client (client/src/index.css) so the brand stays recognisable; the
+ * "invest" green is renamed "brand" because the product no longer offers investments.
+ */
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #edfcf2;
+  --color-brand-100: #d3f8e0;
+  --color-brand-200: #aaf0c4;
+  --color-brand-300: #73e2a3;
+  --color-brand-400: #3bcc7e;
+  --color-brand-500: #16b364;
+  --color-brand-600: #0a9050;
+  --color-brand-700: #087342;
+  --color-brand-800: #095c37;
+  --color-brand-900: #084c2e;
+
+  --color-gold-50: #fbf9f1;
+  --color-gold-100: #f6f0db;
+  --color-gold-200: #ece1b5;
+  --color-gold-300: #e0cd86;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #c59b27;
+  --color-gold-600: #b8860b;
+  --color-gold-700: #946908;
+  --color-gold-800: #77520c;
+
+  --color-navy-50: #f3f5f8;
+  --color-navy-100: #e3e8ef;
+  --color-navy-200: #c2d1e2;
+  --color-navy-300: #a2b4cd;
+  --color-navy-400: #748fb2;
+  --color-navy-500: #547499;
+  --color-navy-600: #405b7f;
+  --color-navy-700: #354a67;
+  --color-navy-800: #1a2639;
+  --color-navy-900: #0a1128;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-navy-50 text-navy-900;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@layer components {
+  .btn-primary {
+    @apply btn bg-brand-600 text-white hover:bg-brand-700;
+  }
+  .btn-secondary {
+    @apply btn border border-navy-200 bg-white text-navy-800 hover:border-brand-500 hover:text-brand-700;
+  }
+  .btn-danger {
+    @apply btn bg-red-700 text-white hover:bg-red-800;
+  }
+  .btn-ghost {
+    @apply btn text-navy-700 hover:bg-navy-100;
+  }
+  .input {
+    @apply block min-h-11 w-full rounded-xl border border-navy-200 bg-white px-3.5 py-2.5 text-base text-navy-900 placeholder:text-navy-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none sm:text-sm;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-navy-800;
+  }
+  .card {
+    @apply rounded-2xl border border-navy-100 bg-white;
+  }
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  .prose-plain p {
+    @apply mb-3 leading-relaxed;
+  }
+  .prose-plain h2 {
+    @apply mt-8 mb-3 text-xl font-bold text-navy-900;
+  }
+  .prose-plain ul {
+    @apply mb-3 list-disc space-y-1 pl-5;
+  }
+}
