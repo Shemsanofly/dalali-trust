@@ -81,6 +81,37 @@ export const en = {
     disclaimer:
       "Dalali Trust reviews listings and performs manual verification checks, but we cannot guarantee every advertiser or property. Never pay money before you have viewed a property and confirmed who you are dealing with.",
     emptyLatest: "No homes are published yet. Check back soon — or list yours.",
+    titleHighlight: "know what you are walking into.",
+    stats: {
+      published: "Homes published",
+      reviewed: "Listings reviewed by a person before going live",
+      free: "Cost to search or list",
+    },
+    showcase: {
+      label: "What every listing shows",
+      steps: [
+        "Reviewed by a moderator before publishing",
+        "Who is advertising — landlord or agent",
+        "Full move-in cost, before you travel",
+        "A button to report anything suspicious",
+      ],
+      verified: "Identity verified",
+      verifiedNote: "Shown only after a manual check",
+      noUpfront: "Never pay before viewing",
+    },
+    calculator: {
+      title: "What will moving in really cost?",
+      body: "Many homes ask for several months of rent up front. Move the sliders to see the cash you would need on day one.",
+      rent: "Monthly rent",
+      advance: "Months paid in advance",
+      deposit: "Deposit",
+      agentFee: "Agent fee",
+      months: "{count} months",
+      total: "Cash needed before moving in",
+      breakdown: "{advance} advance rent + {deposit} deposit + {fee} agent fee",
+      note: "Every listing on Dalali Trust shows these amounts before you travel.",
+      cta: "Find homes at this rent",
+    },
   },
   search: {
     title: "Homes for rent",

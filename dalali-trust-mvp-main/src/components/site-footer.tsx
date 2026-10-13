@@ -12,16 +12,24 @@ export async function SiteFooter() {
     { href: "/terms", label: t.footer.terms },
   ];
   return (
-    <footer className="mt-16 border-t border-navy-100 bg-navy-800 text-navy-100">
-      <div className="container-page grid gap-8 py-10 md:grid-cols-[2fr_3fr]">
+    <footer className="relative isolate mt-20 overflow-hidden bg-navy-900 text-navy-100">
+      <div className="h-0.5 bg-linear-to-r from-transparent via-gold-400 to-transparent" aria-hidden />
+      <div className="orb -top-32 right-0 -z-10 h-72 w-72 bg-brand-500/15" aria-hidden />
+      <div className="container-page grid gap-8 py-12 md:grid-cols-[2fr_3fr]">
         <div>
-          <p className="text-lg font-extrabold text-white">Dalali Trust</p>
+          <p className="flex items-center gap-2.5 text-lg font-extrabold text-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.svg" alt="" width={32} height={32} />
+            <span>
+              Dalali <span className="text-shimmer">Trust</span>
+            </span>
+          </p>
           <p className="mt-2 max-w-sm text-sm text-navy-200">{t.brand.mission}</p>
         </div>
         <div>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} className="hover:text-white hover:underline">
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-gold-300">
                 {l.label}
               </Link>
             ))}

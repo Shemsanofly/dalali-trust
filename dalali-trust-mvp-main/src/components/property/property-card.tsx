@@ -38,8 +38,8 @@ export function PropertyCard({
 }) {
   const img = p.images[0];
   return (
-    <article className="card group relative flex flex-col overflow-hidden transition-shadow hover:shadow-lg">
-      <div className="relative aspect-[4/3] bg-navy-100">
+    <article className="card-interactive group flex w-full flex-col overflow-hidden">
+      <div className="relative aspect-[4/3] overflow-hidden bg-navy-100">
         {img ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -47,7 +47,7 @@ export function PropertyCard({
             alt={img.altText ?? p.title}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             width={640}
             height={480}
           />
@@ -56,6 +56,10 @@ export function PropertyCard({
             {t.property.noPhotos}
           </div>
         )}
+        <div
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-navy-900/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          aria-hidden
+        />
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           <Badge tone={p.availabilityStatus === "OCCUPIED" ? "gray" : "green"}>
             {availabilityLabel(t, locale, p)}
@@ -67,7 +71,7 @@ export function PropertyCard({
           {formatTZS(p.rentAmount, locale)}
           <span className="text-sm font-medium text-navy-500"> {t.property.perMonth}</span>
         </p>
-        <h3 className="line-clamp-2 font-semibold text-navy-800">
+        <h3 className="line-clamp-2 font-semibold text-navy-800 transition-colors group-hover:text-brand-700">
           <Link href={`/properties/${p.slug}`} className="after:absolute after:inset-0">
             {p.title}
           </Link>
