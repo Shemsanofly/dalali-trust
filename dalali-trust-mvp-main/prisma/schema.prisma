@@ -1,0 +1,629 @@
+// Dalali Trust — PostgreSQL schema (Prisma ORM 7)
+//
+// Conventions
+// - Money is stored as integer Tanzanian shillings (TZS) in `Int` columns, together with
+//   an explicit `currency` column. TZS cents are not used in practice, so whole shillings
+//   are the smallest unit we accept. Never use floating point for money.
+// - All timestamps are `timestamptz` (stored in UTC) and rendered in Africa/Dar_es_Salaam.
+// - Sensitive files (identity documents, evidence) live in private object storage. Only
+//   their storage keys and metadata are stored here.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum Role {
+  TENANT
+  LANDLORD
+  AGENT
+  ADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum AdvertiserPlan {
+  FREE
+}
+
+enum PropertyType {
+  ROOM
+  BEDSITTER
+  APARTMENT
+  HOUSE
+  OTHER
+}
+
+enum ListingStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  REJECTED
+  ARCHIVED
+  SUSPENDED
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  AVAILABLE_SOON
+  OCCUPIED
+}
+
+enum RentPeriod {
+  MONTHLY
+}
+
+enum UtilityArrangement {
+  INCLUDED_IN_RENT
+  SEPARATE_METER
+  SHARED_SPLIT
+  NOT_AVAILABLE
+  ASK_ADVERTISER
+}
+
+enum ChargeFrequency {
+  ONE_TIME
+  MONTHLY
+}
+
+enum VerificationType {
+  IDENTITY
+  ADVERTISER_ROLE
+  PROPERTY_EVIDENCE
+}
+
+enum VerificationStatus {
+  DRAFT
+  PENDING_REVIEW
+  MORE_INFO_REQUIRED
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+enum EvidenceKind {
+  NATIONAL_ID
+  PASSPORT
+  DRIVING_LICENCE
+  VOTER_ID
+  SELFIE_WITH_ID
+  BUSINESS_LICENCE
+  OWNER_AUTHORIZATION_LETTER
+  MANAGEMENT_AGREEMENT
+  UTILITY_BILL
+  PROPERTY_OWNERSHIP_DOCUMENT
+  PROPERTY_PHOTO
+  OTHER
+}
+
+enum ViewingStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+  COMPLETED
+}
+
+enum ReportCategory {
+  IMPERSONATION
+  DUPLICATE_OR_MISLEADING
+  INCORRECT_PRICE_OR_AVAILABILITY
+  ADVANCE_PAYMENT_REQUEST
+  UNAUTHORIZED_ADVERTISING
+  OTHER
+}
+
+enum ReportStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  INFO_REQUESTED
+  ACTION_TAKEN
+  DISMISSED
+  APPEALED
+}
+
+enum ModerationActionType {
+  APPROVE_LISTING
+  REJECT_LISTING
+  SUSPEND_LISTING
+  REINSTATE_LISTING
+  SUSPEND_USER
+  REINSTATE_USER
+  CHANGE_ROLE
+  VERIFICATION_APPROVED
+  VERIFICATION_REJECTED
+  VERIFICATION_INFO_REQUESTED
+  VERIFICATION_EXPIRED
+  REPORT_UNDER_REVIEW
+  REPORT_INFO_REQUESTED
+  REPORT_ACTION_TAKEN
+  REPORT_DISMISSED
+}
+
+enum FeedbackKind {
+  FEEDBACK
+  CONTACT
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Identity & authentication (tables shared with Better Auth)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model User {
+  id              String        @id
+  name            String
+  email           String        @unique
+  emailVerified   Boolean       @default(false)
+  image           String?
+  role            Role          @default(TENANT)
+  status          AccountStatus @default(ACTIVE)
+  phoneNumber     String?
+  locale          String        @default("en")
+  suspendedReason String?
+  suspendedAt     DateTime?     @db.Timestamptz(3)
+  deletedAt       DateTime?     @db.Timestamptz(3)
+  createdAt       DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime      @updatedAt @db.Timestamptz(3)
+
+  sessions             Session[]
+  accounts             Account[]
+  advertiserProfile    AdvertiserProfile?
+  properties           Property[]            @relation("PropertyAdvertiser")
+  savedProperties      SavedProperty[]
+  viewingRequestsMade  ViewingRequest[]      @relation("ViewingRequester")
+  viewingRequestsRecv  ViewingRequest[]      @relation("ViewingAdvertiser")
+  verificationRequests VerificationRequest[] @relation("VerificationSubject")
+  verificationReviews  VerificationRequest[] @relation("VerificationReviewer")
+  evidenceUploaded     VerificationEvidence[]
+  reportsFiled         Report[]              @relation("ReportReporter")
+  reportsAgainst       Report[]              @relation("ReportSubjectUser")
+  reportsAssigned      Report[]              @relation("ReportAssignee")
+  reportEvidence       ReportEvidence[]
+  moderationActions    ModerationAction[]    @relation("ModerationActor")
+  moderationTargets    ModerationAction[]    @relation("ModerationTargetUser")
+  auditLogs            AuditLog[]
+  notifications        Notification[]
+  feedback             Feedback[]
+
+  @@index([role])
+  @@index([status])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime @db.Timestamptz(3)
+  token     String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime? @db.Timestamptz(3)
+  refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt             DateTime  @updatedAt @db.Timestamptz(3)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime @db.Timestamptz(3)
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(3)
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+/// Fixed-window rate limiting shared by Better Auth and application endpoints.
+/// Keys contain hashed IPs or user ids, never raw IP addresses.
+model RateLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime @db.Timestamptz(3)
+
+  @@index([windowStart])
+  @@map("rate_limit")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Advertisers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Public-facing profile for landlords and agents. Separate from User so that
+/// tenants never carry advertiser fields and public pages select only safe columns.
+model AdvertiserProfile {
+  id             String         @id @default(cuid())
+  userId         String         @unique
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName    String
+  bio            String?
+  agencyName     String?
+  serviceRegions String[]       @default([])
+  contactPhone   String?
+  whatsappNumber String?
+  showPhone      Boolean        @default(true)
+  plan           AdvertiserPlan @default(FREE)
+  createdAt      DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @db.Timestamptz(3)
+
+  @@map("advertiser_profile")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Properties
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Property {
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  advertiserId String
+  advertiser   User         @relation("PropertyAdvertiser", fields: [advertiserId], references: [id], onDelete: Restrict)
+
+  title        String
+  description  String
+  propertyType PropertyType
+
+  region          String
+  district        String
+  neighborhood    String
+  streetAddress   String?
+  /// Approximate location only (rounded to ~100 m before storage).
+  latitude        Decimal?  @db.Decimal(8, 5)
+  longitude       Decimal?  @db.Decimal(8, 5)
+
+  currency      String     @default("TZS") @db.Char(3)
+  rentAmount    Int
+  rentPeriod    RentPeriod @default(MONTHLY)
+  /// Months of rent the advertiser asks to be paid up front (common in Tanzania).
+  advanceMonths Int        @default(1)
+  depositAmount Int        @default(0)
+  agentFeeAmount Int       @default(0)
+  agentFeeNote  String?
+  paymentTerms  String?
+
+  bedrooms  Int
+  bathrooms Int
+  furnished Boolean  @default(false)
+  amenities String[] @default([])
+
+  electricity UtilityArrangement @default(ASK_ADVERTISER)
+  water       UtilityArrangement @default(ASK_ADVERTISER)
+  utilityNotes String?
+
+  contactPhone    String?
+  contactWhatsapp String?
+
+  status                  ListingStatus      @default(DRAFT)
+  availabilityStatus      AvailabilityStatus @default(AVAILABLE)
+  availableFrom           DateTime?          @db.Date
+  availabilityConfirmedAt DateTime?          @db.Timestamptz(3)
+  submittedAt             DateTime?          @db.Timestamptz(3)
+  publishedAt             DateTime?          @db.Timestamptz(3)
+  archivedAt              DateTime?          @db.Timestamptz(3)
+  reviewNote              String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  images               PropertyImage[]
+  charges              PropertyCharge[]
+  savedBy              SavedProperty[]
+  viewingRequests      ViewingRequest[]
+  verificationRequests VerificationRequest[]
+  reports              Report[]
+  moderationActions    ModerationAction[]
+  analyticsEvents      AnalyticsEvent[]
+
+  @@index([status, region, district])
+  @@index([status, propertyType])
+  @@index([status, rentAmount])
+  @@index([status, bedrooms])
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([advertiserId, status])
+  @@map("property")
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  storageKey String
+  thumbKey   String
+  width      Int
+  height     Int
+  sizeBytes  Int
+  /// SHA-256 of the original upload; used as a duplicate-listing review aid.
+  sha256     String
+  altText    String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([propertyId, sortOrder])
+  @@index([sha256])
+  @@map("property_image")
+}
+
+model PropertyCharge {
+  id         String          @id @default(cuid())
+  propertyId String
+  property   Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  label      String
+  amount     Int
+  frequency  ChargeFrequency
+  note       String?
+
+  @@index([propertyId])
+  @@map("property_charge")
+}
+
+model SavedProperty {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([userId, propertyId])
+  @@index([propertyId])
+  @@map("saved_property")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Verification
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// A request for one clearly-scoped manual check. A VERIFIED status only means the
+/// check described in `scopeStatement` was performed by `reviewer` at `decidedAt`.
+/// It never proves legal ownership of a property.
+model VerificationRequest {
+  id             String             @id @default(cuid())
+  subjectUserId  String
+  subjectUser    User               @relation("VerificationSubject", fields: [subjectUserId], references: [id], onDelete: Cascade)
+  propertyId     String?
+  property       Property?          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  type           VerificationType
+  status         VerificationStatus @default(DRAFT)
+  applicantNote  String?
+  reviewerId     String?
+  reviewer       User?              @relation("VerificationReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  decisionReason String?
+  scopeStatement String?
+  submittedAt    DateTime?          @db.Timestamptz(3)
+  decidedAt      DateTime?          @db.Timestamptz(3)
+  expiresAt      DateTime?          @db.Timestamptz(3)
+  createdAt      DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime           @updatedAt @db.Timestamptz(3)
+
+  evidence          VerificationEvidence[]
+  moderationActions ModerationAction[]
+
+  @@index([status, submittedAt])
+  @@index([subjectUserId, type])
+  @@index([propertyId])
+  @@map("verification_request")
+}
+
+model VerificationEvidence {
+  id           String              @id @default(cuid())
+  requestId    String
+  request      VerificationRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  uploadedById String
+  uploadedBy   User                @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  kind         EvidenceKind
+  storageKey   String
+  mimeType     String
+  sizeBytes    Int
+  sha256       String
+  createdAt    DateTime            @default(now()) @db.Timestamptz(3)
+  /// Set when the underlying file is purged under the retention policy.
+  purgedAt     DateTime?           @db.Timestamptz(3)
+
+  @@index([requestId])
+  @@map("verification_evidence")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Viewing requests
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ViewingRequest {
+  id              String        @id @default(cuid())
+  propertyId      String
+  property        Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  requesterId     String
+  requester       User          @relation("ViewingRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  advertiserId    String
+  advertiser      User          @relation("ViewingAdvertiser", fields: [advertiserId], references: [id], onDelete: Cascade)
+  proposedAt      DateTime      @db.Timestamptz(3)
+  message         String?
+  contactPhone    String?
+  status          ViewingStatus @default(PENDING)
+  responseMessage String?
+  respondedAt     DateTime?     @db.Timestamptz(3)
+  createdAt       DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime      @updatedAt @db.Timestamptz(3)
+
+  @@index([requesterId, createdAt(sort: Desc)])
+  @@index([advertiserId, status])
+  @@index([propertyId])
+  @@map("viewing_request")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reports & moderation
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// A complaint. A report is an allegation under review — never a finding of guilt.
+model Report {
+  id             String         @id @default(cuid())
+  reporterId     String
+  reporter       User           @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  propertyId     String?
+  property       Property?      @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  subjectUserId  String?
+  subjectUser    User?          @relation("ReportSubjectUser", fields: [subjectUserId], references: [id], onDelete: SetNull)
+  category       ReportCategory
+  description    String
+  status         ReportStatus   @default(SUBMITTED)
+  assignedToId   String?
+  assignedTo     User?          @relation("ReportAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  /// Message shown to the reporter (e.g. what extra information is needed, or outcome).
+  publicResponse String?
+  /// Internal moderator notes, never shown to the reporter or the reported party.
+  internalNote   String?
+  appealNote     String?
+  appealedAt     DateTime?      @db.Timestamptz(3)
+  resolvedAt     DateTime?      @db.Timestamptz(3)
+  createdAt      DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @db.Timestamptz(3)
+
+  evidence          ReportEvidence[]
+  moderationActions ModerationAction[]
+
+  @@index([status, createdAt])
+  @@index([reporterId, createdAt(sort: Desc)])
+  @@index([propertyId])
+  @@index([subjectUserId])
+  @@map("report")
+}
+
+model ReportEvidence {
+  id           String   @id @default(cuid())
+  reportId     String
+  report       Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  storageKey   String
+  mimeType     String
+  sizeBytes    Int
+  sha256       String
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  purgedAt     DateTime? @db.Timestamptz(3)
+
+  @@index([reportId])
+  @@map("report_evidence")
+}
+
+model ModerationAction {
+  id                    String               @id @default(cuid())
+  actorId               String
+  actor                 User                 @relation("ModerationActor", fields: [actorId], references: [id], onDelete: Restrict)
+  action                ModerationActionType
+  reason                String
+  propertyId            String?
+  property              Property?            @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  targetUserId          String?
+  targetUser            User?                @relation("ModerationTargetUser", fields: [targetUserId], references: [id], onDelete: SetNull)
+  reportId              String?
+  report                Report?              @relation(fields: [reportId], references: [id], onDelete: SetNull)
+  verificationRequestId String?
+  verificationRequest   VerificationRequest? @relation(fields: [verificationRequestId], references: [id], onDelete: SetNull)
+  createdAt             DateTime             @default(now()) @db.Timestamptz(3)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([propertyId])
+  @@index([targetUserId])
+  @@map("moderation_action")
+}
+
+/// Append-only log of security-relevant and administrative operations.
+/// `metadata` must never contain passwords, tokens or document contents.
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@map("audit_log")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Notifications, feedback, analytics
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// In-app notifications only. No SMS/email is implied by a Notification row.
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  link      String?
+  readAt    DateTime? @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+
+  @@index([userId, readAt])
+  @@map("notification")
+}
+
+model Feedback {
+  id        String       @id @default(cuid())
+  kind      FeedbackKind @default(FEEDBACK)
+  userId    String?
+  user      User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name      String?
+  email     String?
+  message   String
+  page      String?
+  createdAt DateTime     @default(now()) @db.Timestamptz(3)
+
+  @@index([createdAt(sort: Desc)])
+  @@map("feedback")
+}
+
+/// Privacy-respecting product analytics: event name and optional listing only.
+/// No user id, IP address or user agent is stored.
+model AnalyticsEvent {
+  id         String    @id @default(cuid())
+  name       String
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+
+  @@index([name, createdAt])
+  @@index([propertyId, name])
+  @@map("analytics_event")
+}

@@ -1,0 +1,9 @@
+node_modules/
+.env
+*.pem
+*.json.key
+uploads/
+public/audio/
+client/dist/
+client/node_modules/
+.vercel/

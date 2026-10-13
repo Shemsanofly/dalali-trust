@@ -1,0 +1,19 @@
+import "server-only";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@/generated/prisma/client";
+
+declare global {
+  var __dalaliPrisma: PrismaClient | undefined;
+}
+
+function createClient() {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) throw new Error("DATABASE_URL is not set");
+  return new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+}
+
+export const prisma: PrismaClient = globalThis.__dalaliPrisma ?? createClient();
+
+if (process.env.NODE_ENV !== "production") globalThis.__dalaliPrisma = prisma;
+
+export type Db = PrismaClient;

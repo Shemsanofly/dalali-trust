@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+defaults:
+  run:
+    working-directory: dalali-trust-mvp-main
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: dalali
+          POSTGRES_PASSWORD: dalali_dev_password
+          POSTGRES_DB: dalali_trust
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U dalali" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://dalali:dalali_dev_password@localhost:5432/dalali_trust?schema=public
+      TEST_DATABASE_URL: postgresql://dalali:dalali_dev_password@localhost:5432/dalali_trust_test?schema=public
+      E2E_DATABASE_URL: postgresql://dalali:dalali_dev_password@localhost:5432/dalali_trust_e2e?schema=public
+      SHADOW_DATABASE_URL: postgresql://dalali:dalali_dev_password@localhost:5432/dalali_trust_shadow?schema=public
+      BETTER_AUTH_SECRET: ci-only-secret-ci-only-secret-ci-only-secret
+      BETTER_AUTH_URL: http://localhost:3000
+      APP_URL: http://localhost:3000
+      EMAIL_PROVIDER: none
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: dalali-trust-mvp-main/package-lock.json
+      - name: Create test databases
+        run: |
+          PGPASSWORD=dalali_dev_password psql -h localhost -U dalali -d dalali_trust -c "CREATE DATABASE dalali_trust_test"
+          PGPASSWORD=dalali_dev_password psql -h localhost -U dalali -d dalali_trust -c "CREATE DATABASE dalali_trust_e2e"
+          PGPASSWORD=dalali_dev_password psql -h localhost -U dalali -d dalali_trust -c "CREATE DATABASE dalali_trust_shadow"
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Migrations apply cleanly to an empty database
+        run: npx prisma migrate deploy
+      - name: Schema and migrations are in sync
+        run: npx prisma migrate diff --from-migrations prisma/migrations --to-schema prisma/schema.prisma --exit-code
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e

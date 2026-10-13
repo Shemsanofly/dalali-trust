@@ -1,9 +1,30 @@
+# dependencies
 node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# generated prisma client
+src/generated/
+
+# env files (never commit secrets)
 .env
-*.pem
-*.json.key
-uploads/
-public/audio/
-client/dist/
-client/node_modules/
+.env.*
+!.env.example
+
+# private local object storage (development only)
+storage/
+
+# tests
+coverage/
+playwright-report/
+test-results/
+
+# misc
+.DS_Store
+*.log
 .vercel/
+storage-e2e/
