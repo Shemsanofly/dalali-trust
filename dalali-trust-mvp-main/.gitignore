@@ -16,7 +16,7 @@ src/generated/
 !.env.example
 
 # private local object storage (development only)
-storage/
+/storage/
 
 # tests
 coverage/
