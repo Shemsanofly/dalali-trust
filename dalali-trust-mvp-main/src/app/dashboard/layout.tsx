@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NavLink } from "@/components/nav/nav-link";
 import { getDictionary } from "@/i18n/server";
 import { isAdvertiser } from "@/server/actor";
 import { requirePageActor } from "@/server/session";
@@ -30,9 +30,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <ul className="flex gap-1 lg:flex-col">
           {links.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} className="btn-ghost w-full justify-start whitespace-nowrap">
+              <NavLink
+                href={l.href}
+                exact={l.href === "/dashboard"}
+                className={
+                  "btn-ghost w-full justify-start whitespace-nowrap aria-[current=page]:bg-white aria-[current=page]:text-brand-700 aria-[current=page]:shadow-[inset_3px_0_0_var(--color-brand-600)]"
+                }
+              >
                 {l.label}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>

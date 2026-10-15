@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { NavLink } from "@/components/nav/nav-link";
 import { requirePageActor } from "@/server/session";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
@@ -22,9 +22,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <ul className="flex gap-1">
           {links.map(([href, label]) => (
             <li key={href}>
-              <Link href={href!} className="btn-ghost whitespace-nowrap">
+              <NavLink
+                href={href!}
+                exact={href === "/admin"}
+                className="btn-ghost whitespace-nowrap aria-[current=page]:bg-white aria-[current=page]:text-brand-700 aria-[current=page]:shadow-[inset_0_-3px_0_var(--color-brand-600)]"
+              >
                 {label}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>

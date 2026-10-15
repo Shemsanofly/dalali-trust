@@ -7,6 +7,7 @@
  */
 @theme {
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
 
   --color-brand-50: #edfcf2;
   --color-brand-100: #d3f8e0;
@@ -39,11 +40,11 @@
   --color-navy-700: #354a67;
   --color-navy-800: #1a2639;
   --color-navy-900: #0a1128;
-  --color-navy-950: #050a1f;
 
-  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-float: float-y 6s ease-in-out infinite;
-  --animate-shimmer: shimmer 4s ease-in-out infinite;
+  /* Warm paper background so pages feel printed rather than screen-grey */
+  --color-sand-50: #faf8f3;
+  --color-sand-100: #f3efe5;
+  --color-sand-200: #e7e0cf;
 }
 
 html {
@@ -52,7 +53,7 @@ html {
 }
 
 body {
-  @apply bg-navy-50 text-navy-900;
+  @apply bg-sand-50 text-navy-900;
 }
 
 :focus-visible {
@@ -71,19 +72,18 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 @layer components {
-  /* Gradient buttons with a gentle lift, as in the original SahaShares client */
   .btn-primary {
-    @apply btn bg-linear-to-r from-brand-500 to-brand-700 text-white shadow-lg shadow-brand-600/25 hover:-translate-y-0.5 hover:shadow-brand-600/40 disabled:hover:translate-y-0;
+    @apply btn bg-brand-600 text-white hover:bg-brand-700;
   }
   .btn-gold {
-    @apply btn bg-linear-to-r from-gold-400 to-gold-600 text-navy-900 shadow-lg shadow-gold-500/25 hover:-translate-y-0.5 hover:shadow-gold-500/40;
+    @apply btn bg-gold-400 text-navy-900 hover:bg-gold-300;
   }
   .btn-secondary {
-    @apply btn border border-navy-200 bg-white text-navy-800 hover:-translate-y-0.5 hover:border-brand-500 hover:text-brand-700 hover:shadow-md;
+    @apply btn border border-navy-200 bg-white text-navy-800 hover:border-brand-500 hover:text-brand-700;
   }
   .btn-danger {
     @apply btn bg-red-700 text-white hover:bg-red-800;
@@ -92,34 +92,16 @@ body {
     @apply btn text-navy-700 hover:bg-navy-100;
   }
   .input {
-    @apply block min-h-11 w-full rounded-xl border border-navy-200 bg-white px-3.5 py-2.5 text-base text-navy-900 placeholder:text-navy-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none sm:text-sm;
+    @apply block min-h-11 w-full rounded-lg border border-navy-200 bg-white px-3.5 py-2.5 text-base text-navy-900 placeholder:text-navy-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none sm:text-sm;
   }
   .label {
     @apply mb-1.5 block text-sm font-semibold text-navy-800;
   }
   .card {
-    @apply rounded-2xl border border-navy-100 bg-white;
+    @apply rounded-xl border border-navy-100 bg-white;
   }
-  /* Card that lifts and follows the pointer with a soft glow (see <PointerEffects />) */
-  .card-interactive {
-    @apply relative rounded-2xl border border-navy-100 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-navy-900/10;
-    background-image: radial-gradient(
-      420px circle at var(--mx, -999px) var(--my, -999px),
-      color-mix(in oklab, var(--color-brand-400) 12%, transparent),
-      transparent 60%
-    );
-  }
-  .glass {
-    @apply border border-white/15 bg-white/10 backdrop-blur-xl;
-  }
-  .glass-light {
-    @apply border border-white/60 bg-white/80 shadow-xl shadow-navy-900/10 backdrop-blur-xl;
-  }
-  .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-widest uppercase;
-  }
-  .section-title {
-    @apply text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl;
+  .display {
+    @apply font-display font-semibold tracking-tight text-navy-900;
   }
   .container-page {
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
@@ -128,141 +110,21 @@ body {
     @apply mb-3 leading-relaxed;
   }
   .prose-plain h2 {
-    @apply mt-8 mb-3 text-xl font-bold text-navy-900;
+    @apply mt-8 mb-3 font-display text-2xl font-semibold text-navy-900;
   }
   .prose-plain ul {
     @apply mb-3 list-disc space-y-1 pl-5;
   }
 }
 
-/* ── Brand effects carried over from the SahaShares client ──────────────── */
-
-.text-shimmer {
-  background: linear-gradient(120deg, var(--color-gold-400), var(--color-gold-200), var(--color-gold-500));
-  background-size: 200% 200%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: var(--animate-shimmer);
-}
-
-.orb {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(80px);
-  pointer-events: none;
-  animation: orb-drift 20s ease-in-out infinite;
-}
-
-.noise-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 128px;
-}
-
-.grid-pattern {
-  background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-}
-
-.pulse-dot {
-  animation: pulse-ring 2s ease-in-out infinite;
-}
-
-/* Scroll reveal: elements with [data-reveal] fade up once <PointerEffects /> sees them.
-   Without JavaScript the class is never added to <html>, so content stays visible. */
-.js-reveal [data-reveal] {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.js-reveal [data-reveal].is-visible {
-  opacity: 1;
-  transform: none;
-}
-
-/* Animated underline for navigation links */
-.nav-link {
-  @apply relative rounded-lg px-3 py-2 text-sm font-semibold text-navy-700 transition-colors hover:text-brand-700;
-}
-.nav-link::after {
-  content: "";
-  @apply absolute right-3 bottom-1 left-3 h-0.5 origin-left scale-x-0 rounded-full bg-linear-to-r from-brand-500 to-gold-400 transition-transform duration-300;
-}
-.nav-link:hover::after,
-.nav-link[aria-current="page"]::after {
-  @apply scale-x-100;
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float-y {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes shimmer {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes orb-drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(30px, -40px) scale(1.05);
-  }
-  50% {
-    transform: translate(-20px, 20px) scale(0.95);
-  }
-  75% {
-    transform: translate(15px, 30px) scale(1.02);
-  }
-}
-
-@keyframes pulse-ring {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgb(22 179 100 / 0.55);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgb(22 179 100 / 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .js-reveal [data-reveal] {
-    opacity: 1;
-    transform: none;
-  }
+/* A slightly uneven, pen-drawn stroke under a phrase. Inline, so it follows the text
+   across line breaks instead of forcing the whole phrase onto its own line. */
+.pen-underline {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8.5c38-3.6 79-5.4 121-5.2 46 .2 83 2.6 120 3.4 19 .4 37-.2 55-1.5' fill='none' stroke='%23d4af37' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.28em;
+  padding-bottom: 0.08em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }

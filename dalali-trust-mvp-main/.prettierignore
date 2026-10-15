@@ -3,7 +3,8 @@ node_modules
 src/generated
 legacy-sahashares
 prisma/migrations
-storage
+/storage
+/storage-e2e
 playwright-report
 test-results
 package-lock.json

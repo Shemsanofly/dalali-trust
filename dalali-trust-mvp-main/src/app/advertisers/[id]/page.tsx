@@ -71,7 +71,7 @@ export default async function AdvertiserPage({ params }: { params: Promise<{ id:
     <div className="container-page py-10">
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
         <div>
-          <h1 className="text-3xl font-extrabold text-navy-900">{p?.displayName ?? user.name}</h1>
+          <h1 className="display text-3xl sm:text-4xl">{p?.displayName ?? user.name}</h1>
           <p className="text-navy-600">
             {t.property.roles[user.role]}
             {p?.agencyName ? ` · ${p.agencyName}` : ""} ·{" "}

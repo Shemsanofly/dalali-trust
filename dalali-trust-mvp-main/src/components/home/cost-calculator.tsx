@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Calculator } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useId, useState } from "react";
 import { fmt, type Locale } from "@/i18n";
@@ -87,17 +87,14 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
   const money = (n: number) => formatTZS(n, locale);
   const segments = [
     { amount: cost.advanceRent, className: "bg-brand-500" },
-    { amount: deposit, className: "bg-gold-400" },
+    { amount: deposit, className: "bg-gold-300" },
     { amount: agentFee, className: "bg-navy-400" },
   ];
 
   return (
-    <div className="card-interactive grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-2">
-      <div>
-        <span className="eyebrow border-brand-200 bg-brand-50 text-brand-700">
-          <Calculator className="h-3.5 w-3.5" aria-hidden /> TSh
-        </span>
-        <h2 className="section-title mt-4">{labels.title}</h2>
+    <div className="grid overflow-hidden rounded-xl border border-navy-100 bg-white lg:grid-cols-[3fr_2fr]">
+      <div className="p-6 sm:p-8">
+        <h2 className="display text-3xl">{labels.title}</h2>
         <p className="mt-3 text-navy-600">{labels.body}</p>
         <div className="mt-6 space-y-5">
           <Slider
@@ -143,15 +140,15 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
         </div>
       </div>
 
-      <div className="flex flex-col justify-center rounded-2xl bg-navy-900 p-6 text-white sm:p-8">
+      <div className="flex flex-col justify-center bg-navy-900 p-6 text-white sm:p-8">
         <p className="text-sm font-semibold text-navy-200">{labels.total}</p>
         <p
-          className="mt-2 text-4xl font-extrabold tracking-tight text-shimmer sm:text-5xl"
+          className="mt-2 font-display text-4xl font-semibold text-gold-300 tabular-nums sm:text-5xl"
           aria-live="polite"
         >
           {money(cost.total)}
         </p>
-        <div className="mt-6 flex h-3 overflow-hidden rounded-full bg-white/10" aria-hidden>
+        <div className="mt-6 flex h-2 overflow-hidden rounded-sm bg-white/10" aria-hidden>
           {segments.map((s, i) => (
             <div
               key={i}
@@ -160,7 +157,7 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
             />
           ))}
         </div>
-        <p className="mt-3 text-sm text-navy-200">
+        <p className="mt-3 text-sm leading-relaxed text-navy-200">
           {fmt(labels.breakdown, {
             advance: money(cost.advanceRent),
             deposit: money(deposit),

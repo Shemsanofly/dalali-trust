@@ -11,13 +11,9 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex animate-fade-up flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">{title}</h1>
-        <span
-          className="mt-2 block h-1 w-12 rounded-full bg-linear-to-r from-brand-500 to-gold-400"
-          aria-hidden
-        />
+        <h1 className="display text-3xl sm:text-4xl">{title}</h1>
         {subtitle ? <p className="mt-1 text-navy-600">{subtitle}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
@@ -35,7 +31,7 @@ export function EmptyState({
   action?: { href: string; label: string };
 }) {
   return (
-    <div className="card flex animate-fade-up flex-col items-center px-6 py-12 text-center">
+    <div className="card flex flex-col items-center px-6 py-12 text-center">
       <p className="text-lg font-semibold text-navy-900">{title}</p>
       {body ? <p className="mt-1 max-w-md text-navy-600">{body}</p> : null}
       {action ? (

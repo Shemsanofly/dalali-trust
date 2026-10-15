@@ -1,12 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
-import { PointerEffects, revealBootstrap } from "@/components/fx/pointer-effects";
+import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getDictionary } from "@/i18n/server";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getDictionary();
@@ -22,10 +28,7 @@ export const viewport: Viewport = { themeColor: "#1a2639", width: "device-width"
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { locale, t } = await getDictionary();
   return (
-    <html lang={locale} className={jakarta.variable} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
-      </head>
+    <html lang={locale} className={`${jakarta.variable} ${newsreader.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <a
           href="#main"
@@ -38,7 +41,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {children}
         </main>
         <SiteFooter />
-        <PointerEffects />
       </body>
     </html>
   );
