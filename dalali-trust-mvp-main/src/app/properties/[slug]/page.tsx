@@ -78,9 +78,7 @@ export default async function PropertyPage({ params }: { params: Params }) {
               </Badge>
               <Badge>{p.furnished ? t.property.furnished : t.property.unfurnished}</Badge>
             </div>
-            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
-              {p.title}
-            </h1>
+            <h1 className="display mt-3 text-3xl sm:text-4xl">{p.title}</h1>
             <p className="mt-2 flex items-center gap-1 text-navy-600">
               <MapPin className="h-4 w-4" aria-hidden /> {p.neighborhood}, {p.district},{" "}
               {regionName(p.region)}
