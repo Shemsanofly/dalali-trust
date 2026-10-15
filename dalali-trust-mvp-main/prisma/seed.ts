@@ -8,7 +8,9 @@
  * SEED_ALLOW_REMOTE=true is set explicitly (e.g. for a throwaway staging database).
  */
 import "dotenv/config";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hashPassword } from "better-auth/crypto";
 import sharp from "sharp";
@@ -54,6 +56,44 @@ async function placeholderImage(label: string, color: string, width: number, hei
     <text x="50%" y="92%" font-family="sans-serif" font-size="${Math.round(width / 40)}" fill="rgba(255,255,255,0.8)" text-anchor="middle">SAMPLE PHOTO · DEVELOPMENT DATA ONLY</text>
   </svg>`;
   return sharp(Buffer.from(svg)).webp({ quality: 75 }).toBuffer();
+}
+
+const SEED_PHOTO_DIR = path.resolve("prisma", "seed-photos"); // npm scripts run from the project root
+const PHOTO_EXT = /\.(jpe?g|png|webp)$/i;
+
+/** Real photos for a sample listing, from prisma/seed-photos/<neighbourhood-slug>/ (up to 6). */
+function seedPhotosFor(neighborhood: string): string[] {
+  const dir = path.join(SEED_PHOTO_DIR, neighborhood.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => PHOTO_EXT.test(f))
+    .sort()
+    .slice(0, 6)
+    .map((f) => path.join(dir, f));
+}
+
+/** Same processing as real uploads (src/server/uploads.ts): auto-rotate, resize, WebP, metadata stripped. */
+async function processPhoto(file: string) {
+  const buf = fs.readFileSync(file);
+  const base = sharp(buf, { limitInputPixels: 40_000_000 }).rotate();
+  const full = await base
+    .clone()
+    .resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true })
+    .webp({ quality: 78 })
+    .toBuffer({ resolveWithObject: true });
+  const thumb = await base
+    .clone()
+    .resize({ width: 640, height: 480, fit: "cover" })
+    .webp({ quality: 70 })
+    .toBuffer();
+  return {
+    full: full.data,
+    thumb,
+    width: full.info.width,
+    height: full.info.height,
+    sha256: createHash("sha256").update(buf).digest("hex"),
+  };
 }
 
 async function createUser(opts: {
@@ -316,25 +356,40 @@ async function main() {
         },
       },
     });
-    for (let n = 0; n < 3; n++) {
-      const color = PALETTE[(i + n) % PALETTE.length]!;
-      const label = `${l.neighborhood} — photo ${n + 1}`;
+    const photos = seedPhotosFor(l.neighborhood);
+    for (let n = 0; n < Math.max(photos.length, 3); n++) {
       const key = `listings/sample/${property.id}-${n}.webp`;
       const thumbKey = `listings/sample/${property.id}-${n}.thumb.webp`;
-      const full = await placeholderImage(label, color, 1200, 800);
-      await store.put(key, full, "image/webp");
-      await store.put(thumbKey, await placeholderImage(label, color, 640, 480), "image/webp");
+      const photo = photos[n];
+      let img: { full: Buffer; thumb: Buffer; width: number; height: number; sha256: string };
+      if (photo) {
+        img = await processPhoto(photo);
+      } else if (photos.length) {
+        break; // real photos supplied: don't pad them with placeholders
+      } else {
+        const color = PALETTE[(i + n) % PALETTE.length]!;
+        const label = `${l.neighborhood} — photo ${n + 1}`;
+        img = {
+          full: await placeholderImage(label, color, 1200, 800),
+          thumb: await placeholderImage(label, color, 640, 480),
+          width: 1200,
+          height: 800,
+          sha256: `sample-${property.id}-${n}`,
+        };
+      }
+      await store.put(key, img.full, "image/webp");
+      await store.put(thumbKey, img.thumb, "image/webp");
       await prisma.propertyImage.create({
         data: {
           propertyId: property.id,
           storageKey: key,
           thumbKey,
-          width: 1200,
-          height: 800,
-          sizeBytes: full.length,
-          sha256: `sample-${property.id}-${n}`,
+          width: img.width,
+          height: img.height,
+          sizeBytes: img.full.length,
+          sha256: photo ? img.sha256 : `sample-${property.id}-${n}`,
           sortOrder: n,
-          altText: `Sample placeholder image ${n + 1}`,
+          altText: photo ? `${l.title}, photo ${n + 1}` : `Sample placeholder image ${n + 1}`,
         },
       });
     }
