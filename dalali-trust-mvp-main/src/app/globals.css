@@ -66,13 +66,15 @@ body {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
 }
 
 @utility btn {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100;
 }
 
 @layer components {
@@ -125,6 +127,107 @@ body {
   background-position: 0 100%;
   background-size: 100% 0.28em;
   padding-bottom: 0.08em;
+  animation: pen-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.55s both;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   Each animation acts out something the product does (a pen underline, a
+   message arriving, a stamp, a receipt printing). Everything ends in the
+   normal resting state, so content is never hidden if an animation is skipped. */
+
+@keyframes pen-draw {
+  from {
+    background-size: 0% 0.28em;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: rotate(-12deg) scale(1.8);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(-12deg) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-12deg) scale(1);
+  }
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+@keyframes rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Staggered entrance on page load; set --d for the delay. */
+.rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both;
+}
+.pop-in {
+  animation: pop-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both;
+}
+.stamp-in {
+  animation: stamp 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) var(--d, 0ms) both;
+}
+.typing-dot {
+  animation: typing 1s ease-in-out infinite;
+}
+.slide-down {
+  animation: slide-down 0.22s ease-out both;
+}
+
+/* Scroll-triggered pieces (see <InView>): hidden only once JavaScript has confirmed
+   they are below the fold, then played when they scroll into view. */
+[data-inview="pending"] .on-view {
+  visibility: hidden;
+  animation: none;
+}
+[data-inview="true"] .on-view-rule {
+  transform-origin: left;
+  animation: rule-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+}
+[data-inview="true"] .on-view-rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both;
+}
+[data-inview="true"] .on-view-pop {
+  animation: pop-in 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) var(--d, 0ms) both;
 }

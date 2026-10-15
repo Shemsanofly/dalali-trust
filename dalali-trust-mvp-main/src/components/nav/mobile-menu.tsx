@@ -46,8 +46,10 @@ export function MobileMenu({ label, children }: { label: string; children: React
         <Menu className="h-6 w-6 group-open:hidden" aria-hidden />
         <X className="hidden h-6 w-6 group-open:block" aria-hidden />
       </summary>
-      <div className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto border-t border-navy-100 bg-white">
-        <div className="container-page py-4">{children}</div>
+      <div className="slide-down fixed inset-x-0 top-16 bottom-0 overflow-y-auto border-t border-navy-100 bg-white">
+        <div className="container-page rise py-4" style={{ "--d": "60ms" } as React.CSSProperties}>
+          {children}
+        </div>
       </div>
     </details>
   );

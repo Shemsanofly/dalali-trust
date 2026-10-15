@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useId, useState } from "react";
 import { fmt, type Locale } from "@/i18n";
 import { formatTZS, moveInCost } from "@/lib/money";
+import { useTweened } from "../motion/use-tweened";
 
 type Labels = {
   title: string;
@@ -85,6 +86,7 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
     charges: [],
   });
   const money = (n: number) => formatTZS(n, locale);
+  const shownTotal = useTweened(cost.total);
   const segments = [
     { amount: cost.advanceRent, className: "bg-brand-500" },
     { amount: deposit, className: "bg-gold-300" },
@@ -144,8 +146,11 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
         <p className="text-sm font-semibold text-navy-200">{labels.total}</p>
         <p
           className="mt-2 font-display text-4xl font-semibold text-gold-300 tabular-nums sm:text-5xl"
-          aria-live="polite"
+          aria-hidden
         >
+          {money(shownTotal)}
+        </p>
+        <p className="sr-only" aria-live="polite">
           {money(cost.total)}
         </p>
         <div className="mt-6 flex h-2 overflow-hidden rounded-sm bg-white/10" aria-hidden>

@@ -1,6 +1,7 @@
 import { ArrowRight, Search } from "lucide-react";
 import Link from "next/link";
 import { AdvertCompare } from "@/components/home/advert-compare";
+import { InView } from "@/components/motion/in-view";
 import { CostCalculator } from "@/components/home/cost-calculator";
 import { PropertyCard } from "@/components/property/property-card";
 import { fmt } from "@/i18n";
@@ -17,23 +18,29 @@ export default async function HomePage() {
   const { title, titleHighlight } = t.home;
   const highlightAt = title.lastIndexOf(titleHighlight);
   const titleLead = highlightAt > 0 ? title.slice(0, highlightAt) : title;
+  // One-tap searches for neighbourhoods that actually have published homes.
+  const popularAreas = [...new Set(latest.items.map((i) => i.neighborhood))].slice(0, 4);
+  const d = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
   return (
     <>
       <section className="border-b border-sand-200">
         <div className="container-page grid gap-12 py-12 sm:py-16 lg:grid-cols-[11fr_9fr] lg:items-center lg:gap-16 lg:py-20">
           <div>
-            <p className="text-sm font-semibold text-brand-700">{t.home.eyebrow}</p>
-            <h1 className="display mt-4 text-[2.6rem] leading-[1.05] sm:text-6xl">
+            <p className="rise text-sm font-semibold text-brand-700">{t.home.eyebrow}</p>
+            <h1 className="display rise mt-4 text-[2.6rem] leading-[1.05] sm:text-6xl" style={d(80)}>
               {titleLead}
               {highlightAt > 0 ? <span className="pen-underline italic">{titleHighlight}</span> : null}
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy-600">{t.home.subtitle}</p>
+            <p className="rise mt-6 max-w-xl text-lg leading-relaxed text-navy-600" style={d(180)}>
+              {t.home.subtitle}
+            </p>
 
             <form
               action="/properties"
               method="get"
-              className="mt-8 flex max-w-xl flex-col gap-2 sm:flex-row"
+              className="rise mt-8 flex max-w-xl flex-col gap-2 sm:flex-row"
+              style={d(260)}
               role="search"
             >
               <label htmlFor="hero-q" className="sr-only">
@@ -56,8 +63,22 @@ export default async function HomePage() {
                 {t.home.searchButton}
               </button>
             </form>
+            {popularAreas.length ? (
+              <div className="rise mt-4 flex flex-wrap items-center gap-2" style={d(340)}>
+                <span className="text-sm text-navy-500">{t.home.popularAreas}:</span>
+                {popularAreas.map((area) => (
+                  <Link
+                    key={area}
+                    href={`/properties?q=${encodeURIComponent(area)}`}
+                    className="rounded-full border border-sand-200 bg-white px-3 py-1 text-sm font-medium text-navy-700 transition-[color,border-color,transform] hover:-translate-y-px hover:border-brand-500 hover:text-brand-700 active:translate-y-0"
+                  >
+                    {area}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
             {latest.total > 0 ? (
-              <p className="mt-4 text-sm text-navy-600">
+              <p className="rise mt-5 text-sm text-navy-600" style={d(400)}>
                 <span
                   className="mr-2 inline-block h-2 w-2 rounded-full bg-brand-500 align-middle"
                   aria-hidden
@@ -76,35 +97,52 @@ export default async function HomePage() {
 
       <section className="container-page py-16 sm:py-20">
         <h2 className="display max-w-2xl text-3xl sm:text-4xl">{t.home.problemTitle}</h2>
-        <ol className="mt-10 grid gap-x-12 sm:grid-cols-2">
+        <InView as="ol" className="mt-10 grid gap-x-12 sm:grid-cols-2">
           {t.home.problems.map((p, i) => (
-            <li key={p.title} className="flex gap-5 border-t border-sand-200 py-6">
-              <span className="font-display text-3xl leading-none text-gold-600 tabular-nums" aria-hidden>
+            <li key={p.title} className="relative flex gap-5 py-6">
+              <span
+                className="on-view on-view-rule absolute inset-x-0 top-0 h-px bg-sand-200"
+                style={d(i * 120)}
+                aria-hidden
+              />
+              <span
+                className="on-view on-view-rise font-display text-3xl leading-none text-gold-600 tabular-nums"
+                style={d(150 + i * 120)}
+                aria-hidden
+              >
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <div>
+              <div className="on-view on-view-rise" style={d(220 + i * 120)}>
                 <h3 className="font-semibold text-navy-900">{p.title}</h3>
                 <p className="mt-1.5 text-navy-600">{p.body}</p>
               </div>
             </li>
           ))}
-        </ol>
+        </InView>
       </section>
 
       <section className="bg-white py-16 sm:py-20">
         <div className="container-page">
           <h2 className="display text-3xl sm:text-4xl">{t.home.howTitle}</h2>
-          <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-navy-100">
+          <InView
+            as="ol"
+            className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-navy-100"
+          >
             {t.home.how.map((h, i) => (
-              <li key={h.title} className="lg:px-6 lg:first:pl-0 lg:last:pr-0">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-brand-600 text-sm font-bold text-brand-700">
+              <li key={h.title} className="group lg:px-6 lg:first:pl-0 lg:last:pr-0">
+                <span
+                  className="on-view on-view-pop flex h-8 w-8 items-center justify-center rounded-full border-2 border-brand-600 text-sm font-bold text-brand-700 transition-colors group-hover:bg-brand-600 group-hover:text-white"
+                  style={d(i * 160)}
+                >
                   {i + 1}
                 </span>
-                <h3 className="mt-4 font-semibold text-navy-900">{h.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-navy-600">{h.body}</p>
+                <div className="on-view on-view-rise" style={d(80 + i * 160)}>
+                  <h3 className="mt-4 font-semibold text-navy-900">{h.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-navy-600">{h.body}</p>
+                </div>
               </li>
             ))}
-          </ol>
+          </InView>
         </div>
       </section>
 
@@ -123,11 +161,13 @@ export default async function HomePage() {
           </Link>
         </div>
         {items.length ? (
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((p) => (
-              <PropertyCard key={p.id} p={p} t={t} locale={locale} trust={byAdvertiser.get(p.advertiserId)} />
+          <InView className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((p, i) => (
+              <div key={p.id} className="on-view on-view-rise flex" style={d((i % 3) * 110)}>
+                <PropertyCard p={p} t={t} locale={locale} trust={byAdvertiser.get(p.advertiserId)} />
+              </div>
             ))}
-          </div>
+          </InView>
         ) : (
           <p className="card mt-8 p-10 text-center text-navy-600">{t.home.emptyLatest}</p>
         )}

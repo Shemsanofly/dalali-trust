@@ -84,6 +84,7 @@ export const sw: Dictionary = {
       "Dalali Trust hukagua matangazo na kufanya uthibitisho wa mkono, lakini hatuwezi kumhakikishia kila mtangazaji au kila nyumba. Usilipe pesa kabla ya kuona nyumba na kuthibitisha unashughulika na nani.",
     emptyLatest: "Bado hakuna nyumba zilizochapishwa. Rudi baadaye — au tangaza yako.",
     titleHighlight: "ujue unachokiendea.",
+    popularAreas: "Maeneo maarufu",
     stats: {
       published: "Nyumba {count} zimechapishwa sasa hivi",
     },

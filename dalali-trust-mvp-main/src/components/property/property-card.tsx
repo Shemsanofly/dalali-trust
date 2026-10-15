@@ -38,7 +38,7 @@ export function PropertyCard({
 }) {
   const img = p.images[0];
   return (
-    <article className="card group relative flex flex-col overflow-hidden transition-[border-color,box-shadow] hover:border-navy-200 hover:shadow-[0_6px_20px_-8px_rgb(10_17_40_/_0.25)]">
+    <article className="card group relative flex w-full flex-col overflow-hidden transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-navy-200 hover:shadow-[0_10px_24px_-12px_rgb(10_17_40_/_0.3)]">
       <div className="relative aspect-[4/3] overflow-hidden bg-navy-100">
         {img ? (
           // eslint-disable-next-line @next/next/no-img-element

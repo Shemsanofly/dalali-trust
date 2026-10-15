@@ -9,7 +9,7 @@ import { MobileMenu } from "./nav/mobile-menu";
 import { NavLink } from "./nav/nav-link";
 
 const desktopLink =
-  "relative whitespace-nowrap px-1 py-5 text-[15px] font-medium text-navy-600 transition-colors hover:text-navy-900 aria-[current=page]:text-navy-900 after:absolute after:inset-x-1 after:bottom-0 after:h-[3px] after:rounded-t after:bg-brand-600 after:opacity-0 after:transition-opacity aria-[current=page]:after:opacity-100";
+  "relative whitespace-nowrap px-1 py-5 text-[15px] font-medium text-navy-600 transition-colors hover:text-navy-900 aria-[current=page]:text-navy-900 after:absolute after:inset-x-1 after:bottom-0 after:h-[3px] after:origin-left after:scale-x-0 after:rounded-t after:bg-navy-200 after:transition-transform after:duration-300 hover:after:scale-x-100 aria-[current=page]:after:scale-x-100 aria-[current=page]:after:bg-brand-600";
 
 const mobileLink =
   "flex items-center justify-between border-b border-navy-100 py-3.5 text-lg font-semibold text-navy-800 aria-[current=page]:text-brand-700";

@@ -82,6 +82,7 @@ export const en = {
       "Dalali Trust reviews listings and performs manual verification checks, but we cannot guarantee every advertiser or property. Never pay money before you have viewed a property and confirmed who you are dealing with.",
     emptyLatest: "No homes are published yet. Check back soon — or list yours.",
     titleHighlight: "know what you are walking into.",
+    popularAreas: "Popular areas",
     stats: {
       published: "{count} homes published right now",
     },
