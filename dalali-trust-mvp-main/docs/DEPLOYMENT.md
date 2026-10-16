@@ -5,7 +5,7 @@ Dalali Trust is a standard Node.js server (`next start`). It needs:
 1. A **PostgreSQL 16** database.
 2. A **private S3-compatible bucket** for photos and documents (local disk is fine only on a single server with persistent storage).
 3. Optionally, an **email provider** (Resend) for password resets.
-4. A **daily scheduled job** (`npm run jobs:expire-verifications`).
+4. Two **daily scheduled jobs**: `npm run jobs:expire-verifications` and `npm run jobs:admin-digest`.
 
 ## Hosting options
 
@@ -49,6 +49,8 @@ Create the first administrator after the first deploy: sign up normally, then ru
 
 Schedule daily: `npm run jobs:expire-verifications` (cron, platform cron job, or a GitHub Action with the production `DATABASE_URL` secret and storage credentials).
 
+Schedule each morning (for example 06:00 EAT, which is 03:00 UTC): `npm run jobs:admin-digest`. It emails every active administrator a short summary of listings, verification requests and reports waiting for review, flagging urgent reports. It sends nothing when the queue is empty and needs `EMAIL_PROVIDER=resend`.
+
 ## Backups and recovery
 
 - Enable **automated daily backups with point-in-time recovery (PITR)** in your managed PostgreSQL provider. Keep at least 7–30 days.
@@ -77,7 +79,7 @@ Schedule daily: `npm run jobs:expire-verifications` (cron, platform cron job, or
 - [ ] Email provider configured (or `EMAIL_PROVIDER=none` accepted, with support handling resets manually)
 - [ ] Support contact variables set (`SUPPORT_EMAIL`, `SUPPORT_PHONE`, `SUPPORT_WHATSAPP`)
 - [ ] First administrator created with `admin:promote`. Admin accounts limited to trained reviewers
-- [ ] Daily `jobs:expire-verifications` scheduled and its output monitored
+- [ ] Daily `jobs:expire-verifications` and morning `jobs:admin-digest` scheduled and their output monitored
 - [ ] Uptime monitor on `/api/health`. Error logging and alerts configured on the platform
 - [ ] `TRUST_PROXY_HEADERS` set correctly for your proxy setup
 - [ ] Seed script **not** run against production (it refuses by default)

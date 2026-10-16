@@ -27,6 +27,7 @@ export const sw: Dictionary = {
     menu: "Menyu",
     language: "Language: English",
     skipToContent: "Ruka hadi maudhui",
+    install: "Weka programu kwenye simu",
     notifications: "Taarifa",
   },
   home: {
@@ -240,6 +241,13 @@ export const sw: Dictionary = {
       near_public_transport: "Karibu na daladala / mwendokasi",
       pets_allowed: "Wanyama wa kufugwa wanaruhusiwa",
     },
+    share: "Shiriki",
+    shareWhatsapp: "Shiriki WhatsApp",
+    linkCopied: "Kiungo kimenakiliwa",
+    shareText: "{title} — {price} {perMonth}, {area}. Gharama zote kwenye Dalali Trust:",
+    previewTitle: "{price} {perMonth} · {title}",
+    previewDescription:
+      "{area}. Jumla kabla ya kuhamia: {total}. Matangazo ya Dalali Trust huonyesha gharama zote na hukaguliwa kabla ya kuchapishwa.",
     safetyReminder: "Usitume pesa kabla ya kuona nyumba. Ukiombwa kulipa mapema, ripoti.",
   },
   trust: {

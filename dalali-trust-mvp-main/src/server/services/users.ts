@@ -5,6 +5,7 @@ import { writeAudit } from "../audit";
 import { prisma } from "../db";
 import { AppError, forbidden, invalidState, notFound } from "../errors";
 import { enforceRateLimit, RATE_RULES } from "../rate-limit";
+import { ogImageKey } from "../og-image";
 import { storage } from "../storage";
 import {
   advertiserProfileSchema,
@@ -253,7 +254,11 @@ export async function deleteMyAccount(actor: Actor, confirmEmail: string) {
   await Promise.allSettled([
     ...evidence.map((e) => store.delete(e.storageKey)),
     ...reportEvidence.map((e) => store.delete(e.storageKey)),
-    ...images.flatMap((i) => [store.delete(i.storageKey), store.delete(i.thumbKey)]),
+    ...images.flatMap((i) => [
+      store.delete(i.storageKey),
+      store.delete(i.thumbKey),
+      store.delete(ogImageKey(i.storageKey)),
+    ]),
   ]);
 }
 

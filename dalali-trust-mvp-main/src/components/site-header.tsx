@@ -4,7 +4,9 @@ import { setLocaleAction, signOutAction } from "@/app/actions/common";
 import { getDictionary } from "@/i18n/server";
 import { isAdvertiser } from "@/server/actor";
 import { getActor } from "@/server/session";
+import { moderationQueue } from "@/server/services/moderation-queue";
 import { unreadCount } from "@/server/services/notifications";
+import { InstallButton } from "./nav/install-button";
 import { MobileMenu } from "./nav/mobile-menu";
 import { NavLink } from "./nav/nav-link";
 
@@ -16,7 +18,21 @@ const mobileLink =
 
 export async function SiteHeader() {
   const [{ locale, t }, actor] = await Promise.all([getDictionary(), getActor()]);
-  const unread = actor ? await unreadCount(actor) : 0;
+  const [unread, queue] = await Promise.all([
+    actor ? unreadCount(actor) : 0,
+    actor?.role === "ADMIN" ? moderationQueue() : null,
+  ]);
+  // Small count of waiting moderation work, shown on the Admin link (red if anything is urgent).
+  const queueBadge = queue?.total ? (
+    <span
+      className={`ml-1.5 inline-flex min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] leading-5 font-bold ${
+        queue.urgentReports ? "bg-red-600 text-white" : "bg-gold-400 text-navy-900"
+      }`}
+      aria-label={`${queue.total} waiting for review`}
+    >
+      {queue.total > 99 ? "99+" : queue.total}
+    </span>
+  ) : null;
   const links = [
     { href: "/properties", label: t.nav.search },
     { href: "/how-it-works", label: t.nav.howItWorks },
@@ -74,6 +90,7 @@ export async function SiteHeader() {
               {actor.role === "ADMIN" ? (
                 <NavLink href="/admin" className={desktopLink}>
                   {t.nav.admin}
+                  {queueBadge}
                 </NavLink>
               ) : null}
               <NavLink href="/dashboard" className={desktopLink}>
@@ -142,6 +159,7 @@ export async function SiteHeader() {
                   {actor.role === "ADMIN" ? (
                     <NavLink href="/admin" className={mobileLink}>
                       {t.nav.admin}
+                      {queueBadge}
                     </NavLink>
                   ) : null}
                 </>
@@ -164,6 +182,7 @@ export async function SiteHeader() {
                   </Link>
                 </div>
               )}
+              <InstallButton label={t.nav.install} className="btn-secondary w-full" />
               <form action={setLocaleAction}>
                 <input type="hidden" name="locale" value={nextLocale} />
                 <button type="submit" className="btn-ghost w-full" lang={nextLocale}>

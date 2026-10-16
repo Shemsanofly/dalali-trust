@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getDictionary } from "@/i18n/server";
+import { InstallButton } from "./nav/install-button";
 
 export async function SiteFooter() {
   const { t } = await getDictionary();
@@ -21,6 +22,10 @@ export async function SiteFooter() {
             <span className="font-display text-xl font-semibold">Dalali Trust</span>
           </p>
           <p className="mt-2 max-w-sm text-sm text-navy-200">{t.brand.mission}</p>
+          <InstallButton
+            label={t.nav.install}
+            className="btn mt-4 border border-navy-600 text-white hover:border-gold-300 hover:text-gold-300"
+          />
         </div>
         <div>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm">

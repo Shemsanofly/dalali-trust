@@ -25,6 +25,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "jobs:expire-verifications": "tsx --conditions=react-server scripts/expire-verifications.ts",
+    "jobs:admin-digest": "tsx --conditions=react-server scripts/admin-digest.ts",
     "legacy:export": "tsx scripts/export-legacy-mongo.ts"
   },
   "dependencies": {

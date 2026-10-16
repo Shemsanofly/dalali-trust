@@ -4,6 +4,8 @@ This is the working playbook for the first months. Keep it short, follow it cons
 
 ## 1. Listing review (target: within 2 working days)
 
+You do not need to keep checking: the **Admin** link in the header shows how many items are waiting (red when an urgent report is open), and the morning summary email (`jobs:admin-digest`) lists the queue.
+
 Open **Admin → Listings** (oldest first). For each listing, check:
 
 1. **Photos** look like a real, specific property: not stock images, not watermarked from another site, consistent with the description. Use the _Possible duplicates_ panel. A match is a prompt to look closer, never proof.
