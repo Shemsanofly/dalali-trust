@@ -1,5 +1,7 @@
 import "server-only";
 import { unstable_rethrow } from "next/navigation";
+import { translateServerMessage } from "@/i18n/server-messages";
+import { getLocale } from "@/i18n/server";
 import { isAppError } from "./errors";
 
 export type ActionState = {
@@ -21,15 +23,33 @@ export async function runAction(
   fn: () => Promise<ActionState | void>,
   successMessage?: string,
 ): Promise<ActionState> {
+  let state: ActionState;
   try {
     const result = await fn();
-    return result ?? { ok: true, message: successMessage };
+    state = result ?? { ok: true, message: successMessage };
   } catch (e) {
     unstable_rethrow(e); // let Next.js redirects / notFound propagate
-    if (isAppError(e)) return { ok: false, message: e.message, fieldErrors: e.fieldErrors };
-    console.error("[action] unexpected error", e instanceof Error ? e.message : e);
-    return { ok: false, message: "Something went wrong. Please try again." };
+    if (isAppError(e)) state = { ok: false, message: e.message, fieldErrors: e.fieldErrors };
+    else {
+      console.error("[action] unexpected error", e instanceof Error ? e.message : e);
+      state = { ok: false, message: "Something went wrong. Please try again." };
+    }
   }
+  return localize(state);
+}
+
+/** Shows server messages in the visitor's language (English messages are the fallback). */
+async function localize(state: ActionState): Promise<ActionState> {
+  const locale = await getLocale().catch(() => "en" as const);
+  if (locale === "en") return state;
+  const tr = (m: string) => translateServerMessage(m, locale);
+  return {
+    ...state,
+    message: state.message ? tr(state.message) : state.message,
+    fieldErrors: state.fieldErrors
+      ? Object.fromEntries(Object.entries(state.fieldErrors).map(([k, v]) => [k, v.map(tr)]))
+      : state.fieldErrors,
+  };
 }
 
 export function str(form: FormData, key: string): string | undefined {

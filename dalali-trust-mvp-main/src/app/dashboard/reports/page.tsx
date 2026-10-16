@@ -59,9 +59,13 @@ export default async function ReportsPage() {
               {r.status === "DISMISSED" && !r.appealedAt ? (
                 <details className="mt-3">
                   <summary className="cursor-pointer text-sm font-semibold text-brand-700">
-                    Appeal this decision
+                    {t.landlord.reports.appealThis}
                   </summary>
-                  <ActionForm action={appealAction} submitLabel="Submit appeal" className="mt-2 space-y-2">
+                  <ActionForm
+                    action={appealAction}
+                    submitLabel={t.landlord.reports.submitAppeal}
+                    className="mt-2 space-y-2"
+                  >
                     <input type="hidden" name="id" value={r.id} />
                     <textarea
                       className="input"
@@ -70,7 +74,7 @@ export default async function ReportsPage() {
                       minLength={10}
                       maxLength={2000}
                       required
-                      aria-label="Appeal reason"
+                      aria-label={t.landlord.reports.appealReason}
                     />
                   </ActionForm>
                 </details>
@@ -82,10 +86,8 @@ export default async function ReportsPage() {
 
       {against.length ? (
         <section className="mt-10">
-          <h2 className="mb-1 text-lg font-bold">Decisions about your listings</h2>
-          <p className="mb-3 text-sm text-navy-600">
-            You can appeal a decision once. Reporters&apos; identities are kept confidential.
-          </p>
+          <h2 className="mb-1 text-lg font-bold">{t.landlord.reports.aboutYou}</h2>
+          <p className="mb-3 text-sm text-navy-600">{t.landlord.reports.aboutYouHelp}</p>
           <ul className="space-y-3">
             {against.map((r) => (
               <li key={r.id} className="card p-4">
@@ -100,7 +102,11 @@ export default async function ReportsPage() {
                   <p className="mt-2 rounded-lg bg-navy-50 p-3 text-sm">{r.publicResponse}</p>
                 ) : null}
                 {r.status === "ACTION_TAKEN" && !r.appealedAt ? (
-                  <ActionForm action={appealAction} submitLabel="Submit appeal" className="mt-3 space-y-2">
+                  <ActionForm
+                    action={appealAction}
+                    submitLabel={t.landlord.reports.submitAppeal}
+                    className="mt-3 space-y-2"
+                  >
                     <input type="hidden" name="id" value={r.id} />
                     <textarea
                       className="input"
@@ -109,8 +115,8 @@ export default async function ReportsPage() {
                       minLength={10}
                       maxLength={2000}
                       required
-                      aria-label="Appeal reason"
-                      placeholder="Explain why this decision should be reconsidered"
+                      aria-label={t.landlord.reports.appealReason}
+                      placeholder={t.landlord.reports.appealPlaceholder}
                     />
                   </ActionForm>
                 ) : null}

@@ -18,6 +18,10 @@ export function ActionForm({
   children,
   encType,
   resetOnSuccess,
+  autoSubmit,
+  pendingLabel,
+  submitName,
+  submitValue,
 }: {
   action: Action;
   submitLabel: string;
@@ -26,6 +30,11 @@ export function ActionForm({
   children?: ReactNode;
   encType?: "multipart/form-data";
   resetOnSuccess?: boolean;
+  /** Submit as soon as files are chosen (the button stays as a fallback). */
+  autoSubmit?: boolean;
+  pendingLabel?: string;
+  submitName?: string;
+  submitValue?: string;
 }) {
   const [state, formAction] = useActionState(action, { ok: false });
   return (
@@ -34,6 +43,14 @@ export function ActionForm({
       className={className}
       encType={encType}
       key={resetOnSuccess && state.ok ? state.message : undefined}
+      onChange={
+        autoSubmit
+          ? (e) => {
+              const input = e.target as unknown as HTMLInputElement;
+              if (input.type === "file" && input.files?.length) e.currentTarget.requestSubmit();
+            }
+          : undefined
+      }
     >
       <FormMessage state={state} />
       {children}
@@ -46,7 +63,14 @@ export function ActionForm({
           ))}
         </ul>
       ) : null}
-      <SubmitButton className={submitClassName}>{submitLabel}</SubmitButton>
+      <SubmitButton
+        className={submitClassName}
+        pendingLabel={pendingLabel}
+        name={submitName}
+        value={submitValue}
+      >
+        {submitLabel}
+      </SubmitButton>
     </form>
   );
 }

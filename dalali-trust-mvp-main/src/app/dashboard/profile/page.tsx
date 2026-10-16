@@ -1,3 +1,4 @@
+import { formatTzPhone } from "@/lib/phone";
 import Link from "next/link";
 import { advertiserProfileAction } from "@/app/actions/account";
 import { ActionForm } from "@/components/ui/action-form";
@@ -16,7 +17,7 @@ export default async function AdvertiserProfilePage() {
     <>
       <PageHeader
         title={t.dashboard.profile}
-        subtitle="Shown to tenants on your listings."
+        subtitle={t.landlord.profile.subtitle}
         actions={
           <Link className="btn-secondary" href={`/advertisers/${actor.id}`}>
             View public page
@@ -75,7 +76,7 @@ export default async function AdvertiserProfilePage() {
                 id="contactPhone"
                 name="contactPhone"
                 type="tel"
-                defaultValue={p?.contactPhone ?? ""}
+                defaultValue={p?.contactPhone ? formatTzPhone(p.contactPhone) : ""}
                 placeholder="07XX XXX XXX"
               />
             </div>
@@ -88,7 +89,7 @@ export default async function AdvertiserProfilePage() {
                 id="whatsappNumber"
                 name="whatsappNumber"
                 type="tel"
-                defaultValue={p?.whatsappNumber ?? ""}
+                defaultValue={p?.whatsappNumber ? formatTzPhone(p.whatsappNumber) : ""}
                 placeholder="07XX XXX XXX"
               />
             </div>
@@ -100,10 +101,10 @@ export default async function AdvertiserProfilePage() {
               defaultChecked={p?.showPhone ?? true}
               className="h-5 w-5 accent-brand-600"
             />
-            Show my phone and WhatsApp to signed-in tenants (otherwise tenants can only send viewing requests)
+            {t.landlord.profile.showPhone}
           </label>
           <fieldset>
-            <legend className="label">Regions you serve</legend>
+            <legend className="label">{t.landlord.profile.regions}</legend>
             <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
               {REGIONS.map((r) => (
                 <label key={r.slug} className="flex items-center gap-2 text-sm">

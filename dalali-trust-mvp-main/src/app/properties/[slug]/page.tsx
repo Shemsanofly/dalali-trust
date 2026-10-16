@@ -13,6 +13,7 @@ import { fmt } from "@/i18n";
 import { getDictionary } from "@/i18n/server";
 import { daysSince, formatDate } from "@/lib/dates";
 import { regionName } from "@/lib/locations";
+import { formatTZS, moveInCost } from "@/lib/money";
 import { env } from "@/server/env";
 import { getActor } from "@/server/session";
 import { track } from "@/server/services/analytics";
@@ -99,6 +100,25 @@ export default async function PropertyPage({ params }: { params: Params }) {
                   ? fmt(t.property.confirmed, { days: confirmedDays })
                   : null}
             </p>
+            {/* On phones the side column comes after the description, so repeat the essentials here. */}
+            <div className="card mt-4 p-4 lg:hidden">
+              <p className="text-2xl font-extrabold text-navy-900">
+                {formatTZS(p.rentAmount, locale)}
+                <span className="text-sm font-medium text-navy-500"> {t.property.perMonth}</span>
+              </p>
+              <p className="mt-1 text-sm text-navy-600">
+                {t.property.moveInTotal}:{" "}
+                <span className="font-semibold text-navy-900">{formatTZS(moveInCost(p).total, locale)}</span>
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <a href="#adv-title" className="btn-primary">
+                  {t.property.contact}
+                </a>
+                <a href={canInteract ? "#view-title" : "#costs"} className="btn-secondary whitespace-normal">
+                  {canInteract ? t.viewing.title : t.property.costsTitle}
+                </a>
+              </div>
+            </div>
             {stale ? (
               <div className="mt-3">
                 <Notice tone="amber">
@@ -172,8 +192,7 @@ export default async function PropertyPage({ params }: { params: Params }) {
         <aside className="space-y-5">
           <div className="card p-5">
             <p className="text-3xl font-extrabold text-navy-900">
-              {new Intl.NumberFormat(locale === "sw" ? "sw-TZ" : "en-TZ").format(p.rentAmount)}{" "}
-              <span className="text-base font-semibold">TSh</span>
+              {formatTZS(p.rentAmount, locale)}
               <span className="text-sm font-medium text-navy-500"> {t.property.perMonth}</span>
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -187,7 +206,9 @@ export default async function PropertyPage({ params }: { params: Params }) {
             </div>
           </div>
 
-          <CostBreakdown t={t} locale={locale} p={p} />
+          <div id="costs" className="scroll-mt-20">
+            <CostBreakdown t={t} locale={locale} p={p} />
+          </div>
           <TrustPanel t={t} locale={locale} trust={trust} reviewed={isPublic} />
 
           <section className="card p-5" aria-labelledby="adv-title">

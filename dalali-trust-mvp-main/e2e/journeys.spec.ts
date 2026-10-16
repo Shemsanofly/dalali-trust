@@ -36,7 +36,7 @@ test("tenant signs up, searches, saves a home, requests a viewing and reports a 
   // Open a listing: full cost breakdown and trust panel are shown
   await page.goto("/properties/sample-sinza-1");
   await expect(page.getByRole("heading", { name: /what you will pay/i })).toBeVisible();
-  await expect(page.getByText(/estimated total before moving in/i)).toBeVisible();
+  await expect(page.locator("#costs").getByText(/estimated total before moving in/i)).toBeVisible();
   await expect(page.getByText(/no check on dalali trust proves legal ownership/i)).toBeVisible();
 
   await page.getByRole("button", { name: /^save$/i }).click();
@@ -94,7 +94,7 @@ test("landlord lists a property, an admin approves it, and it appears in search"
   await page
     .getByLabel(/add photos/i)
     .setInputFiles({ name: "room.jpg", mimeType: "image/jpeg", buffer: photo });
-  await page.getByRole("button", { name: /upload photos/i }).click();
+  // Choosing photos uploads them straight away; no separate upload click is needed.
   await expect(page.getByText(/photos uploaded/i)).toBeVisible();
   await page.getByRole("button", { name: /submit for review/i }).click();
   await expect(page.getByText(/waiting for a moderator/i)).toBeVisible();

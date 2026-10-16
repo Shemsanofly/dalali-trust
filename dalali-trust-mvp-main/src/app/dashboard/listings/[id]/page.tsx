@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -8,9 +9,11 @@ import {
   uploadImagesAction,
 } from "@/app/actions/listings";
 import { ListingForm } from "@/components/listing/listing-form";
+import { StepGuide } from "@/components/listing/step-guide";
 import { imageUrl } from "@/components/property/property-card";
 import { ActionForm } from "@/components/ui/action-form";
-import { Notice, PageHeader, StatusBadge } from "@/components/ui/basics";
+import { PageHeader, StatusBadge } from "@/components/ui/basics";
+import { fmt } from "@/i18n";
 import { getDictionary } from "@/i18n/server";
 import { formatDateTime } from "@/lib/dates";
 import { isAppError } from "@/server/errors";
@@ -18,27 +21,11 @@ import { requirePageActor } from "@/server/session";
 import { getListingForOwner } from "@/server/services/listings";
 import { MAX_IMAGES_PER_LISTING } from "@/server/uploads";
 
-const STATUS_HELP: Record<string, string> = {
-  DRAFT: "Private draft. Add at least one photo, then submit it for review.",
-  PENDING_REVIEW: "Waiting for a moderator. You can still edit it.",
-  PUBLISHED:
-    "Live and visible to tenants. Changing details or photos sends it back to review; confirming availability does not.",
-  REJECTED: "Not approved. Read the moderator's note, fix the listing and submit again.",
-  ARCHIVED: "Hidden from tenants. Restore it as a draft to use it again.",
-  SUSPENDED: "Suspended by a moderator after a review. You can appeal from My reports.",
-};
-
-export default async function EditListingPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ created?: string }>;
-}) {
+export default async function EditListingPage({ params }: { params: Promise<{ id: string }> }) {
   const actor = await requirePageActor({ roles: ["LANDLORD", "AGENT"] });
   const { id } = await params;
-  const { created } = await searchParams;
-  const { t } = await getDictionary();
+  const { locale, t } = await getDictionary();
+  const tl = t.landlord;
   let listing;
   try {
     listing = await getListingForOwner(actor, id);
@@ -48,83 +35,64 @@ export default async function EditListingPage({
   }
   if (listing.advertiserId !== actor.id) notFound();
   const editable = ["DRAFT", "REJECTED", "PENDING_REVIEW", "PUBLISHED"].includes(listing.status);
+  const canSubmit = listing.status === "DRAFT" || listing.status === "REJECTED";
+  const hasPhotos = listing.images.length > 0;
+  const status = listing.status as keyof typeof tl.statusHelp;
 
   return (
     <>
       <PageHeader
         title={listing.title}
-        subtitle={<StatusBadge status={listing.status} />}
+        subtitle={<StatusBadge status={listing.status} label={tl.statuses[status]} />}
         actions={
           <Link href={`/properties/${listing.slug}`} className="btn-secondary">
-            {listing.status === "PUBLISHED" ? "View public page" : "Preview"}
+            {listing.status === "PUBLISHED" ? tl.viewPublic : tl.preview}
           </Link>
         }
       />
-      {created ? (
-        <div className="mb-4">
-          <Notice tone="green">Draft saved. Step 2: add real photos below. Step 3: submit for review.</Notice>
-        </div>
-      ) : null}
+
+      {canSubmit ? <StepGuide t={tl.steps} current={hasPhotos ? 3 : 2} /> : null}
 
       <section className="card mb-6 p-5">
-        <p className="text-sm text-navy-700">{STATUS_HELP[listing.status]}</p>
+        <p className="text-sm text-navy-700">{tl.statusHelp[status]}</p>
         {listing.reviewNote ? (
           <p className="mt-2 rounded-lg bg-red-50 p-3 text-sm text-red-800">
-            Moderator note: {listing.reviewNote}
+            {fmt(tl.moderatorNote, { note: listing.reviewNote })}
           </p>
         ) : null}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {listing.status === "DRAFT" || listing.status === "REJECTED" ? (
-            <ActionForm action={listingStatusAction} submitLabel="Submit for review" className="contents">
-              <input type="hidden" name="id" value={listing.id} />
-              <input type="hidden" name="op" value="submit" />
-            </ActionForm>
-          ) : null}
-          {listing.status !== "ARCHIVED" && listing.status !== "SUSPENDED" ? (
-            <ActionForm
-              action={listingStatusAction}
-              submitLabel="Archive listing"
-              submitClassName="btn-secondary"
-              className="contents"
-            >
-              <input type="hidden" name="id" value={listing.id} />
-              <input type="hidden" name="op" value="archive" />
-            </ActionForm>
-          ) : null}
-          {listing.status === "ARCHIVED" ? (
-            <ActionForm
-              action={listingStatusAction}
-              submitLabel="Restore as draft"
-              submitClassName="btn-secondary"
-              className="contents"
-            >
-              <input type="hidden" name="id" value={listing.id} />
-              <input type="hidden" name="op" value="restore" />
-            </ActionForm>
-          ) : null}
-          <Link href={`/dashboard/verification?property=${listing.id}`} className="btn-ghost">
-            Add property evidence
-          </Link>
-        </div>
+        {listing.status === "ARCHIVED" ? (
+          <ActionForm
+            action={listingStatusAction}
+            submitLabel={tl.restore}
+            submitClassName="btn-secondary mt-3"
+            className="contents"
+          >
+            <input type="hidden" name="id" value={listing.id} />
+            <input type="hidden" name="op" value="restore" />
+          </ActionForm>
+        ) : null}
       </section>
 
       {listing.status === "PUBLISHED" ? (
         <section className="card mb-6 p-5">
-          <h2 className="font-bold">Confirm availability</h2>
+          <h2 className="font-bold">{tl.availability.title}</h2>
           <p className="text-sm text-navy-600">
-            Last confirmed:{" "}
-            {listing.availabilityConfirmedAt ? formatDateTime(listing.availabilityConfirmedAt) : "never"}.
-            Tenants see a warning when a listing has not been confirmed recently.
+            {fmt(tl.availability.lastConfirmed, {
+              date: listing.availabilityConfirmedAt
+                ? formatDateTime(listing.availabilityConfirmedAt, locale)
+                : tl.availability.never,
+            })}{" "}
+            {tl.availability.warning}
           </p>
           <ActionForm
             action={availabilityAction}
-            submitLabel="Confirm"
+            submitLabel={tl.availability.confirm}
             className="mt-3 grid gap-2 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
           >
             <input type="hidden" name="id" value={listing.id} />
             <div>
               <label className="label" htmlFor="av-status">
-                Status
+                {tl.availability.status}
               </label>
               <select
                 className="input"
@@ -132,14 +100,14 @@ export default async function EditListingPage({
                 name="availabilityStatus"
                 defaultValue={listing.availabilityStatus}
               >
-                <option value="AVAILABLE">Available now</option>
-                <option value="AVAILABLE_SOON">Available from a date</option>
-                <option value="OCCUPIED">Occupied</option>
+                <option value="AVAILABLE">{tl.availability.AVAILABLE}</option>
+                <option value="AVAILABLE_SOON">{tl.availability.AVAILABLE_SOON}</option>
+                <option value="OCCUPIED">{tl.availability.OCCUPIED}</option>
               </select>
             </div>
             <div>
               <label className="label" htmlFor="av-from">
-                Available from
+                {tl.availability.from}
               </label>
               <input
                 className="input"
@@ -155,18 +123,21 @@ export default async function EditListingPage({
 
       <section className="card mb-6 p-5">
         <h2 className="font-bold">
-          Photos ({listing.images.length}/{MAX_IMAGES_PER_LISTING})
+          {fmt(tl.photos.title, { count: listing.images.length, max: MAX_IMAGES_PER_LISTING })}
         </h2>
-        <p className="text-sm text-navy-600">
-          Use recent photos of this exact property. Location data is removed from photos automatically. JPEG,
-          PNG or WebP, up to 8 MB each.
-        </p>
-        {listing.images.length ? (
+        <p className="text-sm text-navy-600">{tl.photos.help}</p>
+        <p className="mt-1 text-sm text-navy-600">{tl.photos.tip}</p>
+        {hasPhotos ? (
           <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {listing.images.map((img) => (
+            {listing.images.map((img, i) => (
               <li key={img.id} className="relative overflow-hidden rounded-xl border border-navy-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={imageUrl(img.id, "thumb")} alt="" className="aspect-[4/3] w-full object-cover" />
+                {i === 0 ? (
+                  <span className="absolute bottom-1 left-1 rounded-full bg-navy-900/80 px-2 py-0.5 text-xs font-semibold text-white">
+                    {tl.photos.cover}
+                  </span>
+                ) : null}
                 {editable ? (
                   <form action={removeImageAction} className="absolute top-1 right-1">
                     <input type="hidden" name="id" value={listing.id} />
@@ -175,7 +146,7 @@ export default async function EditListingPage({
                       type="submit"
                       className="rounded-full bg-white/90 px-2 py-1 text-xs font-semibold text-red-700 shadow"
                     >
-                      Remove
+                      {tl.photos.remove}
                     </button>
                   </form>
                 ) : null}
@@ -186,14 +157,17 @@ export default async function EditListingPage({
         {editable && listing.images.length < MAX_IMAGES_PER_LISTING ? (
           <ActionForm
             action={uploadImagesAction}
-            submitLabel="Upload photos"
+            submitLabel={tl.photos.upload}
+            pendingLabel={tl.photos.uploading}
+            submitClassName={hasPhotos ? "btn-secondary" : "btn-primary"}
             encType="multipart/form-data"
             className="mt-4 space-y-3"
             resetOnSuccess
+            autoSubmit
           >
             <input type="hidden" name="id" value={listing.id} />
             <label className="label" htmlFor="images">
-              Add photos
+              {tl.photos.add}
             </label>
             <input
               className="input"
@@ -206,21 +180,67 @@ export default async function EditListingPage({
             />
           </ActionForm>
         ) : null}
+
+        {canSubmit ? (
+          <div className="mt-5 border-t border-navy-100 pt-5">
+            <p className="mb-3 text-sm font-semibold text-navy-800">
+              {hasPhotos ? tl.nextSubmit : tl.nextPhotos}
+            </p>
+            <ActionForm
+              action={listingStatusAction}
+              submitLabel={tl.submit}
+              submitClassName={hasPhotos ? "btn-primary w-full sm:w-auto" : "btn-secondary w-full sm:w-auto"}
+              className="space-y-3"
+            >
+              <input type="hidden" name="id" value={listing.id} />
+              <input type="hidden" name="op" value="submit" />
+            </ActionForm>
+          </div>
+        ) : null}
       </section>
 
       {editable ? (
-        <ListingForm
-          action={updateListingAction}
-          t={t.property}
-          submitLabel={listing.status === "PUBLISHED" ? "Save changes (sends to review)" : "Save changes"}
-          defaults={{
-            ...listing,
-            latitude: listing.latitude?.toString() ?? null,
-            longitude: listing.longitude?.toString() ?? null,
-            availableFrom: listing.availableFrom?.toISOString().slice(0, 10) ?? null,
-          }}
-        />
+        <details className="group card mb-6" open={listing.status === "REJECTED" || undefined}>
+          <summary className="flex cursor-pointer list-none items-center justify-between p-5 font-bold [&::-webkit-details-marker]:hidden">
+            {tl.editDetails}
+            <ChevronDown
+              className="h-5 w-5 text-navy-500 transition-transform group-open:rotate-180"
+              aria-hidden
+            />
+          </summary>
+          <div className="border-t border-navy-100 p-4 sm:p-5">
+            <ListingForm
+              action={updateListingAction}
+              t={t.property}
+              tf={tl.form}
+              submitLabel={listing.status === "PUBLISHED" ? tl.saveChangesReview : tl.saveChanges}
+              defaults={{
+                ...listing,
+                latitude: listing.latitude?.toString() ?? null,
+                longitude: listing.longitude?.toString() ?? null,
+                availableFrom: listing.availableFrom?.toISOString().slice(0, 10) ?? null,
+              }}
+            />
+          </div>
+        </details>
       ) : null}
+
+      <div className="flex flex-wrap gap-2">
+        <Link href={`/dashboard/verification?property=${listing.id}`} className="btn-ghost">
+          {tl.addEvidence}
+        </Link>
+        {listing.status !== "ARCHIVED" && listing.status !== "SUSPENDED" ? (
+          <ActionForm
+            action={listingStatusAction}
+            submitLabel={tl.archive}
+            submitClassName="btn-ghost text-navy-600"
+            className="contents"
+          >
+            <input type="hidden" name="id" value={listing.id} />
+            <input type="hidden" name="op" value="archive" />
+          </ActionForm>
+        ) : null}
+      </div>
     </>
   );
 }

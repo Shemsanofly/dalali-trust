@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { imageUrl } from "@/components/property/property-card";
 import { EmptyState, PageHeader, StatusBadge } from "@/components/ui/basics";
+import { fmt } from "@/i18n";
 import { getDictionary } from "@/i18n/server";
 import { formatDate } from "@/lib/dates";
 import { formatTZS } from "@/lib/money";
@@ -15,7 +16,7 @@ export default async function MyListingsPage() {
     <>
       <PageHeader
         title={t.dashboard.listings}
-        subtitle="Views and contacts are counted over the last 30 days."
+        subtitle={t.landlord.myListings.subtitle}
         actions={
           <Link href="/dashboard/listings/new" className="btn-primary">
             {t.dashboard.newListing}
@@ -24,8 +25,8 @@ export default async function MyListingsPage() {
       />
       {listings.length === 0 ? (
         <EmptyState
-          title="You have no listings yet."
-          body="Add your first property — it is free."
+          title={t.landlord.myListings.empty}
+          body={t.landlord.myListings.emptyBody}
           action={{ href: "/dashboard/listings/new", label: t.dashboard.newListing }}
         />
       ) : (
@@ -50,20 +51,29 @@ export default async function MyListingsPage() {
                     <Link href={`/dashboard/listings/${l.id}`} className="font-semibold underline">
                       {l.title}
                     </Link>
-                    <StatusBadge status={l.status} />
+                    <StatusBadge
+                      status={l.status}
+                      label={t.landlord.statuses[l.status as keyof typeof t.landlord.statuses]}
+                    />
                   </div>
                   <p className="text-sm text-navy-600">
-                    {l.neighborhood}, {l.district} · {formatTZS(l.rentAmount, locale)} · updated{" "}
-                    {formatDate(l.updatedAt, locale)}
+                    {l.neighborhood}, {l.district} · {formatTZS(l.rentAmount, locale)} ·{" "}
+                    {fmt(t.landlord.myListings.updated, { date: formatDate(l.updatedAt, locale) })}
                   </p>
                   {s ? (
                     <p className="mt-1 text-xs text-navy-500">
-                      {s.views} views · {s.contacts} contact clicks · {s.saves} saves · {s.viewings} viewing
-                      requests
+                      {fmt(t.landlord.myListings.stats, {
+                        views: s.views,
+                        contacts: s.contacts,
+                        saves: s.saves,
+                        viewings: s.viewings,
+                      })}
                     </p>
                   ) : null}
                   {l.reviewNote && (l.status === "REJECTED" || l.status === "SUSPENDED") ? (
-                    <p className="mt-1 text-sm text-red-700">Moderator note: {l.reviewNote}</p>
+                    <p className="mt-1 text-sm text-red-700">
+                      {fmt(t.landlord.moderatorNote, { note: l.reviewNote })}
+                    </p>
                   ) : null}
                 </div>
               </li>

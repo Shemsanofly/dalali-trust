@@ -1,8 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import type { Dictionary } from "@/i18n";
+import { fmt, type Dictionary } from "@/i18n";
 import { REGIONS } from "@/lib/locations";
+import { formatTzPhone } from "@/lib/phone";
 import { FieldError, FormMessage, SubmitButton } from "../ui/form";
 
 type State = {
@@ -57,11 +58,13 @@ export function ListingForm({
   action,
   defaults,
   t,
+  tf,
   submitLabel,
 }: {
   action: Action;
   defaults: ListingDefaults;
   t: Dictionary["property"];
+  tf: Dictionary["landlord"]["form"];
   submitLabel: string;
 }) {
   const [state, formAction] = useActionState(action, { ok: false });
@@ -90,11 +93,11 @@ export function ListingForm({
       {defaults.id ? <input type="hidden" name="id" value={defaults.id} /> : null}
       <FormMessage state={state} />
 
-      <Section title="Basics">
+      <Section title={tf.basics}>
         <Text
           name="title"
-          label="Title"
-          hint="E.g. Self-contained room near Mwenge bus stand"
+          label={tf.title}
+          hint={tf.titleHint}
           defaultValue={val("title", defaults.title)}
           errors={err.title}
           maxLength={120}
@@ -102,7 +105,7 @@ export function ListingForm({
         />
         <div>
           <label className="label" htmlFor="description">
-            Description
+            {tf.description}
           </label>
           <textarea
             className="input"
@@ -115,22 +118,21 @@ export function ListingForm({
             aria-describedby="description-hint"
           />
           <p id="description-hint" className="mt-1 text-xs text-navy-500">
-            Describe the home honestly: condition, access road, security, who it suits. At least 40
-            characters.
+            {tf.descriptionHint}
           </p>
           <FieldError errors={err.description} />
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
           <Select
             name="propertyType"
-            label="Property type"
+            label={tf.propertyType}
             defaultValue={val("propertyType", defaults.propertyType ?? "BEDSITTER")}
             options={PROPERTY_TYPES.map((p) => [p, t.types[p]])}
             errors={err.propertyType}
           />
           <Text
             name="bedrooms"
-            label="Bedrooms"
+            label={tf.bedrooms}
             type="number"
             min={0}
             max={20}
@@ -139,7 +141,7 @@ export function ListingForm({
           />
           <Text
             name="bathrooms"
-            label="Bathrooms"
+            label={tf.bathrooms}
             type="number"
             min={0}
             max={20}
@@ -158,18 +160,18 @@ export function ListingForm({
         </label>
       </Section>
 
-      <Section title="Location">
+      <Section title={tf.location}>
         <div className="grid gap-4 sm:grid-cols-3">
           <Select
             name="region"
-            label="Region"
+            label={tf.region}
             defaultValue={val("region", defaults.region ?? "dar-es-salaam")}
             options={REGIONS.map((r) => [r.slug, r.name])}
             errors={err.region}
           />
           <div>
             <label className="label" htmlFor="district">
-              District
+              {tf.district}
             </label>
             <input
               className="input"
@@ -189,7 +191,7 @@ export function ListingForm({
           </div>
           <Text
             name="neighborhood"
-            label="Neighbourhood / street area"
+            label={tf.neighborhood}
             defaultValue={val("neighborhood", defaults.neighborhood)}
             errors={err.neighborhood}
             maxLength={80}
@@ -198,39 +200,42 @@ export function ListingForm({
         </div>
         <Text
           name="streetAddress"
-          label="Directions or landmark (optional)"
-          hint="Shown publicly. Do not give a house number if you prefer to share it after contact."
+          label={tf.streetAddress}
+          hint={tf.streetAddressHint}
           defaultValue={val("streetAddress", defaults.streetAddress)}
           errors={err.streetAddress}
           maxLength={160}
         />
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Text
-            name="latitude"
-            label="Approximate latitude (optional)"
-            hint="Rounded to about 100 m before saving."
-            inputMode="decimal"
-            defaultValue={val("latitude", defaults.latitude)}
-            errors={err.latitude}
-          />
-          <Text
-            name="longitude"
-            label="Approximate longitude (optional)"
-            inputMode="decimal"
-            defaultValue={val("longitude", defaults.longitude)}
-            errors={err.longitude}
-          />
-        </div>
+        <details
+          className="group rounded-lg border border-navy-100 p-3"
+          open={Boolean(val("latitude", defaults.latitude) || err.latitude || err.longitude)}
+        >
+          <summary className="cursor-pointer text-sm font-semibold text-navy-800">{tf.mapPin}</summary>
+          <p className="mt-2 text-sm text-navy-600">{tf.mapPinHelp}</p>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <Text
+              name="latitude"
+              label={tf.latitude}
+              inputMode="decimal"
+              defaultValue={val("latitude", defaults.latitude)}
+              errors={err.latitude}
+            />
+            <Text
+              name="longitude"
+              label={tf.longitude}
+              inputMode="decimal"
+              defaultValue={val("longitude", defaults.longitude)}
+              errors={err.longitude}
+            />
+          </div>
+        </details>
       </Section>
 
-      <Section
-        title="Costs (TZS)"
-        description="Tenants see all of these before contacting you. Listings with missing or hidden charges are rejected."
-      >
+      <Section title={tf.costs} description={tf.costsHelp}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Text
             name="rentAmount"
-            label="Monthly rent (TSh)"
+            label={tf.rent}
             inputMode="numeric"
             defaultValue={val("rentAmount", defaults.rentAmount)}
             errors={err.rentAmount}
@@ -238,7 +243,7 @@ export function ListingForm({
           />
           <Text
             name="advanceMonths"
-            label="Months of rent paid in advance"
+            label={tf.advanceMonths}
             type="number"
             min={1}
             max={24}
@@ -247,14 +252,14 @@ export function ListingForm({
           />
           <Text
             name="depositAmount"
-            label="Deposit (TSh, 0 if none)"
+            label={tf.deposit}
             inputMode="numeric"
             defaultValue={val("depositAmount", defaults.depositAmount ?? 0)}
             errors={err.depositAmount}
           />
           <Text
             name="agentFeeAmount"
-            label="Agent fee (TSh, 0 if none)"
+            label={tf.agentFee}
             inputMode="numeric"
             defaultValue={val("agentFeeAmount", defaults.agentFeeAmount ?? 0)}
             errors={err.agentFeeAmount}
@@ -262,46 +267,46 @@ export function ListingForm({
         </div>
         <Text
           name="agentFeeNote"
-          label="Agent fee details (optional)"
-          hint="E.g. one month's rent, paid after signing the agreement"
+          label={tf.agentFeeNote}
+          hint={tf.agentFeeNoteHint}
           defaultValue={val("agentFeeNote", defaults.agentFeeNote)}
           errors={err.agentFeeNote}
           maxLength={200}
         />
         <Text
           name="paymentTerms"
-          label="Payment terms (optional)"
-          hint="E.g. 6 months upfront, then quarterly. Payment only after viewing and signing."
+          label={tf.paymentTerms}
+          hint={tf.paymentTermsHint}
           defaultValue={val("paymentTerms", defaults.paymentTerms)}
           errors={err.paymentTerms}
           maxLength={500}
         />
         <fieldset>
-          <legend className="label">Other charges (security, garbage collection, service charge…)</legend>
+          <legend className="label">{tf.otherCharges}</legend>
           <div className="space-y-2">
             {charges.map((c, i) => (
               <div key={i} className="grid gap-2 sm:grid-cols-[2fr_1fr_1fr_2fr]">
                 <input
                   className="input"
                   name={`charge_label_${i}`}
-                  placeholder="Name, e.g. Security"
+                  placeholder={tf.chargeNamePlaceholder}
                   defaultValue={c.label}
-                  aria-label={`Charge ${i + 1} name`}
+                  aria-label={fmt(tf.chargeName, { n: i + 1 })}
                   maxLength={60}
                 />
                 <input
                   className="input"
                   name={`charge_amount_${i}`}
-                  placeholder="Amount"
+                  placeholder={tf.chargeAmountPlaceholder}
                   inputMode="numeric"
                   defaultValue={c.amount}
-                  aria-label={`Charge ${i + 1} amount`}
+                  aria-label={fmt(tf.chargeAmount, { n: i + 1 })}
                 />
                 <select
                   className="input"
                   name={`charge_frequency_${i}`}
                   defaultValue={c.frequency}
-                  aria-label={`Charge ${i + 1} frequency`}
+                  aria-label={fmt(tf.chargeFrequency, { n: i + 1 })}
                 >
                   <option value="ONE_TIME">{t.oneTime}</option>
                   <option value="MONTHLY">{t.monthly}</option>
@@ -309,9 +314,9 @@ export function ListingForm({
                 <input
                   className="input"
                   name={`charge_note_${i}`}
-                  placeholder="Note (optional)"
+                  placeholder={tf.chargeNotePlaceholder}
                   defaultValue={c.note}
-                  aria-label={`Charge ${i + 1} note`}
+                  aria-label={fmt(tf.chargeNote, { n: i + 1 })}
                   maxLength={160}
                 />
               </div>
@@ -323,7 +328,7 @@ export function ListingForm({
         </fieldset>
       </Section>
 
-      <Section title="Utilities and amenities">
+      <Section title={tf.utilities}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Select
             name="electricity"
@@ -342,8 +347,8 @@ export function ListingForm({
         </div>
         <Text
           name="utilityNotes"
-          label="Utility notes (optional)"
-          hint="E.g. water bill shared between 4 tenants, about TSh 10,000/month"
+          label={tf.utilityNotes}
+          hint={tf.utilityNotesHint}
           defaultValue={val("utilityNotes", defaults.utilityNotes)}
           errors={err.utilityNotes}
           maxLength={300}
@@ -367,39 +372,45 @@ export function ListingForm({
         </fieldset>
       </Section>
 
-      <Section title="Availability and contact">
+      <Section title={tf.availabilityContact}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Select
             name="availabilityStatus"
-            label="Availability"
+            label={tf.availability}
             defaultValue={val("availabilityStatus", defaults.availabilityStatus ?? "AVAILABLE")}
             options={[
-              ["AVAILABLE", "Available now"],
-              ["AVAILABLE_SOON", "Available from a date"],
-              ["OCCUPIED", "Currently occupied"],
+              ["AVAILABLE", tf.availableNow],
+              ["AVAILABLE_SOON", tf.availableSoon],
+              ["OCCUPIED", tf.occupied],
             ]}
             errors={err.availabilityStatus}
           />
           <Text
             name="availableFrom"
-            label="Available from (if not now)"
+            label={tf.availableFrom}
             type="date"
             defaultValue={val("availableFrom", defaults.availableFrom)}
             errors={err.availableFrom}
           />
           <Text
             name="contactPhone"
-            label="Phone for this listing (optional)"
-            hint="Leave empty to use your profile number"
+            label={tf.contactPhone}
+            hint={tf.contactPhoneHint}
             type="tel"
-            defaultValue={val("contactPhone", defaults.contactPhone)}
+            defaultValue={val(
+              "contactPhone",
+              defaults.contactPhone ? formatTzPhone(defaults.contactPhone) : null,
+            )}
             errors={err.contactPhone}
           />
           <Text
             name="contactWhatsapp"
-            label="WhatsApp for this listing (optional)"
+            label={tf.contactWhatsapp}
             type="tel"
-            defaultValue={val("contactWhatsapp", defaults.contactWhatsapp)}
+            defaultValue={val(
+              "contactWhatsapp",
+              defaults.contactWhatsapp ? formatTzPhone(defaults.contactWhatsapp) : null,
+            )}
             errors={err.contactWhatsapp}
           />
         </div>

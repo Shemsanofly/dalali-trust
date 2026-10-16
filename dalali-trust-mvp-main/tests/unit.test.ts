@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { parseEatLocalDateTime } from "@/lib/dates";
+import { translateServerMessage } from "@/i18n/server-messages";
+import { coordinatesFromForm } from "@/lib/coordinates";
 import { formatTZS, moveInCost, parseTZS } from "@/lib/money";
 import { normalizeTzPhone } from "@/lib/phone";
 import { makeListingSlug } from "@/lib/slug";
@@ -73,5 +75,42 @@ describe("security helpers", () => {
     expect(makeListingSlug("Nyumba nzuri <script>", "Mbezi Beach")).toMatch(
       /^nyumba-nzuri-script-mbezi-beach-[a-z0-9]{6}$/,
     );
+  });
+});
+
+describe("map coordinates pasted by advertisers", () => {
+  it("splits a pasted pair or a Google Maps link into latitude and longitude", () => {
+    expect(coordinatesFromForm("-6.7735, 39.2195", "")).toEqual(["-6.7735", "39.2195"]);
+    expect(coordinatesFromForm("-6.7735 39.2195", undefined)).toEqual(["-6.7735", "39.2195"]);
+    expect(coordinatesFromForm("https://www.google.com/maps/place/Sinza/@-6.7809,39.2276,15z", "")).toEqual([
+      "-6.7809",
+      "39.2276",
+    ]);
+    expect(coordinatesFromForm("https://maps.google.com/?q=-6.8,39.28", "")).toEqual(["-6.8", "39.28"]);
+  });
+  it("leaves separate or unrecognised values alone", () => {
+    expect(coordinatesFromForm("-6.77", "39.22")).toEqual(["-6.77", "39.22"]);
+    expect(coordinatesFromForm("near the market", "")).toEqual(["near the market", ""]);
+    expect(coordinatesFromForm(undefined, undefined)).toEqual([undefined, undefined]);
+  });
+});
+
+describe("server messages in Swahili", () => {
+  it("translates known messages and templated field errors", () => {
+    expect(translateServerMessage("Photos uploaded.", "sw")).toBe("Picha zimepakiwa.");
+    expect(translateServerMessage("Title must be at least 8 characters", "sw")).toBe(
+      "Kichwa lazima iwe na angalau herufi 8",
+    );
+    expect(translateServerMessage("Monthly rent must be greater than zero", "sw")).toBe(
+      "Kodi ya mwezi lazima iwe zaidi ya sifuri",
+    );
+    expect(translateServerMessage("District is required", "sw")).toBe("Wilaya inahitajika");
+    expect(translateServerMessage("A listing can have at most 12 photos.", "sw")).toBe(
+      "Tangazo linaweza kuwa na picha zisizozidi 12.",
+    );
+  });
+  it("keeps English as is and falls back to English for unknown messages", () => {
+    expect(translateServerMessage("Photos uploaded.", "en")).toBe("Photos uploaded.");
+    expect(translateServerMessage("Decision recorded.", "sw")).toBe("Decision recorded.");
   });
 });

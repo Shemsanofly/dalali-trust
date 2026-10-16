@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { coordinatesFromForm } from "@/lib/coordinates";
 import { files, runAction, str, type ActionState } from "@/server/action-result";
 import { unauthenticated } from "@/server/errors";
 import { getActor } from "@/server/session";
@@ -38,6 +39,7 @@ function listingFromForm(form: FormData) {
     });
   }
   const money = (k: string) => (str(form, k) ?? "").replace(/[,\s]/g, "");
+  const [latitude, longitude] = coordinatesFromForm(str(form, "latitude"), str(form, "longitude"));
   return {
     title: str(form, "title"),
     description: str(form, "description"),
@@ -46,8 +48,8 @@ function listingFromForm(form: FormData) {
     district: str(form, "district"),
     neighborhood: str(form, "neighborhood"),
     streetAddress: str(form, "streetAddress"),
-    latitude: str(form, "latitude"),
-    longitude: str(form, "longitude"),
+    latitude,
+    longitude,
     rentAmount: money("rentAmount"),
     advanceMonths: str(form, "advanceMonths"),
     depositAmount: money("depositAmount") || "0",

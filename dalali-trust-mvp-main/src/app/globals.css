@@ -48,6 +48,8 @@
 }
 
 html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* keep anchored headings clear of the sticky header */
   -webkit-font-smoothing: antialiased;
   text-size-adjust: 100%;
 }

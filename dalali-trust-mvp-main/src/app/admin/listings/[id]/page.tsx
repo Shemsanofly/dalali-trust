@@ -73,9 +73,15 @@ export default async function AdminListingDetail({ params }: { params: Promise<{
             </p>
             {l.streetAddress ? <p className="text-navy-600">{l.streetAddress}</p> : null}
             <p className="mt-3 whitespace-pre-line text-navy-700">{l.description}</p>
-            <p className="mt-3 text-navy-600">Amenities: {l.amenities.join(", ") || "—"}</p>
+            <p className="mt-3 text-navy-600">
+              Amenities:{" "}
+              {l.amenities
+                .map((a) => t.property.amenities[a as keyof typeof t.property.amenities] ?? a)
+                .join(", ") || "—"}
+            </p>
             <p className="text-navy-600">
-              Electricity: {l.electricity} · Water: {l.water} {l.utilityNotes ? `· ${l.utilityNotes}` : ""}
+              Electricity: {t.property.utility[l.electricity]} · Water: {t.property.utility[l.water]}{" "}
+              {l.utilityNotes ? `· ${l.utilityNotes}` : ""}
             </p>
           </section>
           <CostBreakdown t={t} locale={locale} p={l} />

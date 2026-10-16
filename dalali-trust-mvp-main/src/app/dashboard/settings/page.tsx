@@ -1,3 +1,4 @@
+import { formatTzPhone } from "@/lib/phone";
 import { deleteAccountAction, updateProfileAction } from "@/app/actions/account";
 import { changePasswordAction } from "@/app/actions/auth";
 import { ActionForm } from "@/components/ui/action-form";
@@ -14,7 +15,7 @@ export default async function SettingsPage() {
     <>
       <PageHeader title={t.dashboard.settings} subtitle={`${me.email} · ${t.property.roles[me.role]}`} />
       <section className="card p-5">
-        <h2 className="mb-3 font-bold">Profile</h2>
+        <h2 className="mb-3 font-bold">{t.account.profile}</h2>
         <ActionForm action={updateProfileAction} submitLabel={t.common.save}>
           <div>
             <label className="label" htmlFor="name">
@@ -39,7 +40,7 @@ export default async function SettingsPage() {
               id="phoneNumber"
               name="phoneNumber"
               type="tel"
-              defaultValue={me.phoneNumber ?? ""}
+              defaultValue={me.phoneNumber ? formatTzPhone(me.phoneNumber) : ""}
               placeholder="07XX XXX XXX"
               autoComplete="tel"
             />
@@ -61,7 +62,7 @@ export default async function SettingsPage() {
         <ActionForm action={changePasswordAction} submitLabel={t.auth.resetSubmit} resetOnSuccess>
           <div>
             <label className="label" htmlFor="currentPassword">
-              Current password
+              {t.account.currentPassword}
             </label>
             <input
               className="input"
@@ -91,20 +92,16 @@ export default async function SettingsPage() {
       </section>
 
       <section className="card mt-6 border-red-200 p-5">
-        <h2 className="font-bold text-red-800">Delete account</h2>
-        <p className="mt-1 text-sm text-navy-600">
-          This removes your personal details, saved homes and uploaded files, archives your listings and signs
-          you out. Records of moderation decisions are kept without your personal details. This cannot be
-          undone.
-        </p>
+        <h2 className="font-bold text-red-800">{t.account.deleteTitle}</h2>
+        <p className="mt-1 text-sm text-navy-600">{t.account.deleteBody}</p>
         <ActionForm
           action={deleteAccountAction}
-          submitLabel="Delete my account permanently"
+          submitLabel={t.account.deleteButton}
           submitClassName="btn-danger"
           className="mt-3 space-y-3"
         >
           <label className="label" htmlFor="confirmEmail">
-            Type your email address to confirm
+            {t.account.deleteConfirm}
           </label>
           <input
             className="input"

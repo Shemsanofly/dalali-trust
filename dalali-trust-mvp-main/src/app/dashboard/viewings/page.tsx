@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cancelViewingAction } from "@/app/actions/tenant";
 import { respondViewingAction } from "@/app/actions/listings";
 import { ActionForm } from "@/components/ui/action-form";
+import { SubmitButton } from "@/components/ui/form";
 import { EmptyState, PageHeader, StatusBadge } from "@/components/ui/basics";
 import { getDictionary } from "@/i18n/server";
 import { formatDateTime } from "@/lib/dates";
@@ -58,7 +59,11 @@ export default async function ViewingsPage() {
                     {v.status === "PENDING" || v.status === "ACCEPTED" ? (
                       <ActionForm
                         action={respondViewingAction}
-                        submitLabel="Update"
+                        submitLabel={
+                          v.status === "PENDING" ? t.landlord.viewings.accept : t.landlord.viewings.complete
+                        }
+                        submitName="decision"
+                        submitValue={v.status === "PENDING" ? "ACCEPT" : "COMPLETE"}
                         className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]"
                         submitClassName="btn-primary"
                       >
@@ -67,24 +72,14 @@ export default async function ViewingsPage() {
                           className="input"
                           name="message"
                           maxLength={1000}
-                          placeholder="Reply (optional), e.g. confirm the address"
-                          aria-label="Reply message"
+                          placeholder={t.landlord.viewings.reply}
+                          aria-label={t.landlord.viewings.replyLabel}
                         />
-                        <select
-                          name="decision"
-                          className="input"
-                          aria-label="Decision"
-                          defaultValue={v.status === "PENDING" ? "ACCEPT" : "COMPLETE"}
-                        >
-                          {v.status === "PENDING" ? (
-                            <>
-                              <option value="ACCEPT">Accept</option>
-                              <option value="DECLINE">Decline</option>
-                            </>
-                          ) : (
-                            <option value="COMPLETE">Mark as completed</option>
-                          )}
-                        </select>
+                        {v.status === "PENDING" ? (
+                          <SubmitButton className="btn-secondary" name="decision" value="DECLINE">
+                            {t.landlord.viewings.decline}
+                          </SubmitButton>
+                        ) : null}
                       </ActionForm>
                     ) : null}
                   </li>
@@ -97,7 +92,7 @@ export default async function ViewingsPage() {
 
       {!advertiser || mine.length ? (
         <section>
-          {advertiser ? <h2 className="mb-3 text-lg font-bold">Requests you sent</h2> : null}
+          {advertiser ? <h2 className="mb-3 text-lg font-bold">{t.landlord.viewings.sent}</h2> : null}
           {mine.length === 0 ? (
             <EmptyState
               title={t.dashboard.emptyViewings}
