@@ -7,6 +7,8 @@ import { enforceRateLimit, RATE_RULES } from "../rate-limit";
 import { parseOrThrow, viewingInputSchema } from "../validation";
 import { track } from "./analytics";
 import { publicListingWhere } from "./listings";
+import { formatEatNumeric } from "@/lib/dates";
+import { appLink } from "../whatsapp";
 import { notify } from "./notifications";
 
 const MIN_LEAD_MS = 60 * 60 * 1000; // at least 1 hour ahead
@@ -60,6 +62,10 @@ export async function createViewingRequest(actor: Actor, raw: unknown) {
       title: "New viewing request",
       body: `Someone asked to view "${property.title}".`,
       link: "/dashboard/viewings",
+      whatsapp: {
+        template: "dalali_viewing_requested",
+        params: [property.title, formatEatNumeric(input.proposedAt), appLink("/dashboard/viewings")],
+      },
     });
     return vr;
   });
@@ -136,6 +142,13 @@ export async function respondToViewing(
         title: "Viewing request update",
         body: `Your viewing request for "${vr.property.title}" was ${next.toLowerCase()}.${responseMessage ? ` Message: ${responseMessage}` : ""}`,
         link: "/dashboard/viewings",
+        whatsapp:
+          next === "ACCEPTED"
+            ? {
+                template: "dalali_viewing_accepted",
+                params: [vr.property.title, formatEatNumeric(vr.proposedAt), appLink("/dashboard/viewings")],
+              }
+            : { template: "dalali_viewing_declined", params: [vr.property.title, appLink("/properties")] },
       });
     }
   });

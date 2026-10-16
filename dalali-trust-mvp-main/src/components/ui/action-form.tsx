@@ -58,7 +58,7 @@ export function ActionForm({
         <ul className="text-sm text-red-700">
           {Object.entries(state.fieldErrors).map(([k, v]) => (
             <li key={k}>
-              <FieldError errors={v.map((m) => (k === "_form" ? m : `${k}: ${m}`))} />
+              <FieldError errors={v} />
             </li>
           ))}
         </ul>

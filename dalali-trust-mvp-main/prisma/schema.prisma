@@ -171,6 +171,8 @@ model User {
   status          AccountStatus @default(ACTIVE)
   phoneNumber     String?
   locale          String        @default("en")
+  /// Consent to receive WhatsApp updates on phoneNumber (viewing requests, listing reviews).
+  whatsappUpdates Boolean       @default(false)
   suspendedReason String?
   suspendedAt     DateTime?     @db.Timestamptz(3)
   deletedAt       DateTime?     @db.Timestamptz(3)
@@ -180,19 +182,19 @@ model User {
   sessions             Session[]
   accounts             Account[]
   advertiserProfile    AdvertiserProfile?
-  properties           Property[]            @relation("PropertyAdvertiser")
+  properties           Property[]             @relation("PropertyAdvertiser")
   savedProperties      SavedProperty[]
-  viewingRequestsMade  ViewingRequest[]      @relation("ViewingRequester")
-  viewingRequestsRecv  ViewingRequest[]      @relation("ViewingAdvertiser")
-  verificationRequests VerificationRequest[] @relation("VerificationSubject")
-  verificationReviews  VerificationRequest[] @relation("VerificationReviewer")
+  viewingRequestsMade  ViewingRequest[]       @relation("ViewingRequester")
+  viewingRequestsRecv  ViewingRequest[]       @relation("ViewingAdvertiser")
+  verificationRequests VerificationRequest[]  @relation("VerificationSubject")
+  verificationReviews  VerificationRequest[]  @relation("VerificationReviewer")
   evidenceUploaded     VerificationEvidence[]
-  reportsFiled         Report[]              @relation("ReportReporter")
-  reportsAgainst       Report[]              @relation("ReportSubjectUser")
-  reportsAssigned      Report[]              @relation("ReportAssignee")
+  reportsFiled         Report[]               @relation("ReportReporter")
+  reportsAgainst       Report[]               @relation("ReportSubjectUser")
+  reportsAssigned      Report[]               @relation("ReportAssignee")
   reportEvidence       ReportEvidence[]
-  moderationActions    ModerationAction[]    @relation("ModerationActor")
-  moderationTargets    ModerationAction[]    @relation("ModerationTargetUser")
+  moderationActions    ModerationAction[]     @relation("ModerationActor")
+  moderationTargets    ModerationAction[]     @relation("ModerationTargetUser")
   auditLogs            AuditLog[]
   notifications        Notification[]
   feedback             Feedback[]
@@ -289,40 +291,40 @@ model AdvertiserProfile {
 // ─────────────────────────────────────────────────────────────────────────────
 
 model Property {
-  id           String       @id @default(cuid())
-  slug         String       @unique
+  id           String @id @default(cuid())
+  slug         String @unique
   advertiserId String
-  advertiser   User         @relation("PropertyAdvertiser", fields: [advertiserId], references: [id], onDelete: Restrict)
+  advertiser   User   @relation("PropertyAdvertiser", fields: [advertiserId], references: [id], onDelete: Restrict)
 
   title        String
   description  String
   propertyType PropertyType
 
-  region          String
-  district        String
-  neighborhood    String
-  streetAddress   String?
+  region        String
+  district      String
+  neighborhood  String
+  streetAddress String?
   /// Approximate location only (rounded to ~100 m before storage).
-  latitude        Decimal?  @db.Decimal(8, 5)
-  longitude       Decimal?  @db.Decimal(8, 5)
+  latitude      Decimal? @db.Decimal(8, 5)
+  longitude     Decimal? @db.Decimal(8, 5)
 
-  currency      String     @default("TZS") @db.Char(3)
-  rentAmount    Int
-  rentPeriod    RentPeriod @default(MONTHLY)
+  currency       String     @default("TZS") @db.Char(3)
+  rentAmount     Int
+  rentPeriod     RentPeriod @default(MONTHLY)
   /// Months of rent the advertiser asks to be paid up front (common in Tanzania).
-  advanceMonths Int        @default(1)
-  depositAmount Int        @default(0)
-  agentFeeAmount Int       @default(0)
-  agentFeeNote  String?
-  paymentTerms  String?
+  advanceMonths  Int        @default(1)
+  depositAmount  Int        @default(0)
+  agentFeeAmount Int        @default(0)
+  agentFeeNote   String?
+  paymentTerms   String?
 
   bedrooms  Int
   bathrooms Int
   furnished Boolean  @default(false)
   amenities String[] @default([])
 
-  electricity UtilityArrangement @default(ASK_ADVERTISER)
-  water       UtilityArrangement @default(ASK_ADVERTISER)
+  electricity  UtilityArrangement @default(ASK_ADVERTISER)
+  water        UtilityArrangement @default(ASK_ADVERTISER)
   utilityNotes String?
 
   contactPhone    String?
@@ -523,16 +525,16 @@ model Report {
 }
 
 model ReportEvidence {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   reportId     String
-  report       Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  report       Report    @relation(fields: [reportId], references: [id], onDelete: Cascade)
   uploadedById String
-  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  uploadedBy   User      @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
   storageKey   String
   mimeType     String
   sizeBytes    Int
   sha256       String
-  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
   purgedAt     DateTime? @db.Timestamptz(3)
 
   @@index([reportId])
@@ -595,8 +597,23 @@ model Notification {
   readAt    DateTime? @db.Timestamptz(3)
   createdAt DateTime  @default(now()) @db.Timestamptz(3)
 
+  /// WhatsApp copy of this notification (only for users who opted in). Null = not sent by WhatsApp.
+  whatsappStatus   WhatsAppStatus?
+  whatsappTemplate String?
+  whatsappParams   Json?
+  whatsappError    String?
+  whatsappSentAt   DateTime?       @db.Timestamptz(3)
+
   @@index([userId, readAt])
+  @@index([whatsappStatus])
   @@map("notification")
+}
+
+enum WhatsAppStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
 }
 
 model Feedback {

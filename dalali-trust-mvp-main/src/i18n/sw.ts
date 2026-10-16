@@ -314,6 +314,8 @@ export const sw: Dictionary = {
     },
   },
   auth: {
+    whatsappUpdates: "Nitumie taarifa muhimu kwa WhatsApp (maombi ya kuangalia na ukaguzi wa matangazo)",
+    whatsappHint: "Inatumia namba yako ya simu. Unaweza kuzima wakati wowote kwenye Mipangilio ya akaunti.",
     signInTitle: "Ingia",
     signUpTitle: "Fungua akaunti yako",
     email: "Barua pepe",
@@ -586,6 +588,9 @@ export const sw: Dictionary = {
     },
   },
   account: {
+    whatsappUpdates: "Nitumie taarifa muhimu kwa WhatsApp",
+    whatsappHint:
+      "Maombi ya kuangalia na ukaguzi wa matangazo, hutumwa kwa namba ya simu iliyo juu. Zima wakati wowote.",
     profile: "Wasifu",
     currentPassword: "Nenosiri la sasa",
     deleteTitle: "Futa akaunti",

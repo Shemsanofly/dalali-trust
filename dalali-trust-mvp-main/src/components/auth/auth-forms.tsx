@@ -71,7 +71,16 @@ export function SignInForm({ t, next, notice }: { t: A; next?: string; notice?: 
   );
 }
 
-export function SignUpForm({ t, defaultRole }: { t: A; defaultRole?: string }) {
+export function SignUpForm({
+  t,
+  defaultRole,
+  whatsapp = false,
+}: {
+  t: A;
+  defaultRole?: string;
+  /** Show the WhatsApp updates opt-in (only when WhatsApp messaging is configured). */
+  whatsapp?: boolean;
+}) {
   const [state, action] = useActionState(signUpAction, initial);
   const v = state.values ?? {};
   const err = state.fieldErrors ?? {};
@@ -151,6 +160,20 @@ export function SignUpForm({ t, defaultRole }: { t: A; defaultRole?: string }) {
           defaultValue={v.phoneNumber}
         />
         <FieldError errors={err.phoneNumber} />
+        {whatsapp ? (
+          <label className="mt-2 flex items-start gap-2 text-sm text-navy-700">
+            <input
+              type="checkbox"
+              name="whatsappUpdates"
+              defaultChecked={v.whatsappUpdates === "on"}
+              className="mt-0.5 h-5 w-5 shrink-0 accent-brand-600"
+            />
+            <span>
+              {t.whatsappUpdates}
+              <span className="block text-xs text-navy-500">{t.whatsappHint}</span>
+            </span>
+          </label>
+        ) : null}
       </div>
       <div>
         <label className="label" htmlFor="password">

@@ -316,6 +316,8 @@ export const en = {
     },
   },
   auth: {
+    whatsappUpdates: "Send me important updates on WhatsApp (viewing requests and listing reviews)",
+    whatsappHint: "Uses your mobile number. You can turn this off any time in Account settings.",
     signInTitle: "Sign in",
     signUpTitle: "Create your account",
     email: "Email address",
@@ -586,6 +588,8 @@ export const en = {
     },
   },
   account: {
+    whatsappUpdates: "Send me important updates on WhatsApp",
+    whatsappHint: "Viewing requests and listing reviews, sent to the mobile number above. Turn off any time.",
     profile: "Profile",
     currentPassword: "Current password",
     deleteTitle: "Delete account",

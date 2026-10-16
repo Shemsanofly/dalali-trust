@@ -5,7 +5,8 @@ Dalali Trust is a standard Node.js server (`next start`). It needs:
 1. A **PostgreSQL 16** database.
 2. A **private S3-compatible bucket** for photos and documents (local disk is fine only on a single server with persistent storage).
 3. Optionally, an **email provider** (Resend) for password resets.
-4. Two **daily scheduled jobs**: `npm run jobs:expire-verifications` and `npm run jobs:admin-digest`.
+4. Two **daily scheduled jobs**: `npm run jobs:expire-verifications` and `npm run jobs:admin-digest`; plus `npm run jobs:send-whatsapp` every 15 minutes if WhatsApp updates are enabled.
+5. Optional: **WhatsApp updates** through Meta's WhatsApp Business Platform — see [WHATSAPP.md](WHATSAPP.md).
 
 ## Hosting options
 

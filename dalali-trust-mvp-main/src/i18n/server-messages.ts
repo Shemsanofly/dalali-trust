@@ -36,6 +36,7 @@ const SW: Record<string, string> = {
   "Public profile saved.": "Wasifu wa umma umehifadhiwa.",
   "Enter a Tanzanian mobile number, e.g. 0712 345 678": "Weka namba ya simu ya Tanzania, mf. 0712 345 678",
   "Enter a valid date": "Weka tarehe sahihi",
+  "Add your mobile number to get WhatsApp updates": "Weka namba yako ya simu ili kupata taarifa kwa WhatsApp",
   // Listings
   "Listing saved.": "Tangazo limehifadhiwa.",
   "Photos uploaded.": "Picha zimepakiwa.",

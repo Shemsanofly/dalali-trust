@@ -21,6 +21,8 @@ export async function updateProfileAction(_prev: ActionState, form: FormData): P
       name: str(form, "name"),
       phoneNumber: str(form, "phoneNumber"),
       locale: str(form, "locale"),
+      // Only change consent when the checkbox was on the form (it is hidden while WhatsApp is off).
+      whatsappUpdates: form.has("whatsappField") ? form.get("whatsappUpdates") === "on" : undefined,
     });
     revalidatePath("/dashboard/settings");
   }, "Profile saved.");

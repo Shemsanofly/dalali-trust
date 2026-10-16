@@ -41,7 +41,11 @@ export const viewport: Viewport = { themeColor: "#1a2639", width: "device-width"
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { locale, t } = await getDictionary();
   return (
-    <html lang={locale} className={`${jakarta.variable} ${newsreader.variable}`}>
+    <html
+      lang={locale}
+      className={`${jakarta.variable} ${newsreader.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="flex min-h-screen flex-col font-sans">
         <a
           href="#main"
