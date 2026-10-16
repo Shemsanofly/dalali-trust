@@ -3,6 +3,9 @@
 `npm run db:seed` uses real photos from this folder for the fictional `[SAMPLE]` listings.
 A listing with no photos here gets generated placeholder images instead.
 
+The included stock photos illustrate fictional listings. See [SOURCES.md](SOURCES.md)
+for photographer credits, original photo pages and licence details.
+
 Put 1–6 JPEG, PNG or WebP files in the folder named after the listing's neighbourhood.
 They are used in file-name order, so the first one (e.g. `01.jpg`) becomes the cover photo.
 

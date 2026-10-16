@@ -29,7 +29,7 @@ export const en = {
   },
   home: {
     eyebrow: "Rental homes in Tanzania",
-    title: "Find a place to rent — and know what you are walking into.",
+    title: "Find a place to rent and know what you are walking into.",
     subtitle:
       "Rooms, apartments and houses with the full cost up front, listings reviewed by people before they go live, and a clear way to report problems.",
     searchPlaceholder: "Neighbourhood or keyword, e.g. Sinza",
