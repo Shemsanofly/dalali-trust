@@ -31,7 +31,7 @@ export const sw: Dictionary = {
   },
   home: {
     eyebrow: "Nyumba za kupanga Tanzania",
-    title: "Pata mahali pa kupanga — na ujue unachokiendea.",
+    title: "Pata mahali pa kupanga na ujue unachokiendea.",
     subtitle:
       "Vyumba, apartment na nyumba zenye gharama kamili mapema, matangazo yanayokaguliwa na watu kabla ya kuchapishwa, na njia wazi ya kuripoti matatizo.",
     searchPlaceholder: "Mtaa au neno, mf. Sinza",
