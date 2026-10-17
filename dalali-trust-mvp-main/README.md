@@ -17,6 +17,8 @@ This directory contains the Next.js application. The original SahaShares prototy
 | Tests      | Vitest integration tests against real PostgreSQL, plus Playwright end-to-end tests        |
 | i18n       | English and Swahili (cookie-based, no extra dependency)                                   |
 
+**Going live:** [Launch checklist (Render)](docs/LAUNCH.md)
+
 More detail: [Architecture](docs/ARCHITECTURE.md) · [Security & privacy](docs/SECURITY.md) · [Deployment](docs/DEPLOYMENT.md) · [Operations, verification & launch](docs/OPERATIONS.md) · [Repository audit](docs/AUDIT.md) · [Legacy migration](docs/MIGRATION.md)
 
 ---
@@ -113,7 +115,7 @@ Migrations live in `prisma/migrations/`. The initial migration also adds Postgre
 
 ```bash
 npm run format:check && npm run lint && npm run typecheck
-npm test            # Vitest: 97 integration + unit tests against TEST_DATABASE_URL
+npm test            # Vitest: 100 integration + unit tests against TEST_DATABASE_URL
 npm run build && npm run test:e2e   # Playwright: user journeys against E2E_DATABASE_URL
 ```
 

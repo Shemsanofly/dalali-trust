@@ -8,6 +8,13 @@ Dalali Trust is a standard Node.js server (`next start`). It needs:
 4. Two **daily scheduled jobs**: `npm run jobs:expire-verifications` and `npm run jobs:admin-digest`; plus `npm run jobs:send-whatsapp` every 15 minutes if WhatsApp updates are enabled.
 5. Optional: **WhatsApp updates** through Meta's WhatsApp Business Platform — see [WHATSAPP.md](WHATSAPP.md).
 
+## Recommended: Render (step by step in [LAUNCH.md](LAUNCH.md))
+
+`render.yaml` at the repository root describes the whole setup as a Render Blueprint: the
+website (`npm ci && npm run build`, migrations as a pre-deploy step, `npm start`, health check
+`/api/health`), a PostgreSQL 16 database in Frankfurt, and the three scheduled jobs. Shared
+settings live in the `dalali-shared` environment group; Render prompts for every secret.
+
 ## Hosting options
 
 | Option                                                                     | Notes                                                                                                                                                                                                                                                                      |
@@ -23,7 +30,7 @@ Managed PostgreSQL: Neon, Supabase, AWS RDS, DigitalOcean, Render, Railway… Us
 2. **Block all public access.** The app streams files through authorised routes and never uses public URLs.
 3. Create an access key limited to `s3:PutObject`, `s3:GetObject` and `s3:DeleteObject` on that bucket.
 4. Set `STORAGE_DRIVER=s3`, `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, plus `S3_ENDPOINT` for non-AWS providers (and `S3_FORCE_PATH_STYLE=true` for MinIO).
-5. Enable server-side encryption (the app also requests AES256) and, if available, access logging and versioning with a lifecycle rule that expires deleted versions after a short period, so purged evidence does not linger.
+5. Use encryption at rest (Cloudflare R2 and AWS S3 encrypt stored objects by default) and, if available, access logging and versioning with a lifecycle rule that expires deleted versions after a short period, so purged evidence does not linger.
 
 ## Environment
 

@@ -1,0 +1,125 @@
+# Render Blueprint for Dalali Trust: the website, its PostgreSQL database and the
+# scheduled jobs. In Render: New + → Blueprint → pick this repository. Render then asks
+# for every value marked `sync: false` (keys and your web address). docs/LAUNCH.md walks
+# through it step by step. Plans and prices change: check them on the Render screen.
+
+databases:
+  - name: dalali-db
+    databaseName: dalali_trust
+    user: dalali
+    postgresMajorVersion: "16"
+    # Frankfurt is the Render region closest to Tanzania. Paid database plans include
+    # daily backups with point-in-time recovery; the free plan expires and has none.
+    region: frankfurt
+    plan: basic-256mb
+    ipAllowList: [] # only Render services can connect
+
+envVarGroups:
+  - name: dalali-shared
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: BETTER_AUTH_SECRET
+        generateValue: true # Render creates a long random secret once
+      - key: APP_URL
+        sync: false # e.g. https://dalalitrust.co.tz
+      - key: BETTER_AUTH_URL
+        sync: false # same as APP_URL
+      - key: TRUST_PROXY_HEADERS
+        value: "true" # Render's proxy sets X-Forwarded-For (used for rate limiting)
+      # Photos and documents: a private S3-compatible bucket (Cloudflare R2 recommended)
+      - key: STORAGE_DRIVER
+        value: s3
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_REGION
+        value: auto # "auto" for Cloudflare R2; your region for AWS S3
+      - key: S3_ENDPOINT
+        sync: false # R2: https://<account-id>.r2.cloudflarestorage.com
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
+      # Email for password resets and the morning moderation summary (Resend)
+      - key: EMAIL_PROVIDER
+        value: resend
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false # e.g. Dalali Trust <no-reply@dalalitrust.co.tz>
+      # WhatsApp updates: off until the Meta setup in docs/WHATSAPP.md is done
+      - key: WHATSAPP_PROVIDER
+        value: none
+      - key: SUPPORT_EMAIL
+        sync: false
+
+services:
+  - type: web
+    name: dalali-trust
+    runtime: node
+    region: frankfurt
+    plan: starter # always on; the free plan sleeps and is too slow for real users
+    rootDir: dalali-trust-mvp-main
+    buildCommand: npm ci && npm run build
+    preDeployCommand: npx prisma migrate deploy # runs before each new version goes live
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true # every push to main that passes the build goes live
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dalali-db
+          property: connectionString
+      - fromGroup: dalali-shared
+
+  # Every morning at 06:00 Tanzania time (03:00 UTC): email admins what is waiting.
+  - type: cron
+    name: dalali-admin-digest
+    runtime: node
+    region: frankfurt
+    plan: starter
+    rootDir: dalali-trust-mvp-main
+    schedule: "0 3 * * *"
+    buildCommand: npm ci
+    startCommand: npm run jobs:admin-digest
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dalali-db
+          property: connectionString
+      - fromGroup: dalali-shared
+
+  # Every night at 02:30 Tanzania time: expire old verifications, purge old documents.
+  - type: cron
+    name: dalali-expire-verifications
+    runtime: node
+    region: frankfurt
+    plan: starter
+    rootDir: dalali-trust-mvp-main
+    schedule: "30 23 * * *"
+    buildCommand: npm ci
+    startCommand: npm run jobs:expire-verifications
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dalali-db
+          property: connectionString
+      - fromGroup: dalali-shared
+
+  # Every 15 minutes: retry WhatsApp messages interrupted by a restart. Does nothing
+  # while WHATSAPP_PROVIDER=none, so it can stay in place.
+  - type: cron
+    name: dalali-send-whatsapp
+    runtime: node
+    region: frankfurt
+    plan: starter
+    rootDir: dalali-trust-mvp-main
+    schedule: "*/15 * * * *"
+    buildCommand: npm ci
+    startCommand: npm run jobs:send-whatsapp
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dalali-db
+          property: connectionString
+      - fromGroup: dalali-shared
