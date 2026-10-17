@@ -26,7 +26,9 @@ envVarGroups:
       - key: BETTER_AUTH_URL
         sync: false # same as APP_URL
       - key: TRUST_PROXY_HEADERS
-        value: "true" # Render's proxy sets X-Forwarded-For (used for rate limiting)
+        value: "true" # requests reach the app through Render's proxy
+      - key: CLIENT_IP_HEADER
+        value: cf-connecting-ip # visitor IP set by Render's Cloudflare edge (used for rate limiting); see LAUNCH.md step 5
       # Photos and documents: a private S3-compatible bucket (Cloudflare R2 recommended)
       - key: STORAGE_DRIVER
         value: s3

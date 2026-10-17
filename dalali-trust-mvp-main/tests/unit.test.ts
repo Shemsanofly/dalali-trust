@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { parseEatLocalDateTime } from "@/lib/dates";
 import { translateServerMessage } from "@/i18n/server-messages";
+import { clientIp, clientIpHeaders } from "@/lib/client-ip";
 import { coordinatesFromForm } from "@/lib/coordinates";
 import { formatTZS, moveInCost, parseTZS } from "@/lib/money";
 import { normalizeTzPhone } from "@/lib/phone";
@@ -112,5 +113,29 @@ describe("server messages in Swahili", () => {
   it("keeps English as is and falls back to English for unknown messages", () => {
     expect(translateServerMessage("Photos uploaded.", "en")).toBe("Photos uploaded.");
     expect(translateServerMessage("Decision recorded.", "sw")).toBe("Decision recorded.");
+  });
+});
+
+describe("client IP for rate limiting", () => {
+  const headers = (h: Record<string, string>) => (name: string) => h[name] ?? null;
+  it("ignores forwarded headers unless a trusted proxy is configured", () => {
+    expect(clientIp(headers({ "x-forwarded-for": "1.2.3.4" }), { trustProxy: false })).toBeNull();
+  });
+  it("prefers the edge's own header, which visitors cannot fake", () => {
+    const h = headers({ "cf-connecting-ip": "41.59.1.10", "x-forwarded-for": "6.6.6.6, 41.59.1.10" });
+    expect(clientIp(h, { trustProxy: true, preferredHeader: "cf-connecting-ip" })).toBe("41.59.1.10");
+  });
+  it("falls back to the first forwarded address", () => {
+    expect(
+      clientIp(headers({ "x-forwarded-for": "41.59.1.10, 10.0.0.1" }), {
+        trustProxy: true,
+        preferredHeader: "cf-connecting-ip",
+      }),
+    ).toBe("41.59.1.10");
+    expect(clientIpHeaders({ trustProxy: true, preferredHeader: "cf-connecting-ip" })).toEqual([
+      "cf-connecting-ip",
+      "x-forwarded-for",
+      "x-real-ip",
+    ]);
   });
 });

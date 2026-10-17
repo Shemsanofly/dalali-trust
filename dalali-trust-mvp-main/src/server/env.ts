@@ -27,6 +27,10 @@ const schema = z
       .regex(/^v\d+\.\d+$/)
       .default("v21.0"),
     TRUST_PROXY_HEADERS: z.enum(["true", "false"]).default("false"),
+    CLIENT_IP_HEADER: z
+      .string()
+      .regex(/^[A-Za-z0-9-]*$/, "CLIENT_IP_HEADER must be a header name")
+      .optional(),
     SUPPORT_EMAIL: z.string().optional(),
     SUPPORT_PHONE: z.string().optional(),
     SUPPORT_WHATSAPP: z.string().optional(),

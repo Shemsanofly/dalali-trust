@@ -40,6 +40,7 @@ Set every variable listed in `.env.example`. In production:
 - `BETTER_AUTH_SECRET`: a new 32+ byte random value, stored in your platform's secret manager
 - `BETTER_AUTH_URL` and `APP_URL`: your public `https://` origin
 - `TRUST_PROXY_HEADERS=true` only if a trusted proxy sets `X-Forwarded-For`
+- `CLIENT_IP_HEADER`: a header your edge sets itself and visitors cannot override (Render and other Cloudflare-fronted hosts: `cf-connecting-ip`). Rate limits use it in preference to `X-Forwarded-For`, whose first entry can be supplied by the visitor when a proxy appends to it
 - `EMAIL_PROVIDER=resend` (or `none`). `console` is refused at startup
 
 ## Release procedure

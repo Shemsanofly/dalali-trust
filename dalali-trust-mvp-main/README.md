@@ -115,7 +115,7 @@ Migrations live in `prisma/migrations/`. The initial migration also adds Postgre
 
 ```bash
 npm run format:check && npm run lint && npm run typecheck
-npm test            # Vitest: 100 integration + unit tests against TEST_DATABASE_URL
+npm test            # Vitest: 103 integration + unit tests against TEST_DATABASE_URL
 npm run build && npm run test:e2e   # Playwright: user journeys against E2E_DATABASE_URL
 ```
 

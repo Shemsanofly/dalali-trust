@@ -60,6 +60,10 @@ names at Render, Cloudflare and Resend change: check them as you go.
 - [ ] From another account, request a viewing; the landlord sees it and can accept.
 - [ ] "Forgot password" sends an email.
 - [ ] Switch the language to Kiswahili and look through the pages.
+- [ ] Rate limits work per person: on your phone, sign in with a wrong password 9 times in a
+      row; the site should say "Too many attempts". Then, from a different network (e.g. a
+      friend's phone on mobile data), signing in should still work. If both are blocked, or
+      neither is, tell your developer: the `CLIENT_IP_HEADER` setting needs adjusting.
 - [ ] Next morning: the admin summary email arrives (only when something is waiting).
 
 ## 6. Before inviting the public

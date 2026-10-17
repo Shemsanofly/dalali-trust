@@ -9,7 +9,7 @@ import "./globals.css";
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
 const newsreader = Newsreader({
   subsets: ["latin"],
-  weight: ["500", "600"],
+  // Variable font: one file per style instead of one per weight, so headings arrive sooner.
   style: ["normal", "italic"],
   variable: "--font-newsreader",
   display: "swap",

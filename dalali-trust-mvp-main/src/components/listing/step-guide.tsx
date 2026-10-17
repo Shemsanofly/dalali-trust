@@ -23,13 +23,13 @@ export function StepGuide({ t, current }: { t: Dictionary["landlord"]["steps"]; 
                     ? "border-brand-600 bg-brand-600 text-white"
                     : active
                       ? "border-brand-600 bg-white text-brand-700"
-                      : "border-navy-200 bg-white text-navy-400"
+                      : "border-navy-200 bg-white text-navy-500"
                 }`}
               >
                 {done ? <Check className="h-4 w-4" aria-hidden /> : n}
               </span>
               <span
-                className={`text-xs leading-tight font-semibold sm:text-sm ${active ? "text-navy-900" : done ? "text-navy-700" : "text-navy-400"}`}
+                className={`text-xs leading-tight font-semibold sm:text-sm ${active ? "text-navy-900" : done ? "text-navy-700" : "text-navy-500"}`}
               >
                 {label}
               </span>

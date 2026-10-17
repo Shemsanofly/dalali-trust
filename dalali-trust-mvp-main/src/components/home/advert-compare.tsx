@@ -119,7 +119,7 @@ export function AdvertCompare({ labels, locale }: { labels: Labels; locale: Loca
                 {[0, 150, 300].map((d) => (
                   <span
                     key={d}
-                    className="typing-dot h-2 w-2 rounded-full bg-[#667781]"
+                    className="typing-dot h-2 w-2 rounded-full bg-[#54656f]"
                     style={{ animationDelay: `${d}ms` }}
                   />
                 ))}
@@ -129,11 +129,11 @@ export function AdvertCompare({ labels, locale }: { labels: Labels; locale: Loca
                 className="pop-in max-w-[19rem] rounded-lg rounded-tl-none bg-[#dcf8c6] px-3.5 pt-2 pb-1.5 text-[15px] text-[#111b21] shadow-[0_1px_0_rgb(0_0_0_/_0.12)]"
                 style={delay(500)}
               >
-                <p className="flex items-center gap-1 text-xs text-[#667781] italic">
+                <p className="flex items-center gap-1 text-xs text-[#54656f] italic">
                   <Forward className="h-3.5 w-3.5" aria-hidden /> {labels.vagueMeta}
                 </p>
                 <p className="mt-1 leading-snug">{labels.vagueAd}</p>
-                <p className="mt-1 text-right text-[11px] text-[#667781]">09:41</p>
+                <p className="mt-1 text-right text-[11px] text-[#54656f]">09:41</p>
               </div>
             )}
           </div>

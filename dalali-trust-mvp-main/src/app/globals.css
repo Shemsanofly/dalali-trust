@@ -81,7 +81,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply btn bg-brand-600 text-white hover:bg-brand-700;
+    @apply btn bg-brand-700 text-white hover:bg-brand-800;
   }
   .btn-gold {
     @apply btn bg-gold-400 text-navy-900 hover:bg-gold-300;

@@ -173,9 +173,10 @@ export default async function PropertiesPage({ searchParams }: { searchParams: S
           </div>
           {result.items.length ? (
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {result.items.map((item) => (
+              {result.items.map((item, i) => (
                 <PropertyCard
                   key={item.id}
+                  priority={i === 0 ? "high" : i < 3 ? "eager" : "lazy"}
                   p={item}
                   t={t}
                   locale={locale}

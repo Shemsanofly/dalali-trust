@@ -1,13 +1,16 @@
 import "server-only";
 import { headers } from "next/headers";
+import { clientIp } from "@/lib/client-ip";
 import { hashIdentifier } from "./rate-limit";
 
 /** A hashed client identifier for rate limiting anonymous requests. Raw IPs are never stored. */
 export async function clientKey(): Promise<string> {
   const h = await headers();
-  const trust = process.env.TRUST_PROXY_HEADERS === "true";
   const ip =
-    (trust ? (h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip")) : null) ?? "unknown";
+    clientIp((name) => h.get(name), {
+      trustProxy: process.env.TRUST_PROXY_HEADERS === "true",
+      preferredHeader: process.env.CLIENT_IP_HEADER?.toLowerCase() || undefined,
+    }) ?? "unknown";
   return hashIdentifier(`${ip}|${h.get("user-agent") ?? ""}`);
 }
 

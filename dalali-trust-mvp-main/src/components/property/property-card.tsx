@@ -30,7 +30,13 @@ export function PropertyCard({
   t,
   locale,
   trust,
+  priority = "lazy",
 }: {
+  /**
+   * How urgently to load the photo: "high" for the first card (usually the largest thing on
+   * a phone screen), "eager" for the rest of the first row, "lazy" for cards further down.
+   */
+  priority?: "high" | "eager" | "lazy";
   p: PublicListingCard;
   t: Dictionary;
   locale: Locale;
@@ -45,7 +51,8 @@ export function PropertyCard({
           <img
             src={imageUrl(img.id, "thumb")}
             alt={img.altText ?? p.title}
-            loading="lazy"
+            loading={priority === "lazy" ? "lazy" : "eager"}
+            fetchPriority={priority === "high" ? "high" : undefined}
             decoding="async"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             width={640}

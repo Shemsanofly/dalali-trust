@@ -1,4 +1,5 @@
 import "server-only";
+import { clientIpHeaders } from "@/lib/client-ip";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
@@ -67,7 +68,10 @@ export const auth = betterAuth({
     cookiePrefix: "dalali",
     defaultCookieAttributes: { httpOnly: true, sameSite: "lax", path: "/" },
     ipAddress: {
-      ipAddressHeaders: process.env.TRUST_PROXY_HEADERS === "true" ? ["x-forwarded-for", "x-real-ip"] : [],
+      ipAddressHeaders: clientIpHeaders({
+        trustProxy: process.env.TRUST_PROXY_HEADERS === "true",
+        preferredHeader: process.env.CLIENT_IP_HEADER?.toLowerCase() || undefined,
+      }),
     },
   },
   databaseHooks: {
