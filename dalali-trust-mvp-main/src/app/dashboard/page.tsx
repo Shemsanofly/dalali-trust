@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FeedbackForm } from "@/components/feedback-form";
 import { Notice, PageHeader, StatusBadge } from "@/components/ui/basics";
 import { fmt } from "@/i18n";
+import { notificationText } from "@/i18n/notification-text";
 import { getDictionary } from "@/i18n/server";
 import { isAdvertiser } from "@/server/actor";
 import { prisma } from "@/server/db";
@@ -120,8 +121,10 @@ export default async function DashboardPage({
           <ul className="mt-3 divide-y divide-navy-100 text-sm">
             {notifications.map((n) => (
               <li key={n.id} className="py-2">
-                <p className={n.readAt ? "text-navy-600" : "font-semibold text-navy-900"}>{n.title}</p>
-                <p className="text-navy-600">{n.body}</p>
+                <p className={n.readAt ? "text-navy-600" : "font-semibold text-navy-900"}>
+                  {notificationText(t.notices, n.type, n.data)?.title ?? n.title}
+                </p>
+                <p className="text-navy-600">{notificationText(t.notices, n.type, n.data)?.body ?? n.body}</p>
               </li>
             ))}
           </ul>

@@ -71,6 +71,7 @@ export async function expireVerifications(now = new Date()): Promise<number> {
         title: "Verification expired",
         body: "One of your verification checks has expired. Please submit it again to keep your badge.",
         link: "/dashboard/verification",
+        data: {},
       });
     });
   }
@@ -361,6 +362,7 @@ export async function decideVerification(
       title: "Verification update",
       body,
       link: "/dashboard/verification",
+      data: { reason: reason || undefined },
     });
   });
 }

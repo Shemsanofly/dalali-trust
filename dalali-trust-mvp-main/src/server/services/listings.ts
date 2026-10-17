@@ -646,6 +646,7 @@ export async function moderateListing(
       title: "Listing review update",
       body: messages[decision],
       link: `/dashboard/listings/${propertyId}`,
+      data: { listing: property.title, reason: trimmedReason || undefined },
       whatsapp:
         decision === "APPROVE"
           ? {

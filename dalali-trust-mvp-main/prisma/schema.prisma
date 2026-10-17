@@ -594,6 +594,8 @@ model Notification {
   title     String
   body      String
   link      String?
+  /// Values used to show the notification in the reader's language (title/body are the English fallback).
+  data      Json?
   readAt    DateTime? @db.Timestamptz(3)
   createdAt DateTime  @default(now()) @db.Timestamptz(3)
 

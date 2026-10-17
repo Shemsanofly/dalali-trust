@@ -333,6 +333,7 @@ export async function decideReport(
         type: "listing_suspend",
         title: "Listing suspended",
         body: `Your listing "${report.property.title}" was suspended after a review. You can appeal from your dashboard.`,
+        data: { listing: report.property.title },
         link: "/dashboard/listings",
       });
     }
@@ -377,6 +378,7 @@ export async function decideReport(
         type: `report_${next.toLowerCase()}`,
         title: "Update on your report",
         body: publicResponse ?? "Your report status changed.",
+        data: { response: publicResponse ?? undefined },
         link: "/dashboard/reports",
       });
     }

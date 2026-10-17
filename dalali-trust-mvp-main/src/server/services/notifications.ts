@@ -19,6 +19,8 @@ export async function notify(
     title: string;
     body: string;
     link?: string;
+    /** Values for showing the notification in the reader's language (see i18n/notification-text). */
+    data?: Record<string, string | undefined>;
     whatsapp?: { template: WhatsAppTemplate; params: string[] };
   },
 ) {
@@ -35,6 +37,7 @@ export async function notify(
     data: {
       ...rest,
       link: n.link ?? null,
+      data: n.data ? JSON.parse(JSON.stringify(n.data)) : undefined,
       ...(queueWhatsApp && whatsapp
         ? { whatsappStatus: "PENDING", whatsappTemplate: whatsapp.template, whatsappParams: whatsapp.params }
         : {}),

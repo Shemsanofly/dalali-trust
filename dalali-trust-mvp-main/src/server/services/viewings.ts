@@ -62,6 +62,7 @@ export async function createViewingRequest(actor: Actor, raw: unknown) {
       title: "New viewing request",
       body: `Someone asked to view "${property.title}".`,
       link: "/dashboard/viewings",
+      data: { listing: property.title },
       whatsapp: {
         template: "dalali_viewing_requested",
         params: [property.title, formatEatNumeric(input.proposedAt), appLink("/dashboard/viewings")],
@@ -142,6 +143,7 @@ export async function respondToViewing(
         title: "Viewing request update",
         body: `Your viewing request for "${vr.property.title}" was ${next.toLowerCase()}.${responseMessage ? ` Message: ${responseMessage}` : ""}`,
         link: "/dashboard/viewings",
+        data: { listing: vr.property.title, message: responseMessage ?? undefined },
         whatsapp:
           next === "ACCEPTED"
             ? {
@@ -177,6 +179,7 @@ export async function cancelViewing(actor: Actor, requestId: string) {
       title: "Viewing cancelled",
       body: `A viewing request for "${vr.property.title}" was cancelled by the tenant.`,
       link: "/dashboard/viewings",
+      data: { listing: vr.property.title },
     });
   });
 }
