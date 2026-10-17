@@ -61,7 +61,10 @@ export function TrustPanel({
         ))}
       </ul>
       <p className="mt-4 text-xs text-navy-600">{t.trust.notOwnership}</p>
-      <Link href="/verification" className="mt-2 inline-block text-sm font-semibold text-brand-700 underline">
+      <Link
+        href="/verification"
+        className="mt-1 inline-block py-1.5 text-sm font-semibold text-brand-700 underline"
+      >
         {t.trust.learnMore}
       </Link>
     </section>

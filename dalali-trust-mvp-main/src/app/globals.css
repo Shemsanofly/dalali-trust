@@ -76,7 +76,7 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-center text-sm leading-snug font-semibold transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 [&_svg]:shrink-0;
 }
 
 @layer components {
@@ -109,6 +109,40 @@ body {
   }
   .container-page {
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  /* Sideways-scrolling tab row (dashboard and admin sections) on small screens. The soft
+     right edge hints that more tabs are there. */
+  .scroll-tabs {
+    @apply relative overflow-x-auto overscroll-x-contain;
+    scrollbar-width: none;
+  }
+  .scroll-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  @media (width < 64rem) {
+    .scroll-tabs {
+      mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+    }
+  }
+  /* Tables that turn into stacked cards on phones: each cell shows its column name
+     (from data-label) above the value instead of forcing a sideways scroll. */
+  @media (width < 48rem) {
+    .table-stack thead {
+      @apply sr-only;
+    }
+    .table-stack,
+    .table-stack tbody,
+    .table-stack tr,
+    .table-stack td {
+      @apply block w-full min-w-0;
+    }
+    .table-stack tr {
+      @apply py-2;
+    }
+    .table-stack td[data-label]::before {
+      content: attr(data-label);
+      @apply block text-xs font-semibold tracking-wide text-navy-500 uppercase;
+    }
   }
   .prose-plain p {
     @apply mb-3 leading-relaxed;

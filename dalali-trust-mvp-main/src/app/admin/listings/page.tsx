@@ -44,7 +44,7 @@ export default async function AdminListings({
         <EmptyState title="Nothing here." />
       ) : (
         <div className="card overflow-x-auto">
-          <table className="w-full min-w-[640px] text-sm">
+          <table className="table-stack w-full text-sm md:min-w-[640px]">
             <thead className="bg-navy-50 text-left">
               <tr>
                 <th className="p-3">Listing</th>
@@ -57,7 +57,7 @@ export default async function AdminListings({
             <tbody>
               {items.map((l) => (
                 <tr key={l.id} className="border-t border-navy-100">
-                  <td className="p-3">
+                  <td className="p-3 max-md:py-1">
                     <Link href={`/admin/listings/${l.id}`} className="font-semibold underline">
                       {l.title}
                     </Link>
@@ -65,7 +65,7 @@ export default async function AdminListings({
                       <StatusBadge status={l.status} />
                     </div>
                   </td>
-                  <td className="p-3">
+                  <td data-label="Advertiser" className="p-3 max-md:py-1">
                     <Link href={`/admin/users/${l.advertiser.id}`} className="underline">
                       {l.advertiser.name}
                     </Link>
@@ -73,11 +73,15 @@ export default async function AdminListings({
                       {l.advertiser.role} · {l.advertiser.status}
                     </div>
                   </td>
-                  <td className="p-3">{formatTZS(l.rentAmount)}</td>
-                  <td className="p-3">
+                  <td data-label="Rent" className="p-3 max-md:py-1">
+                    {formatTZS(l.rentAmount)}
+                  </td>
+                  <td data-label="Photos / reports" className="p-3 max-md:py-1">
                     {l._count.images} / {l._count.reports}
                   </td>
-                  <td className="p-3">{l.submittedAt ? formatDateTime(l.submittedAt) : "—"}</td>
+                  <td data-label="Submitted" className="p-3 max-md:py-1">
+                    {l.submittedAt ? formatDateTime(l.submittedAt) : "—"}
+                  </td>
                 </tr>
               ))}
             </tbody>

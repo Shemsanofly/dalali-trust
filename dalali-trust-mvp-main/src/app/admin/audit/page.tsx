@@ -20,7 +20,7 @@ export default async function AuditPage({
         subtitle="Append-only record of security-relevant and administrative operations."
       />
       <div className="card overflow-x-auto">
-        <table className="w-full min-w-[720px] text-sm">
+        <table className="table-stack w-full text-sm md:min-w-[720px]">
           <thead className="bg-navy-50 text-left">
             <tr>
               <th className="p-3">When</th>
@@ -33,13 +33,20 @@ export default async function AuditPage({
           <tbody>
             {data.entries.map((e) => (
               <tr key={e.id} className="border-t border-navy-100 align-top">
-                <td className="p-3 whitespace-nowrap">{formatDateTime(e.createdAt)}</td>
-                <td className="p-3">{e.actor?.name ?? "system"}</td>
-                <td className="p-3 font-mono text-xs">{e.action}</td>
-                <td className="p-3 text-xs">
+                <td className="p-3 max-md:py-1 whitespace-nowrap">{formatDateTime(e.createdAt)}</td>
+                <td data-label="Actor" className="p-3 max-md:py-1">
+                  {e.actor?.name ?? "system"}
+                </td>
+                <td data-label="Action" className="p-3 max-md:py-1 font-mono text-xs">
+                  {e.action}
+                </td>
+                <td data-label="Entity" className="p-3 max-md:py-1 text-xs">
                   {e.entityType} {e.entityId ? <span className="text-navy-500">{e.entityId}</span> : null}
                 </td>
-                <td className="p-3 font-mono text-xs break-all text-navy-600">
+                <td
+                  data-label="Details"
+                  className="p-3 max-md:py-1 font-mono text-xs break-all text-navy-600"
+                >
                   {e.metadata ? JSON.stringify(e.metadata) : ""}
                 </td>
               </tr>

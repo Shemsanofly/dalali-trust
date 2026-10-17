@@ -153,7 +153,7 @@ export function AdvertCompare({ labels, locale }: { labels: Labels; locale: Loca
           <button
             type="button"
             onClick={() => select("clear")}
-            className="group mt-5 text-sm font-semibold text-brand-700 underline underline-offset-4 hover:text-brand-800"
+            className="group mt-3 py-2 text-sm font-semibold text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             {labels.clearTab}{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden>

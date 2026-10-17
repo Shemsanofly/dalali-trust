@@ -33,7 +33,7 @@ export function Gallery({
           src={`/api/media/${current.id}`}
           alt={current.altText ?? `${title} — ${caption}`}
           fetchPriority="high"
-          className="aspect-[16/10] w-full object-contain"
+          className="aspect-[16/10] max-h-[70svh] w-full object-contain"
         />
         {images.length > 1 ? (
           <>

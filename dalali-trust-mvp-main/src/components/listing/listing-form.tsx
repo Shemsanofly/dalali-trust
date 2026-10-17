@@ -210,7 +210,7 @@ export function ListingForm({
           className="group rounded-lg border border-navy-100 p-3"
           open={Boolean(val("latitude", defaults.latitude) || err.latitude || err.longitude)}
         >
-          <summary className="cursor-pointer text-sm font-semibold text-navy-800">{tf.mapPin}</summary>
+          <summary className="cursor-pointer py-2 text-sm font-semibold text-navy-800">{tf.mapPin}</summary>
           <p className="mt-2 text-sm text-navy-600">{tf.mapPinHelp}</p>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
             <Text

@@ -28,12 +28,15 @@ export async function SiteFooter() {
           />
         </div>
         <div>
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <nav
+            aria-label="Footer"
+            className="grid grid-cols-2 gap-x-6 text-sm sm:flex sm:flex-wrap sm:gap-y-1"
+          >
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="hover:text-white hover:underline hover:underline-offset-4"
+                className="py-2 hover:text-white hover:underline hover:underline-offset-4"
               >
                 {l.label}
               </Link>

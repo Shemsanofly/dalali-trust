@@ -41,7 +41,7 @@ export default async function AdminUsers({
         </button>
       </form>
       <div className="card overflow-x-auto">
-        <table className="w-full min-w-[640px] text-sm">
+        <table className="table-stack w-full text-sm md:min-w-[640px]">
           <thead className="bg-navy-50 text-left">
             <tr>
               <th className="p-3">Name</th>
@@ -55,19 +55,27 @@ export default async function AdminUsers({
           <tbody>
             {data.users.map((u) => (
               <tr key={u.id} className="border-t border-navy-100">
-                <td className="p-3">
+                <td className="p-3 max-md:py-1">
                   <Link href={`/admin/users/${u.id}`} className="font-semibold underline">
                     {u.name}
                   </Link>
                   <div className="text-xs text-navy-500">{u.email}</div>
                 </td>
-                <td className="p-3">{u.role}</td>
-                <td className="p-3">
+                <td data-label="Role" className="p-3 max-md:py-1">
+                  {u.role}
+                </td>
+                <td data-label="Status" className="p-3 max-md:py-1">
                   <StatusBadge status={u.status} />
                 </td>
-                <td className="p-3">{u._count.properties}</td>
-                <td className="p-3">{u._count.reportsAgainst}</td>
-                <td className="p-3">{formatDate(u.createdAt)}</td>
+                <td data-label="Listings" className="p-3 max-md:py-1">
+                  {u._count.properties}
+                </td>
+                <td data-label="Reports against" className="p-3 max-md:py-1">
+                  {u._count.reportsAgainst}
+                </td>
+                <td data-label="Joined" className="p-3 max-md:py-1">
+                  {formatDate(u.createdAt)}
+                </td>
               </tr>
             ))}
           </tbody>

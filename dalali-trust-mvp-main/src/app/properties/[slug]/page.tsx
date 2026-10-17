@@ -164,13 +164,15 @@ export default async function PropertyPage({ params }: { params: Params }) {
               </p>
               <p className="mt-1 text-sm text-navy-600">
                 {t.property.moveInTotal}:{" "}
-                <span className="font-semibold text-navy-900">{formatTZS(moveInCost(p).total, locale)}</span>
+                <span className="font-semibold whitespace-nowrap text-navy-900">
+                  {formatTZS(moveInCost(p).total, locale)}
+                </span>
               </p>
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <a href="#adv-title" className="btn-primary">
                   {t.property.contact}
                 </a>
-                <a href={canInteract ? "#view-title" : "#costs"} className="btn-secondary whitespace-normal">
+                <a href={canInteract ? "#view-title" : "#costs"} className="btn-secondary">
                   {canInteract ? t.viewing.title : t.property.costsTitle}
                 </a>
               </div>

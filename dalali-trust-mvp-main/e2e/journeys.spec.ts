@@ -20,11 +20,13 @@ test("tenant signs up, searches, saves a home, requests a viewing and reports a 
 
   // Search with filters (plain GET form)
   await page.goto("/properties");
+  // On phones the filters fold away behind a button above the results.
+  await page.getByRole("button", { name: /^filters/i }).click();
   await page.getByLabel(/^region/i).selectOption("dar-es-salaam");
   await page.getByLabel(/max rent/i).fill("400000");
   await page.getByRole("button", { name: /show results/i }).click();
   await expect(page).toHaveURL(/region=dar-es-salaam/);
-  await expect(page.getByText(/homes found/)).toBeVisible();
+  await expect(page.getByText(/homes found/).filter({ visible: true })).toBeVisible();
   const cards = page.locator("article");
   await expect(cards.first()).toBeVisible();
   for (const text of await cards.locator("p.text-xl").allInnerTexts()) {

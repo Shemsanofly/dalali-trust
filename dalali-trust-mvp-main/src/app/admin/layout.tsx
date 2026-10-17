@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { NavLink } from "@/components/nav/nav-link";
+import { ScrollTabs } from "@/components/nav/scroll-tabs";
 import { requirePageActor } from "@/server/session";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
@@ -18,7 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
   return (
     <div className="container-page py-6 lg:py-10">
-      <nav aria-label="Admin" className="-mx-4 mb-6 overflow-x-auto px-4">
+      <ScrollTabs label="Admin" className="-mx-4 mb-6 px-4 sm:-mx-6 sm:px-6">
         <ul className="flex gap-1">
           {links.map(([href, label]) => (
             <li key={href}>
@@ -32,7 +33,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </li>
           ))}
         </ul>
-      </nav>
+      </ScrollTabs>
       {children}
     </div>
   );
