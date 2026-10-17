@@ -25,6 +25,7 @@ export const en = {
     menu: "Menu",
     language: "Lugha: Kiswahili",
     skipToContent: "Skip to content",
+    install: "Install the app",
     notifications: "Notifications",
   },
   home: {
@@ -242,6 +243,13 @@ export const en = {
       near_public_transport: "Near daladala / BRT",
       pets_allowed: "Pets allowed",
     },
+    share: "Share",
+    shareWhatsapp: "Share on WhatsApp",
+    linkCopied: "Link copied",
+    shareText: "{title} — {price} {perMonth}, {area}. Full costs on Dalali Trust:",
+    previewTitle: "{price} {perMonth} · {title}",
+    previewDescription:
+      "{area}. Total before moving in: {total}. Listings on Dalali Trust show the full costs and are reviewed before publishing.",
     safetyReminder: "Never send money before viewing. If you are asked to pay in advance, report it.",
   },
   trust: {
@@ -308,6 +316,8 @@ export const en = {
     },
   },
   auth: {
+    whatsappUpdates: "Send me important updates on WhatsApp (viewing requests and listing reviews)",
+    whatsappHint: "Uses your mobile number. You can turn this off any time in Account settings.",
     signInTitle: "Sign in",
     signUpTitle: "Create your account",
     email: "Email address",
@@ -578,6 +588,8 @@ export const en = {
     },
   },
   account: {
+    whatsappUpdates: "Send me important updates on WhatsApp",
+    whatsappHint: "Viewing requests and listing reviews, sent to the mobile number above. Turn off any time.",
     profile: "Profile",
     currentPassword: "Current password",
     deleteTitle: "Delete account",

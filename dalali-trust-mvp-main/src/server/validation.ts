@@ -264,11 +264,16 @@ export const EVIDENCE_KINDS = [
   "OTHER",
 ] as const;
 
-export const profileSchema = z.object({
-  name: trimmed(2, 80, "Name"),
-  phoneNumber: optionalTzPhone,
-  locale: z.enum(["en", "sw"]).default("en"),
-});
+const NEEDS_PHONE = "Add your mobile number to get WhatsApp updates";
+
+export const profileSchema = z
+  .object({
+    name: trimmed(2, 80, "Name"),
+    phoneNumber: optionalTzPhone,
+    locale: z.enum(["en", "sw"]).default("en"),
+    whatsappUpdates: z.boolean().optional(),
+  })
+  .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE });
 
 export const advertiserProfileSchema = z.object({
   displayName: trimmed(2, 80, "Display name"),
@@ -282,14 +287,17 @@ export const advertiserProfileSchema = z.object({
 
 export const SELF_SERVICE_ROLES = ["TENANT", "LANDLORD", "AGENT"] as const;
 
-export const signUpSchema = z.object({
-  name: trimmed(2, 80, "Name"),
-  email: z.email("Enter a valid email address").trim().toLowerCase().max(254),
-  password: z.string().min(10, "Use at least 10 characters").max(128, "Use at most 128 characters"),
-  role: z.enum(SELF_SERVICE_ROLES, { error: "Choose how you will use Dalali Trust" }),
-  phoneNumber: optionalTzPhone,
-  acceptTerms: z.literal(true, { error: "You must accept the terms to continue" }),
-});
+export const signUpSchema = z
+  .object({
+    name: trimmed(2, 80, "Name"),
+    email: z.email("Enter a valid email address").trim().toLowerCase().max(254),
+    password: z.string().min(10, "Use at least 10 characters").max(128, "Use at most 128 characters"),
+    role: z.enum(SELF_SERVICE_ROLES, { error: "Choose how you will use Dalali Trust" }),
+    phoneNumber: optionalTzPhone,
+    acceptTerms: z.literal(true, { error: "You must accept the terms to continue" }),
+    whatsappUpdates: z.boolean().default(false),
+  })
+  .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE });
 
 export const feedbackSchema = z.object({
   kind: z.enum(["FEEDBACK", "CONTACT"]).default("FEEDBACK"),

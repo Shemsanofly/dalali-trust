@@ -19,6 +19,13 @@ const schema = z
     EMAIL_PROVIDER: z.enum(["console", "resend", "none"]).default("none"),
     EMAIL_FROM: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
+    WHATSAPP_PROVIDER: z.enum(["none", "console", "cloud"]).default("none"),
+    WHATSAPP_ACCESS_TOKEN: z.string().optional(),
+    WHATSAPP_PHONE_NUMBER_ID: z.string().optional(),
+    WHATSAPP_API_VERSION: z
+      .string()
+      .regex(/^v\d+\.\d+$/)
+      .default("v21.0"),
     TRUST_PROXY_HEADERS: z.enum(["true", "false"]).default("false"),
     SUPPORT_EMAIL: z.string().optional(),
     SUPPORT_PHONE: z.string().optional(),
@@ -39,6 +46,20 @@ const schema = z
         code: "custom",
         path: ["RESEND_API_KEY"],
         message: "RESEND_API_KEY and EMAIL_FROM are required",
+      });
+    }
+    if (env.WHATSAPP_PROVIDER === "cloud" && (!env.WHATSAPP_ACCESS_TOKEN || !env.WHATSAPP_PHONE_NUMBER_ID)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["WHATSAPP_ACCESS_TOKEN"],
+        message: "WHATSAPP_ACCESS_TOKEN and WHATSAPP_PHONE_NUMBER_ID are required",
+      });
+    }
+    if (env.NODE_ENV === "production" && env.WHATSAPP_PROVIDER === "console") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["WHATSAPP_PROVIDER"],
+        message: "console WhatsApp is not allowed in production",
       });
     }
     if (env.NODE_ENV === "production" && env.EMAIL_PROVIDER === "console") {

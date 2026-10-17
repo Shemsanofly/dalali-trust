@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { PageHeader } from "@/components/ui/basics";
+import { Notice, PageHeader } from "@/components/ui/basics";
 import { requirePageActor } from "@/server/session";
+import { moderationQueue } from "@/server/services/moderation-queue";
 import { adminMetrics } from "@/server/services/users";
 
 export default async function AdminOverview() {
   const actor = await requirePageActor({ roles: ["ADMIN"] });
-  const m = await adminMetrics(actor);
+  const [m, queue] = await Promise.all([adminMetrics(actor), moderationQueue()]);
   const pending = m.listingsByStatus.find((s) => s.status === "PENDING_REVIEW")?._count._all ?? 0;
   const published = m.listingsByStatus.find((s) => s.status === "PUBLISHED")?._count._all ?? 0;
   const tiles = [
@@ -20,6 +21,17 @@ export default async function AdminOverview() {
   return (
     <>
       <PageHeader title="Operations overview" />
+      {queue.urgentReports ? (
+        <div className="mb-4">
+          <Notice tone="red">
+            {queue.urgentReports} urgent report{queue.urgentReports === 1 ? "" : "s"} (payment before viewing
+            or impersonation) — handle today.{" "}
+            <Link href="/admin/reports" className="font-semibold underline">
+              Open reports
+            </Link>
+          </Notice>
+        </div>
+      ) : null}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {tiles.map((tile) => (
           <Link key={tile.label} href={tile.href} className="card p-4 hover:border-brand-300">

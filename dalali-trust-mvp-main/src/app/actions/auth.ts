@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { APIError } from "better-auth/api";
 import { runAction, str, type ActionState } from "@/server/action-result";
+import { getLocale } from "@/i18n/server";
 import { auth } from "@/server/auth";
 import { emailEnabled } from "@/server/email";
 import { AppError } from "@/server/errors";
@@ -18,12 +19,14 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
     email: str(form, "email") ?? "",
     role: str(form, "role") ?? "",
     phoneNumber: str(form, "phoneNumber") ?? "",
+    whatsappUpdates: form.get("whatsappUpdates") === "on" ? "on" : "",
   };
   const result = await runAction(async () => {
     const input = parseOrThrow(signUpSchema, {
       ...values,
       password: str(form, "password") ?? "",
       acceptTerms: form.get("acceptTerms") === "on",
+      whatsappUpdates: form.get("whatsappUpdates") === "on",
     });
     let userId: string;
     try {
@@ -42,7 +45,11 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
       }
       throw e;
     }
-    await setInitialRole(userId, input.role, input.phoneNumber);
+    // Keep the language they signed up in, so WhatsApp messages and the site match it.
+    await setInitialRole(userId, input.role, input.phoneNumber, {
+      locale: await getLocale(),
+      whatsappUpdates: input.whatsappUpdates,
+    });
   });
   if (!result.ok) return { ...result, values };
   redirect(values.role === "TENANT" ? "/dashboard" : "/dashboard/listings/new?welcome=1");

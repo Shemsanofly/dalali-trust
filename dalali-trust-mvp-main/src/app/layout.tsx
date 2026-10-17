@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
+import { DEFAULT_PREVIEW_IMAGE } from "@/lib/site";
 import { SiteHeader } from "@/components/site-header";
 import { getDictionary } from "@/i18n/server";
 import "./globals.css";
@@ -15,11 +16,23 @@ const newsreader = Newsreader({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getDictionary();
+  const { locale, t } = await getDictionary();
   return {
     title: { default: t.meta.title, template: "%s · Dalali Trust" },
     description: t.meta.description,
     metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
+    applicationName: "Dalali Trust",
+    appleWebApp: { capable: true, title: "Dalali Trust", statusBarStyle: "default" },
+    // Default link preview (WhatsApp, Facebook, X). Listing pages replace it with their own photo.
+    openGraph: {
+      type: "website",
+      siteName: "Dalali Trust",
+      title: t.meta.title,
+      description: t.meta.description,
+      locale: locale === "sw" ? "sw_TZ" : "en_TZ",
+      images: [{ url: DEFAULT_PREVIEW_IMAGE, width: 1200, height: 630, alt: "Dalali Trust" }],
+    },
+    twitter: { card: "summary_large_image", images: [DEFAULT_PREVIEW_IMAGE] },
   };
 }
 
@@ -28,7 +41,11 @@ export const viewport: Viewport = { themeColor: "#1a2639", width: "device-width"
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { locale, t } = await getDictionary();
   return (
-    <html lang={locale} className={`${jakarta.variable} ${newsreader.variable}`}>
+    <html
+      lang={locale}
+      className={`${jakarta.variable} ${newsreader.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="flex min-h-screen flex-col font-sans">
         <a
           href="#main"

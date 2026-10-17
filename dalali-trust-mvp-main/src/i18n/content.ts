@@ -377,6 +377,14 @@ const privacyEn: PageContent = {
       ],
     },
     {
+      h: "WhatsApp updates",
+      ul: [
+        "Only if you turn them on, we send short WhatsApp messages about your viewing requests and listing reviews to the mobile number on your account.",
+        "These messages are delivered through Meta's WhatsApp Business Platform, so Meta processes your number and the message to deliver it.",
+        "You can turn WhatsApp updates off at any time in Account settings. Updates always remain available in your dashboard notifications.",
+      ],
+    },
+    {
       h: "Who can see it",
       ul: [
         "Public: published listings, an advertiser's display name, role and verification statuses.",

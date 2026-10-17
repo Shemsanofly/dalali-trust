@@ -5,6 +5,7 @@ import { writeAudit } from "../audit";
 import { prisma } from "../db";
 import { AppError, forbidden, invalidState, notFound } from "../errors";
 import { enforceRateLimit, RATE_RULES } from "../rate-limit";
+import { ogImageKey } from "../og-image";
 import { storage } from "../storage";
 import {
   advertiserProfileSchema,
@@ -83,6 +84,7 @@ export async function getMyAccount(actor: Actor) {
       role: true,
       phoneNumber: true,
       locale: true,
+      whatsappUpdates: true,
       createdAt: true,
       advertiserProfile: true,
     },
@@ -96,7 +98,12 @@ export async function updateProfile(actor: Actor, raw: unknown) {
   await prisma.$transaction(async (tx) => {
     await tx.user.update({
       where: { id: actor.id },
-      data: { name: input.name, phoneNumber: input.phoneNumber ?? null, locale: input.locale },
+      data: {
+        name: input.name,
+        phoneNumber: input.phoneNumber ?? null,
+        locale: input.locale,
+        ...(input.whatsappUpdates === undefined ? {} : { whatsappUpdates: input.whatsappUpdates }),
+      },
     });
     await writeAudit(tx, {
       actorId: actor.id,
@@ -135,7 +142,12 @@ export async function upsertAdvertiserProfile(actor: Actor, raw: unknown) {
 }
 
 /** Applies the role chosen at sign-up. Only self-service roles are accepted; ADMIN never is. */
-export async function setInitialRole(userId: string, role: string, phoneNumber?: string) {
+export async function setInitialRole(
+  userId: string,
+  role: string,
+  phoneNumber?: string,
+  extra: { locale?: "en" | "sw"; whatsappUpdates?: boolean } = {},
+) {
   if (!(SELF_SERVICE_ROLES as readonly string[]).includes(role)) throw forbidden();
   await prisma.$transaction(async (tx) => {
     const user = await tx.user.findUnique({
@@ -147,7 +159,12 @@ export async function setInitialRole(userId: string, role: string, phoneNumber?:
     if (user.role !== "TENANT" || Date.now() - user.createdAt.getTime() > 10 * 60 * 1000) throw forbidden();
     await tx.user.update({
       where: { id: userId },
-      data: { role: role as Role, phoneNumber: phoneNumber ?? null },
+      data: {
+        role: role as Role,
+        phoneNumber: phoneNumber ?? null,
+        locale: extra.locale ?? "en",
+        whatsappUpdates: Boolean(extra.whatsappUpdates && phoneNumber),
+      },
     });
     if (role === "LANDLORD" || role === "AGENT") {
       await tx.advertiserProfile.upsert({
@@ -253,7 +270,11 @@ export async function deleteMyAccount(actor: Actor, confirmEmail: string) {
   await Promise.allSettled([
     ...evidence.map((e) => store.delete(e.storageKey)),
     ...reportEvidence.map((e) => store.delete(e.storageKey)),
-    ...images.flatMap((i) => [store.delete(i.storageKey), store.delete(i.thumbKey)]),
+    ...images.flatMap((i) => [
+      store.delete(i.storageKey),
+      store.delete(i.thumbKey),
+      store.delete(ogImageKey(i.storageKey)),
+    ]),
   ]);
 }
 

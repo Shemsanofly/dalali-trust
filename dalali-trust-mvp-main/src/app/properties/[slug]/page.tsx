@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { ContactButtons } from "@/components/property/contact-buttons";
 import { CostBreakdown } from "@/components/property/cost-breakdown";
 import { Gallery } from "@/components/property/gallery";
+import { ShareButtons } from "@/components/property/share-buttons";
+import { DEFAULT_PREVIEW_IMAGE } from "@/lib/site";
 import { availabilityLabel } from "@/components/property/property-card";
 import { ReportForm, SaveButton, ViewingRequestForm } from "@/components/property/tenant-forms";
 import { TrustPanel } from "@/components/property/trust-panel";
@@ -27,7 +29,45 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { slug } = await params;
   const data = await getPublicListing(slug, null);
   if (!data) return { title: "Not found", robots: { index: false } };
-  return { title: data.property.title, description: data.property.description.slice(0, 160) };
+  const { locale, t } = await getDictionary();
+  const p = data.property;
+  const area = `${p.neighborhood}, ${p.district}`;
+  const cover = p.images[0];
+  // Shown when the link is shared on WhatsApp, Facebook or X: photo, rent, area and total cost.
+  const previewTitle = fmt(t.property.previewTitle, {
+    price: formatTZS(p.rentAmount, locale),
+    perMonth: t.property.perMonth,
+    title: p.title,
+  });
+  const previewDescription = fmt(t.property.previewDescription, {
+    area,
+    total: formatTZS(moveInCost(p).total, locale),
+  });
+  const images = [
+    cover
+      ? { url: `/api/media/${cover.id}?size=og`, width: 1200, height: 630, alt: p.title }
+      : { url: DEFAULT_PREVIEW_IMAGE, width: 1200, height: 630, alt: "Dalali Trust" },
+  ];
+  return {
+    title: p.title,
+    description: p.description.slice(0, 160),
+    alternates: { canonical: `/properties/${p.slug}` },
+    openGraph: {
+      type: "website",
+      siteName: "Dalali Trust",
+      url: `/properties/${p.slug}`,
+      title: previewTitle,
+      description: previewDescription,
+      locale: locale === "sw" ? "sw_TZ" : "en_TZ",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: previewTitle,
+      description: previewDescription,
+      images,
+    },
+  };
 }
 
 function minViewingTime(): string {
@@ -54,6 +94,22 @@ export default async function PropertyPage({ params }: { params: Params }) {
   const confirmedDays = p.availabilityConfirmedAt ? daysSince(p.availabilityConfirmedAt) : null;
   const stale = confirmedDays === null || confirmedDays > env().AVAILABILITY_STALE_DAYS;
   const canInteract = actor && !isOwner && isPublic && actor.status === "ACTIVE";
+  const share = isPublic ? (
+    <ShareButtons
+      path={`/properties/${p.slug}`}
+      text={fmt(t.property.shareText, {
+        title: p.title,
+        price: formatTZS(p.rentAmount, locale),
+        perMonth: t.property.perMonth,
+        area: `${p.neighborhood}, ${p.district}`,
+      })}
+      labels={{
+        share: t.property.share,
+        shareWhatsapp: t.property.shareWhatsapp,
+        linkCopied: t.property.linkCopied,
+      }}
+    />
+  ) : null;
 
   return (
     <div className="container-page py-6 sm:py-8">
@@ -118,6 +174,7 @@ export default async function PropertyPage({ params }: { params: Params }) {
                   {canInteract ? t.viewing.title : t.property.costsTitle}
                 </a>
               </div>
+              {share ? <div className="mt-2">{share}</div> : null}
             </div>
             {stale ? (
               <div className="mt-3">
@@ -204,6 +261,7 @@ export default async function PropertyPage({ params }: { params: Params }) {
                 />
               ) : null}
             </div>
+            {share ? <div className="mt-3 hidden lg:block">{share}</div> : null}
           </div>
 
           <div id="costs" className="scroll-mt-20">

@@ -12,6 +12,24 @@ export function formatDate(d: Date | string, locale: Loc = "en"): string {
   }).format(new Date(d));
 }
 
+/** "25/10/2026 10:00" in East Africa Time: reads the same in English and Swahili (used in WhatsApp messages). */
+export function formatEatNumeric(d: Date | string): string {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: APP_TIME_ZONE,
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    })
+      .formatToParts(new Date(d))
+      .map((p) => [p.type, p.value]),
+  );
+  return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}`;
+}
+
 export function formatDateTime(d: Date | string, locale: Loc = "en"): string {
   return new Intl.DateTimeFormat(intlLocale(locale), {
     timeZone: APP_TIME_ZONE,

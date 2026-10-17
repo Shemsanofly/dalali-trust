@@ -7,6 +7,8 @@ import { writeAudit } from "../audit";
 import { prisma } from "../db";
 import { AppError, forbidden, invalidState, notFound } from "../errors";
 import { enforceRateLimit, RATE_RULES } from "../rate-limit";
+import { ogImageKey } from "../og-image";
+import { appLink } from "../whatsapp";
 import { storage } from "../storage";
 import {
   fileToBuffer,
@@ -312,7 +314,11 @@ export async function removeListingImage(actor: Actor, imageId: string) {
       entityId: image.propertyId,
     });
   });
-  await Promise.allSettled([storage().delete(image.storageKey), storage().delete(image.thumbKey)]);
+  await Promise.allSettled([
+    storage().delete(image.storageKey),
+    storage().delete(image.thumbKey),
+    storage().delete(ogImageKey(image.storageKey)),
+  ]);
 }
 
 /** Decides whether `actor` may view a listing photo. Published listings are public. */
@@ -640,6 +646,18 @@ export async function moderateListing(
       title: "Listing review update",
       body: messages[decision],
       link: `/dashboard/listings/${propertyId}`,
+      whatsapp:
+        decision === "APPROVE"
+          ? {
+              template: "dalali_listing_published",
+              params: [property.title, appLink(`/properties/${property.slug}`)],
+            }
+          : decision === "REJECT"
+            ? {
+                template: "dalali_listing_not_approved",
+                params: [property.title, trimmedReason, appLink(`/dashboard/listings/${propertyId}`)],
+              }
+            : undefined,
     });
   });
 }

@@ -113,7 +113,7 @@ Migrations live in `prisma/migrations/`. The initial migration also adds Postgre
 
 ```bash
 npm run format:check && npm run lint && npm run typecheck
-npm test            # Vitest: 84 integration + unit tests against TEST_DATABASE_URL
+npm test            # Vitest: 97 integration + unit tests against TEST_DATABASE_URL
 npm run build && npm run test:e2e   # Playwright: user journeys against E2E_DATABASE_URL
 ```
 
@@ -129,7 +129,7 @@ npm run build
 npm start                 # PORT defaults to 3000
 ```
 
-Schedule `npm run jobs:expire-verifications` daily. It expires old verifications and purges evidence past the retention period. Health check: `GET /api/health`. The full checklist is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+Schedule `npm run jobs:expire-verifications` daily. It expires old verifications and purges evidence past the retention period. Schedule `npm run jobs:admin-digest` each morning to email administrators what is waiting for review. Optional WhatsApp updates for viewing requests and listing reviews: see [docs/WHATSAPP.md](docs/WHATSAPP.md). Health check: `GET /api/health`. The full checklist is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Project layout
 

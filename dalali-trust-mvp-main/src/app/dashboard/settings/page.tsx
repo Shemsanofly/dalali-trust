@@ -1,3 +1,4 @@
+import { whatsappEnabled } from "@/server/whatsapp";
 import { formatTzPhone } from "@/lib/phone";
 import { deleteAccountAction, updateProfileAction } from "@/app/actions/account";
 import { changePasswordAction } from "@/app/actions/auth";
@@ -45,6 +46,21 @@ export default async function SettingsPage() {
               autoComplete="tel"
             />
           </div>
+          {whatsappEnabled() ? (
+            <label className="flex items-start gap-2 text-sm text-navy-700">
+              <input type="hidden" name="whatsappField" value="1" />
+              <input
+                type="checkbox"
+                name="whatsappUpdates"
+                defaultChecked={me.whatsappUpdates}
+                className="mt-0.5 h-5 w-5 shrink-0 accent-brand-600"
+              />
+              <span>
+                {t.account.whatsappUpdates}
+                <span className="block text-xs text-navy-500">{t.account.whatsappHint}</span>
+              </span>
+            </label>
+          ) : null}
           <div>
             <label className="label" htmlFor="locale">
               Language / Lugha

@@ -4,6 +4,8 @@ This is the working playbook for the first months. Keep it short, follow it cons
 
 ## 1. Listing review (target: within 2 working days)
 
+You do not need to keep checking: the **Admin** link in the header shows how many items are waiting (red when an urgent report is open), and the morning summary email (`jobs:admin-digest`) lists the queue.
+
 Open **Admin → Listings** (oldest first). For each listing, check:
 
 1. **Photos** look like a real, specific property: not stock images, not watermarked from another site, consistent with the description. Use the _Possible duplicates_ panel. A match is a prompt to look closer, never proof.
@@ -70,7 +72,7 @@ Admin → Overview shows counts. Use `analytics_event` (no personal data) for fu
 
 ## 6. Messages and integrations
 
-All notifications are **in-app only**. The app never claims an SMS, WhatsApp or email was sent unless a provider is configured: only password-reset emails go out, and only with `EMAIL_PROVIDER=resend`. WhatsApp and phone buttons simply open the user's own app.
+Every update appears as an in-app notification. **WhatsApp updates** for viewing requests and listing reviews are sent only to people who opted in, once WhatsApp is configured ([WHATSAPP.md](WHATSAPP.md)). There is no SMS. Email is used for password resets (with `EMAIL_PROVIDER=resend`) and the morning moderation summary. The app never claims a message was sent unless a provider actually accepted it. The "WhatsApp" and phone buttons on listings simply open the user's own app.
 
 ## 7. Payments: not in the MVP
 
