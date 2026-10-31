@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { APIError } from "better-auth/api";
 import { runAction, str, type ActionState } from "@/server/action-result";
 import { getLocale } from "@/i18n/server";
+import { assertAgentCompanyCode } from "@/server/agent-signup";
 import { auth } from "@/server/auth";
 import { emailEnabled } from "@/server/email";
 import { AppError } from "@/server/errors";
@@ -26,10 +27,12 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
     const input = parseOrThrow(signUpSchema, {
       ...values,
       password: str(form, "password") ?? "",
+      companySecretCode: str(form, "companySecretCode"),
       acceptTerms: form.get("acceptTerms") === "on",
       whatsappUpdates: form.get("whatsappUpdates") === "on",
       smsUpdates: form.get("smsUpdates") === "on",
     });
+    assertAgentCompanyCode(input.role, input.companySecretCode);
     let userId: string;
     try {
       const res = await auth.api.signUpEmail({
@@ -52,6 +55,7 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
       locale: await getLocale(),
       whatsappUpdates: input.whatsappUpdates,
       smsUpdates: input.smsUpdates,
+      companySecretCode: input.companySecretCode,
     });
   });
   if (!result.ok) return { ...result, values };

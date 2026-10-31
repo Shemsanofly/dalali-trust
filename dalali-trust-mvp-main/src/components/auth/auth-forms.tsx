@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import {
   requestPasswordResetAction,
   resetPasswordAction,
@@ -86,9 +86,9 @@ export function SignUpForm({
   sms?: boolean;
 }) {
   const [state, action] = useActionState(signUpAction, initial);
+  const [role, setRole] = useState(defaultRole || "TENANT");
   const v = state.values ?? {};
   const err = state.fieldErrors ?? {};
-  const role = v.role || defaultRole || "TENANT";
   return (
     <form action={action} className="space-y-4" noValidate>
       <FormMessage state={state} />
@@ -110,7 +110,8 @@ export function SignUpForm({
                 type="radio"
                 name="role"
                 value={value}
-                defaultChecked={role === value}
+                checked={role === value}
+                onChange={() => setRole(value)}
                 className="h-4 w-4 accent-brand-600"
               />
               <span className="text-sm font-medium">{label}</span>
@@ -119,6 +120,28 @@ export function SignUpForm({
         </div>
         <FieldError errors={err.role} />
       </fieldset>
+      {role === "AGENT" ? (
+        <div>
+          <label className="label" htmlFor="companySecretCode">
+            {t.companySecretCode}
+          </label>
+          <PasswordInput
+            showLabel={t.showPassword}
+            hideLabel={t.hidePassword}
+            id="companySecretCode"
+            name="companySecretCode"
+            autoComplete="off"
+            required
+            maxLength={128}
+            aria-describedby="company-code-help"
+            aria-invalid={Boolean(err.companySecretCode?.length)}
+          />
+          <p id="company-code-help" className="mt-1 text-xs text-navy-500">
+            {t.companySecretCodeHint}
+          </p>
+          <FieldError errors={err.companySecretCode} />
+        </div>
+      ) : null}
       <div>
         <label className="label" htmlFor="name">
           {t.name}

@@ -29,6 +29,8 @@ const SW: Record<string, string> = {
     "Nenosiri limebadilishwa. Vifaa vingine vimetolewa kwenye akaunti.",
   "You must accept the terms to continue": "Lazima ukubali masharti ili kuendelea",
   "Choose how you will use Estate": "Chagua jinsi utakavyotumia Estate",
+  "Enter the company secret code.": "Weka msimbo wa siri wa kampuni.",
+  "The company secret code is incorrect.": "Msimbo wa siri wa kampuni si sahihi.",
   "We could not create an account with these details. If you already have an account, sign in or reset your password.":
     "Hatukuweza kufungua akaunti kwa taarifa hizi. Kama tayari una akaunti, ingia au weka upya nenosiri lako.",
   "Type your email address exactly to confirm.": "Andika barua pepe yako kama ilivyo ili kuthibitisha.",

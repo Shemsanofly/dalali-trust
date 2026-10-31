@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { auth } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { env } from "@/server/env";
 import { consumeRateLimit } from "@/server/rate-limit";
 import {
   addListingImages,
@@ -47,7 +48,9 @@ describe("sign-up and roles", () => {
       body: { name: "Baraka", email: "baraka@example.test", password: "a-strong-password-1" },
     });
     await expect(setInitialRole(res.user.id, "ADMIN")).rejects.toMatchObject({ code: "FORBIDDEN" });
-    await setInitialRole(res.user.id, "AGENT", "+255712345678");
+    await setInitialRole(res.user.id, "AGENT", "+255712345678", {
+      companySecretCode: env().AGENT_COMPANY_SECRET_CODE,
+    });
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: res.user.id },
       include: { advertiserProfile: true },
@@ -62,6 +65,18 @@ describe("sign-up and roles", () => {
     await expect(
       auth.api.signUpEmail({ body: { name: "Weak", email: "weak@example.test", password: "short" } }),
     ).rejects.toBeTruthy();
+  });
+
+  it("does not grant agent access without the company secret code", async () => {
+    const user = await createUser("TENANT");
+    for (const companySecretCode of [undefined, "", "wrong-company-code"]) {
+      await expect(setInitialRole(user.id, "AGENT", undefined, { companySecretCode })).rejects.toMatchObject({
+        code: "VALIDATION",
+        fieldErrors: { companySecretCode: expect.any(Array) },
+      });
+    }
+    expect((await prisma.user.findUniqueOrThrow({ where: { id: user.id } })).role).toBe("TENANT");
+    expect(await prisma.advertiserProfile.count({ where: { userId: user.id } })).toBe(0);
   });
 
   it("blocks sign-in for suspended accounts", async () => {

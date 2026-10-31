@@ -1,6 +1,7 @@
 import "server-only";
 import type { Role } from "@/generated/prisma/enums";
 import { assertActive, assertAdmin, assertAdvertiser, type Actor } from "../actor";
+import { assertAgentCompanyCode } from "../agent-signup";
 import { writeAudit } from "../audit";
 import { prisma } from "../db";
 import { AppError, forbidden, invalidState, notFound } from "../errors";
@@ -148,9 +149,15 @@ export async function setInitialRole(
   userId: string,
   role: string,
   phoneNumber?: string,
-  extra: { locale?: "en" | "sw"; whatsappUpdates?: boolean; smsUpdates?: boolean } = {},
+  extra: {
+    locale?: "en" | "sw";
+    whatsappUpdates?: boolean;
+    smsUpdates?: boolean;
+    companySecretCode?: string;
+  } = {},
 ) {
   if (!(SELF_SERVICE_ROLES as readonly string[]).includes(role)) throw forbidden();
+  assertAgentCompanyCode(role, extra.companySecretCode);
   await prisma.$transaction(async (tx) => {
     const user = await tx.user.findUnique({
       where: { id: userId },

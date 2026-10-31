@@ -111,6 +111,11 @@ Migrations live in `prisma/migrations/`. The initial migration also adds Postgre
 
 [`.env.example`](.env.example) documents every variable. The server validates the configuration at startup (`src/server/env.ts`) and refuses to start if it is invalid. For example, `EMAIL_PROVIDER=console` is rejected in production.
 
+Agent accounts are reserved for Estate company members. Selecting the Agent role at sign-up
+requires the company secret code, checked on the server before the account is created.
+Set `AGENT_COMPANY_SECRET_CODE` in the server environment to change it; its default is
+`estate123`. Tenant and landlord registration does not require this code.
+
 ## Testing
 
 ```bash

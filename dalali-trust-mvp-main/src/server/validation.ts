@@ -296,10 +296,15 @@ export const signUpSchema = z
     email: z.email("Enter a valid email address").trim().toLowerCase().max(254),
     password: z.string().min(10, "Use at least 10 characters").max(128, "Use at most 128 characters"),
     role: z.enum(SELF_SERVICE_ROLES, { error: "Choose how you will use Estate" }),
+    companySecretCode: optionalText(128),
     phoneNumber: optionalTzPhone,
     acceptTerms: z.literal(true, { error: "You must accept the terms to continue" }),
     whatsappUpdates: z.boolean().default(false),
     smsUpdates: z.boolean().default(false),
+  })
+  .refine((v) => v.role !== "AGENT" || v.companySecretCode, {
+    path: ["companySecretCode"],
+    message: "Enter the company secret code.",
   })
   .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE })
   .refine((v) => !v.smsUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE_SMS });

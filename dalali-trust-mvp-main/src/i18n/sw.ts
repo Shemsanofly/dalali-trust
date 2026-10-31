@@ -332,6 +332,8 @@ export const sw: Dictionary = {
     roleTenant: "Kutafuta nyumba ya kupanga",
     roleLandlord: "Kupangisha nyumba yangu (mwenye nyumba)",
     roleAgent: "Kutangaza nyumba kwa niaba ya wamiliki (dalali)",
+    companySecretCode: "Weka msimbo wa siri wa kampuni",
+    companySecretCodeHint: "Kwa wanachama wa kampuni ya Estate pekee.",
     acceptTerms: "Nakubali Masharti na Sera ya Faragha",
     submitSignIn: "Ingia",
     submitSignUp: "Fungua akaunti",

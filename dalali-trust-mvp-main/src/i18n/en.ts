@@ -334,6 +334,8 @@ export const en = {
     roleTenant: "Find a home to rent",
     roleLandlord: "Let my own property (landlord)",
     roleAgent: "Advertise properties for owners (agent)",
+    companySecretCode: "Enter company secret code",
+    companySecretCodeHint: "For Estate company members only.",
     acceptTerms: "I agree to the Terms and Privacy Policy",
     submitSignIn: "Sign in",
     submitSignUp: "Create account",
