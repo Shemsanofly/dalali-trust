@@ -89,8 +89,10 @@ export default async function PropertyPage({ params }: { params: Params }) {
   const [trust, saved] = await Promise.all([trustSummary(p.advertiserId, p.id), savedIds(actor, [p.id])]);
   const profile = p.advertiser.advertiserProfile;
   const advertiserName = profile?.displayName ?? p.advertiser.name;
-  const phone = p.contactPhone ?? (profile?.showPhone ? profile.contactPhone : null);
-  const whatsapp = p.contactWhatsapp ?? (profile?.showPhone ? profile.whatsappNumber : null);
+  // Tenants always see company contacts, never the advertiser's own numbers.
+  const support = env();
+  const phone = support.SUPPORT_PHONE ?? null;
+  const whatsapp = support.SUPPORT_WHATSAPP ?? null;
   const confirmedDays = p.availabilityConfirmedAt ? daysSince(p.availabilityConfirmedAt) : null;
   const stale = confirmedDays === null || confirmedDays > env().AVAILABILITY_STALE_DAYS;
   const canInteract = actor && !isOwner && isPublic && actor.status === "ACTIVE";

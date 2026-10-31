@@ -1,6 +1,7 @@
 import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import type { ListingStatus } from "@/generated/prisma/enums";
+import { listingAgentFeeAmount } from "@/lib/fees";
 import { makeListingSlug } from "@/lib/slug";
 import { assertActive, assertAdmin, assertAdvertiser, isAdmin, type Actor } from "../actor";
 import { writeAudit } from "../audit";
@@ -49,7 +50,6 @@ function listingData(input: ListingInput) {
     rentAmount: input.rentAmount,
     advanceMonths: input.advanceMonths,
     depositAmount: input.depositAmount,
-    agentFeeAmount: input.agentFeeAmount,
     agentFeeNote: input.agentFeeNote ?? null,
     paymentTerms: input.paymentTerms ?? null,
     bedrooms: input.bedrooms,
@@ -59,8 +59,6 @@ function listingData(input: ListingInput) {
     electricity: input.electricity,
     water: input.water,
     utilityNotes: input.utilityNotes ?? null,
-    contactPhone: input.contactPhone ?? null,
-    contactWhatsapp: input.contactWhatsapp ?? null,
     availabilityStatus: input.availabilityStatus,
     availableFrom: input.availableFrom ?? null,
   };
@@ -82,6 +80,11 @@ export async function createListing(actor: Actor, raw: unknown) {
     const property = await tx.property.create({
       data: {
         ...listingData(input),
+        // Agent fee is derived from the rent; owners are never charged. Contacts are
+        // company contacts now, so any per-listing number is cleared.
+        agentFeeAmount: listingAgentFeeAmount(actor.role, input.rentAmount),
+        contactPhone: null,
+        contactWhatsapp: null,
         slug: makeListingSlug(input.title, input.neighborhood),
         advertiserId: actor.id,
         status: "DRAFT",
@@ -117,6 +120,9 @@ export async function updateListing(actor: Actor, propertyId: string, raw: unkno
       where: { id: propertyId },
       data: {
         ...listingData(input),
+        agentFeeAmount: listingAgentFeeAmount(actor.role, input.rentAmount),
+        contactPhone: null,
+        contactWhatsapp: null,
         status: nextStatus,
         submittedAt:
           nextStatus === "PENDING_REVIEW" && property.status === "PUBLISHED"

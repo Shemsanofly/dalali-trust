@@ -89,7 +89,6 @@ export function validListingInput(overrides: Record<string, unknown> = {}) {
     rentAmount: 150000,
     advanceMonths: 3,
     depositAmount: 0,
-    agentFeeAmount: 50000,
     bedrooms: 1,
     bathrooms: 1,
     furnished: false,

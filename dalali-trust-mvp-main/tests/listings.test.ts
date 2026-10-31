@@ -82,9 +82,29 @@ describe("listing creation and editing", () => {
     await expect(
       createListing(landlord, validListingInput({ amenities: ["<script>"] })),
     ).rejects.toMatchObject({ code: "VALIDATION" });
-    await expect(createListing(landlord, validListingInput({ contactPhone: "12345" }))).rejects.toMatchObject(
-      { code: "VALIDATION" },
+  });
+
+  it("calculates the agent fee from the rent and never charges an owner", async () => {
+    const cheap = await createListing(
+      await createUser("AGENT"),
+      validListingInput({ rentAmount: 40_000 }),
     );
+    expect(cheap.agentFeeAmount).toBe(34_000);
+    const mid = await createListing(
+      await createUser("AGENT"),
+      validListingInput({ rentAmount: 150_000 }),
+    );
+    expect(mid.agentFeeAmount).toBe(60_000);
+    const premium = await createListing(
+      await createUser("AGENT"),
+      validListingInput({ rentAmount: 1_200_000 }),
+    );
+    expect(premium.agentFeeAmount).toBe(120_000);
+    const owned = await createListing(
+      await createUser("LANDLORD"),
+      validListingInput({ rentAmount: 150_000 }),
+    );
+    expect(owned.agentFeeAmount).toBe(0);
   });
 
   it("does not let one advertiser edit or archive another's listing", async () => {

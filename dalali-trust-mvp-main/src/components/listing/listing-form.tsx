@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { fmt, type Dictionary } from "@/i18n";
 import { REGIONS } from "@/lib/locations";
-import { formatTzPhone } from "@/lib/phone";
+import { formatTZS } from "@/lib/money";
 import { FieldError, FormMessage, SubmitButton } from "../ui/form";
 
 type State = {
@@ -38,8 +38,6 @@ export type ListingDefaults = {
   electricity?: string;
   water?: string;
   utilityNotes?: string | null;
-  contactPhone?: string | null;
-  contactWhatsapp?: string | null;
   availabilityStatus?: string;
   availableFrom?: string | null;
   charges?: { label: string; amount: number; frequency: string; note: string | null }[];
@@ -257,13 +255,16 @@ export function ListingForm({
             defaultValue={val("depositAmount", defaults.depositAmount ?? 0)}
             errors={err.depositAmount}
           />
-          <Text
-            name="agentFeeAmount"
-            label={tf.agentFee}
-            inputMode="numeric"
-            defaultValue={val("agentFeeAmount", defaults.agentFeeAmount ?? 0)}
-            errors={err.agentFeeAmount}
-          />
+          <div>
+            <span className="label">{tf.agentFee}</span>
+            <p className="rounded-lg bg-navy-50 px-3 py-2 font-semibold text-navy-900">
+              {defaults.agentFeeAmount !== undefined
+                ? formatTZS(defaults.agentFeeAmount)
+                : tf.agentFeeCalculatedOnSave}
+            </p>
+            <p className="mt-1 text-xs text-navy-500">{tf.agentFeeAuto}</p>
+            <p className="mt-1 text-xs text-navy-500">{tf.agentFeeOwnerFree}</p>
+          </div>
         </div>
         <Text
           name="agentFeeNote"
@@ -391,27 +392,6 @@ export function ListingForm({
             type="date"
             defaultValue={val("availableFrom", defaults.availableFrom)}
             errors={err.availableFrom}
-          />
-          <Text
-            name="contactPhone"
-            label={tf.contactPhone}
-            hint={tf.contactPhoneHint}
-            type="tel"
-            defaultValue={val(
-              "contactPhone",
-              defaults.contactPhone ? formatTzPhone(defaults.contactPhone) : null,
-            )}
-            errors={err.contactPhone}
-          />
-          <Text
-            name="contactWhatsapp"
-            label={tf.contactWhatsapp}
-            type="tel"
-            defaultValue={val(
-              "contactWhatsapp",
-              defaults.contactWhatsapp ? formatTzPhone(defaults.contactWhatsapp) : null,
-            )}
-            errors={err.contactWhatsapp}
           />
         </div>
       </Section>

@@ -3,6 +3,7 @@ import { parseEatLocalDateTime } from "@/lib/dates";
 import { translateServerMessage } from "@/i18n/server-messages";
 import { clientIp, clientIpHeaders } from "@/lib/client-ip";
 import { coordinatesFromForm } from "@/lib/coordinates";
+import { agentFeeAmount, agentFeePercent, listingAgentFeeAmount } from "@/lib/fees";
 import { formatTZS, moveInCost, parseTZS } from "@/lib/money";
 import { normalizeTzPhone } from "@/lib/phone";
 import { makeListingSlug } from "@/lib/slug";
@@ -33,6 +34,36 @@ describe("money", () => {
         ],
       }),
     ).toEqual({ advanceRent: 900000, oneTimeCharges: 20000, monthlyCharges: 10000, total: 1220000 });
+  });
+});
+
+describe("agent fee", () => {
+  it.each([
+    [0, 85],
+    [49_999, 85],
+    [50_000, 60],
+    [99_999, 60],
+    [100_000, 40],
+    [499_999, 40],
+    [500_000, 25],
+    [999_999, 25],
+    [1_000_000, 10],
+    [2_500_000, 10],
+  ])("charges %i%% for a rent of TSh %i", (rent, percent) => {
+    expect(agentFeePercent(rent)).toBe(percent);
+  });
+  it("computes whole-shilling fees", () => {
+    expect(agentFeeAmount(40_000)).toBe(34_000);
+    expect(agentFeeAmount(150_000)).toBe(60_000);
+    expect(agentFeeAmount(1_200_000)).toBe(120_000);
+  });
+  it("never charges an owner", () => {
+    expect(listingAgentFeeAmount("LANDLORD", 150_000)).toBe(0);
+    expect(listingAgentFeeAmount("AGENT", 150_000)).toBe(60_000);
+  });
+  it("rejects invalid rents", () => {
+    expect(() => agentFeePercent(-1)).toThrow();
+    expect(() => agentFeePercent(1500.5)).toThrow();
   });
 });
 
