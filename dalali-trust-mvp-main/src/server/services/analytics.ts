@@ -14,6 +14,8 @@ export const EVENTS = [
   "report_submitted",
   "signup_completed",
   "listing_submitted",
+  "ussd_listing_view",
+  "ussd_sms_details",
 ] as const;
 
 export type EventName = (typeof EVENTS)[number];

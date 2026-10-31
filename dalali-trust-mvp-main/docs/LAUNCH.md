@@ -81,6 +81,14 @@ Follow [WHATSAPP.md](WHATSAPP.md). When the templates are approved, set in the R
 environment group `dalali-shared`: `WHATSAPP_PROVIDER=cloud`, `WHATSAPP_ACCESS_TOKEN`,
 `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_API_VERSION`. The opt-in checkbox then appears on the site.
 
+## Optional: SMS updates and USSD search
+
+Follow [AFRICASTALKING.md](AFRICASTALKING.md): try everything in the free Africa's Talking
+sandbox and simulator first. For live use set in `dalali-shared`: `SMS_PROVIDER=africastalking`,
+`AT_USERNAME`, `AT_API_KEY` (and `AT_SENDER_ID` if approved), plus `USSD_ENABLED=true`. Render
+already generated `USSD_CALLBACK_TOKEN`; put it in the callback URL
+`https://<your site>/api/ussd?token=<USSD_CALLBACK_TOKEN>` in the Africa's Talking dashboard.
+
 ## Backups
 
 - **Database:** the paid Render PostgreSQL plan keeps automatic backups and can restore to an

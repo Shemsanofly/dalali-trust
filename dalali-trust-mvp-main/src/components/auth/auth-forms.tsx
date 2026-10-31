@@ -75,11 +75,14 @@ export function SignUpForm({
   t,
   defaultRole,
   whatsapp = false,
+  sms = false,
 }: {
   t: A;
   defaultRole?: string;
   /** Show the WhatsApp updates opt-in (only when WhatsApp messaging is configured). */
   whatsapp?: boolean;
+  /** Show the SMS updates opt-in (only when SMS is configured). */
+  sms?: boolean;
 }) {
   const [state, action] = useActionState(signUpAction, initial);
   const v = state.values ?? {};
@@ -171,6 +174,20 @@ export function SignUpForm({
             <span>
               {t.whatsappUpdates}
               <span className="block text-xs text-navy-500">{t.whatsappHint}</span>
+            </span>
+          </label>
+        ) : null}
+        {sms ? (
+          <label className="mt-2 flex items-start gap-2 text-sm text-navy-700">
+            <input
+              type="checkbox"
+              name="smsUpdates"
+              defaultChecked={v.smsUpdates === "on"}
+              className="mt-0.5 h-5 w-5 shrink-0 accent-brand-600"
+            />
+            <span>
+              {t.smsUpdates}
+              <span className="block text-xs text-navy-500">{t.smsHint}</span>
             </span>
           </label>
         ) : null}

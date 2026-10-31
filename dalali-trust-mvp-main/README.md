@@ -19,7 +19,7 @@ This directory contains the Next.js application. The original SahaShares prototy
 
 **Going live:** [Launch checklist (Render)](docs/LAUNCH.md)
 
-More detail: [Architecture](docs/ARCHITECTURE.md) · [Security & privacy](docs/SECURITY.md) · [Deployment](docs/DEPLOYMENT.md) · [Operations, verification & launch](docs/OPERATIONS.md) · [Repository audit](docs/AUDIT.md) · [Legacy migration](docs/MIGRATION.md)
+More detail: [SMS & USSD](docs/AFRICASTALKING.md) · [Architecture](docs/ARCHITECTURE.md) · [Security & privacy](docs/SECURITY.md) · [Deployment](docs/DEPLOYMENT.md) · [Operations, verification & launch](docs/OPERATIONS.md) · [Repository audit](docs/AUDIT.md) · [Legacy migration](docs/MIGRATION.md)
 
 ---
 
@@ -131,7 +131,7 @@ npm run build
 npm start                 # PORT defaults to 3000
 ```
 
-Schedule `npm run jobs:expire-verifications` daily. It expires old verifications and purges evidence past the retention period. Schedule `npm run jobs:admin-digest` each morning to email administrators what is waiting for review. Optional WhatsApp updates for viewing requests and listing reviews: see [docs/WHATSAPP.md](docs/WHATSAPP.md). Health check: `GET /api/health`. The full checklist is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+Schedule `npm run jobs:expire-verifications` daily. It expires old verifications and purges evidence past the retention period. Schedule `npm run jobs:admin-digest` each morning to email administrators what is waiting for review. Optional WhatsApp updates for viewing requests and listing reviews: see [docs/WHATSAPP.md](docs/WHATSAPP.md). Optional SMS updates and a USSD rental-search menu through Africa's Talking (with a free sandbox simulator): see [docs/AFRICASTALKING.md](docs/AFRICASTALKING.md); schedule `npm run jobs:send-sms` every 15 minutes when SMS is on. Health check: `GET /api/health`. The full checklist is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Project layout
 

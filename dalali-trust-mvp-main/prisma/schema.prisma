@@ -173,6 +173,8 @@ model User {
   locale          String        @default("en")
   /// Consent to receive WhatsApp updates on phoneNumber (viewing requests, listing reviews).
   whatsappUpdates Boolean       @default(false)
+  /// Consent to receive SMS updates on phoneNumber (same events as WhatsApp, via Africa's Talking).
+  smsUpdates      Boolean       @default(false)
   suspendedReason String?
   suspendedAt     DateTime?     @db.Timestamptz(3)
   deletedAt       DateTime?     @db.Timestamptz(3)
@@ -585,7 +587,7 @@ model AuditLog {
 // Notifications, feedback, analytics
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// In-app notifications only. No SMS/email is implied by a Notification row.
+/// In-app notification, optionally copied to WhatsApp and/or SMS for users who opted in.
 model Notification {
   id        String    @id @default(cuid())
   userId    String
@@ -601,17 +603,31 @@ model Notification {
 
   /// WhatsApp copy of this notification (only for users who opted in). Null = not sent by WhatsApp.
   whatsappStatus   WhatsAppStatus?
+  /// Message template and values, used for both the WhatsApp and the SMS copy.
   whatsappTemplate String?
   whatsappParams   Json?
   whatsappError    String?
   whatsappSentAt   DateTime?       @db.Timestamptz(3)
 
+  /// SMS copy of this notification (Africa's Talking; only for users who opted in). Null = no SMS.
+  smsStatus SmsStatus?
+  smsError  String?
+  smsSentAt DateTime?  @db.Timestamptz(3)
+
   @@index([userId, readAt])
   @@index([whatsappStatus])
+  @@index([smsStatus])
   @@map("notification")
 }
 
 enum WhatsAppStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
+}
+
+enum SmsStatus {
   PENDING
   SENDING
   SENT

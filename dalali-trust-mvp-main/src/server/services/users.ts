@@ -85,6 +85,7 @@ export async function getMyAccount(actor: Actor) {
       phoneNumber: true,
       locale: true,
       whatsappUpdates: true,
+      smsUpdates: true,
       createdAt: true,
       advertiserProfile: true,
     },
@@ -103,6 +104,7 @@ export async function updateProfile(actor: Actor, raw: unknown) {
         phoneNumber: input.phoneNumber ?? null,
         locale: input.locale,
         ...(input.whatsappUpdates === undefined ? {} : { whatsappUpdates: input.whatsappUpdates }),
+        ...(input.smsUpdates === undefined ? {} : { smsUpdates: input.smsUpdates }),
       },
     });
     await writeAudit(tx, {
@@ -146,7 +148,7 @@ export async function setInitialRole(
   userId: string,
   role: string,
   phoneNumber?: string,
-  extra: { locale?: "en" | "sw"; whatsappUpdates?: boolean } = {},
+  extra: { locale?: "en" | "sw"; whatsappUpdates?: boolean; smsUpdates?: boolean } = {},
 ) {
   if (!(SELF_SERVICE_ROLES as readonly string[]).includes(role)) throw forbidden();
   await prisma.$transaction(async (tx) => {
@@ -164,6 +166,7 @@ export async function setInitialRole(
         phoneNumber: phoneNumber ?? null,
         locale: extra.locale ?? "en",
         whatsappUpdates: Boolean(extra.whatsappUpdates && phoneNumber),
+        smsUpdates: Boolean(extra.smsUpdates && phoneNumber),
       },
     });
     if (role === "LANDLORD" || role === "AGENT") {

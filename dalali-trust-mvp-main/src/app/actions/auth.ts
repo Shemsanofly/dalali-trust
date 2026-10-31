@@ -20,6 +20,7 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
     role: str(form, "role") ?? "",
     phoneNumber: str(form, "phoneNumber") ?? "",
     whatsappUpdates: form.get("whatsappUpdates") === "on" ? "on" : "",
+    smsUpdates: form.get("smsUpdates") === "on" ? "on" : "",
   };
   const result = await runAction(async () => {
     const input = parseOrThrow(signUpSchema, {
@@ -27,6 +28,7 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
       password: str(form, "password") ?? "",
       acceptTerms: form.get("acceptTerms") === "on",
       whatsappUpdates: form.get("whatsappUpdates") === "on",
+      smsUpdates: form.get("smsUpdates") === "on",
     });
     let userId: string;
     try {
@@ -49,6 +51,7 @@ export async function signUpAction(_prev: ActionState, form: FormData): Promise<
     await setInitialRole(userId, input.role, input.phoneNumber, {
       locale: await getLocale(),
       whatsappUpdates: input.whatsappUpdates,
+      smsUpdates: input.smsUpdates,
     });
   });
   if (!result.ok) return { ...result, values };

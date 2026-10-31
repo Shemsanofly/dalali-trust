@@ -72,7 +72,7 @@ Admin → Overview shows counts. Use `analytics_event` (no personal data) for fu
 
 ## 6. Messages and integrations
 
-Every update appears as an in-app notification. **WhatsApp updates** for viewing requests and listing reviews are sent only to people who opted in, once WhatsApp is configured ([WHATSAPP.md](WHATSAPP.md)). There is no SMS. Email is used for password resets (with `EMAIL_PROVIDER=resend`) and the morning moderation summary. The app never claims a message was sent unless a provider actually accepted it. The "WhatsApp" and phone buttons on listings simply open the user's own app.
+Every update appears as an in-app notification. **WhatsApp updates** for viewing requests and listing reviews are sent only to people who opted in, once WhatsApp is configured ([WHATSAPP.md](WHATSAPP.md)). The same updates can go out by **SMS**, and people on basic phones can search homes over **USSD**, through Africa's Talking ([AFRICASTALKING.md](AFRICASTALKING.md)). Email is used for password resets (with `EMAIL_PROVIDER=resend`) and the morning moderation summary. The app never claims a message was sent unless a provider actually accepted it. The "WhatsApp" and phone buttons on listings simply open the user's own app.
 
 ## 7. Payments: not in the MVP
 

@@ -27,6 +27,8 @@
     "jobs:expire-verifications": "tsx --conditions=react-server scripts/expire-verifications.ts",
     "jobs:admin-digest": "tsx --conditions=react-server scripts/admin-digest.ts",
     "jobs:send-whatsapp": "tsx --conditions=react-server scripts/send-whatsapp.ts",
+    "jobs:send-sms": "tsx --conditions=react-server scripts/send-sms.ts",
+    "sms:test": "tsx --conditions=react-server scripts/send-test-sms.ts",
     "legacy:export": "tsx scripts/export-legacy-mongo.ts"
   },
   "dependencies": {

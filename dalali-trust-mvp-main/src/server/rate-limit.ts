@@ -13,6 +13,10 @@ export const RATE_RULES = {
   upload: { window: 60 * 60, max: 60 },
   listingWrite: { window: 60 * 60, max: 60 },
   verificationSubmit: { window: 60 * 60 * 24, max: 10 },
+  /** USSD callbacks per caller (each key press is one request). */
+  ussd: { window: 10 * 60, max: 120 },
+  /** Listing details sent by SMS from the USSD menu, per caller. */
+  ussdSms: { window: 60 * 60, max: 5 },
 } satisfies Record<string, RateRule>;
 
 /**
