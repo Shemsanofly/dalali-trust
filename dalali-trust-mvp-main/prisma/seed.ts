@@ -1,7 +1,7 @@
 /**
  * DEVELOPMENT-ONLY seed data.
  *
- * Everything created here is fictional and labelled "[SAMPLE]". No verification is
+ * Everything created here is fictional development data. No verification is
  * marked as VERIFIED, so sample advertisers never display verified badges.
  *
  * Refuses to run when NODE_ENV=production, or against a non-local database unless
@@ -299,19 +299,19 @@ async function main() {
     role: "ADMIN",
   });
   const landlord = await createUser({
-    name: "[SAMPLE] Landlord Asha",
+    name: "Landlord Asha",
     email: "landlord@sample.dalali.test",
     role: "LANDLORD",
     phone: "+255700000101",
   });
   const agent = await createUser({
-    name: "[SAMPLE] Agent Juma",
+    name: "Agent Juma",
     email: "agent@sample.dalali.test",
     role: "AGENT",
     phone: "+255700000102",
   });
   const tenant = await createUser({
-    name: "[SAMPLE] Tenant Neema",
+    name: "Tenant Neema",
     email: "tenant@sample.dalali.test",
     role: "TENANT",
     phone: "+255700000103",
@@ -325,7 +325,7 @@ async function main() {
       data: {
         slug: `sample-${l.neighborhood.toLowerCase().replace(/\W+/g, "-")}-${i + 1}`,
         advertiserId: advertiser.id,
-        title: `[SAMPLE] ${l.title}`,
+        title: l.title,
         description: `FICTIONAL LISTING FOR DEVELOPMENT AND TESTING ONLY.\n\nThis sample ${l.type.toLowerCase()} in ${l.neighborhood} shows how a complete Estate listing looks: clear costs, utilities, amenities and availability. It does not describe a real property.`,
         propertyType: l.type,
         region: l.region,

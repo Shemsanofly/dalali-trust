@@ -1,6 +1,6 @@
 # Sample listing photos
 
-`npm run db:seed` uses real photos from this folder for the fictional `[SAMPLE]` listings.
+`npm run db:seed` uses real photos from this folder for the fictional development listings.
 A listing with no photos here gets generated placeholder images instead.
 
 The included stock photos illustrate fictional listings. See [SOURCES.md](SOURCES.md)

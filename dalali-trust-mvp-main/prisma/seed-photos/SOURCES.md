@@ -2,7 +2,7 @@
 
 These stock photographs illustrate fictional development listings. They do not
 depict the advertised properties or establish that a property is in Tanzania.
-Keep the listings' `[SAMPLE]` labels and fictional-listing descriptions.
+Keep the fictional-listing descriptions.
 
 Downloaded on 2026-10-15 under the [Pexels licence](https://www.pexels.com/license/),
 which permits downloading, using and modifying these photos without attribution.

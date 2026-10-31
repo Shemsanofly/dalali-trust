@@ -74,7 +74,7 @@ npm run db:seed
 npm run dev                      # http://localhost:3000
 ```
 
-The seed prints four sample accounts (admin, landlord, agent, tenant), all with the password `dalali-dev-password`. Every sample record is labelled `[SAMPLE]`, uses generated placeholder photos, and no sample advertiser is verified. The seed refuses to run when `NODE_ENV=production` or against a non-local database host.
+The seed prints four sample accounts (admin, landlord, agent, tenant), all with the password `dalali-dev-password`. Sample listings use supplied development photos or generated placeholders, and no sample advertiser is verified. The seed refuses to run when `NODE_ENV=production` or against a non-local database host.
 
 ### Creating the first administrator
 
