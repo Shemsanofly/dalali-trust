@@ -2,7 +2,7 @@
  * READ-ONLY export of the legacy SahaShares MongoDB database for manual review.
  *
  * The legacy app stored investment, wallet and ledger data that has no equivalent in
- * Dalali Trust (see docs/MIGRATION.md). This script never modifies MongoDB; it writes
+ * Estate (see docs/MIGRATION.md). This script never modifies MongoDB; it writes
  * JSON files so the owners can (1) settle any real wallet balances, (2) contact
  * legacy users, and (3) manually recreate genuine rental listings.
  *

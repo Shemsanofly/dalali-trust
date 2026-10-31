@@ -39,7 +39,7 @@ test("tenant signs up, searches, saves a home, requests a viewing and reports a 
   await page.goto("/properties/sample-sinza-1");
   await expect(page.getByRole("heading", { name: /what you will pay/i })).toBeVisible();
   await expect(page.locator("#costs").getByText(/estimated total before moving in/i)).toBeVisible();
-  await expect(page.getByText(/no check on dalali trust proves legal ownership/i)).toBeVisible();
+  await expect(page.getByText(/no check on Estate proves legal ownership/i)).toBeVisible();
 
   await page.getByRole("button", { name: /^save$/i }).click();
   await expect(page.getByRole("button", { name: /saved/i })).toBeVisible();

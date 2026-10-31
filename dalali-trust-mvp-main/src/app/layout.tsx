@@ -18,19 +18,19 @@ const newsreader = Newsreader({
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getDictionary();
   return {
-    title: { default: t.meta.title, template: "%s · Dalali Trust" },
+    title: { default: t.meta.title, template: "%s · Estate" },
     description: t.meta.description,
     metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
-    applicationName: "Dalali Trust",
-    appleWebApp: { capable: true, title: "Dalali Trust", statusBarStyle: "default" },
+    applicationName: "Estate",
+    appleWebApp: { capable: true, title: "Estate", statusBarStyle: "default" },
     // Default link preview (WhatsApp, Facebook, X). Listing pages replace it with their own photo.
     openGraph: {
       type: "website",
-      siteName: "Dalali Trust",
+      siteName: "Estate",
       title: t.meta.title,
       description: t.meta.description,
       locale: locale === "sw" ? "sw_TZ" : "en_TZ",
-      images: [{ url: DEFAULT_PREVIEW_IMAGE, width: 1200, height: 630, alt: "Dalali Trust" }],
+      images: [{ url: DEFAULT_PREVIEW_IMAGE, width: 1200, height: 630, alt: "Estate" }],
     },
     twitter: { card: "summary_large_image", images: [DEFAULT_PREVIEW_IMAGE] },
   };

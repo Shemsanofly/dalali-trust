@@ -1,6 +1,6 @@
 # WhatsApp updates
 
-Dalali Trust can send short WhatsApp messages for the moments that matter. Every message is
+Estate can send short WhatsApp messages for the moments that matter. Every message is
 also available as a notification in the dashboard, so WhatsApp is an extra, never the only channel.
 
 | When                                | Who gets it | Template                      |
@@ -28,8 +28,8 @@ for the Cloud API alongside these steps.
 1. **Meta Business account.** Create one at business.facebook.com and complete **business
    verification** (company documents). Unverified accounts can only message a few test numbers.
 2. **App.** At developers.facebook.com create an app of type _Business_ and add the **WhatsApp** product.
-3. **Phone number.** Add a phone number for Dalali Trust. It must not be in use on the WhatsApp
-   app (a new SIM is simplest). Set the display name to "Dalali Trust" and wait for approval.
+3. **Phone number.** Add a phone number for Estate. It must not be in use on the WhatsApp
+   app (a new SIM is simplest). Set the display name to "Estate" and wait for approval.
 4. **Access token.** In Business Settings create a **system user**, give it the app and the WhatsApp
    account, and generate a permanent token with `whatsapp_business_messaging` and
    `whatsapp_business_management` permissions. Keep it secret.
@@ -55,8 +55,8 @@ rates for Tanzania (utility category) on Meta's WhatsApp pricing page before lau
 
 `dalali_viewing_requested` — variables: listing title, date and time (EAT), dashboard link
 
-- en: New viewing request for {{1}} on {{2}}. Accept or decline it in your Dalali Trust dashboard: {{3}}
-- sw: Ombi jipya la kuangalia {{1}} tarehe {{2}}. Likubali au ulikatae kwenye dashibodi yako ya Dalali Trust: {{3}}
+- en: New viewing request for {{1}} on {{2}}. Accept or decline it in your Estate dashboard: {{3}}
+- sw: Ombi jipya la kuangalia {{1}} tarehe {{2}}. Likubali au ulikatae kwenye dashibodi yako ya Estate: {{3}}
 
 `dalali_viewing_accepted` — variables: listing title, date and time (EAT), dashboard link
 
@@ -65,13 +65,13 @@ rates for Tanzania (utility category) on Meta's WhatsApp pricing page before lau
 
 `dalali_viewing_declined` — variables: listing title, search link
 
-- en: Your viewing request for {{1}} was declined. See other homes on Dalali Trust: {{2}}
-- sw: Ombi lako la kuangalia {{1}} halikukubaliwa. Ona nyumba nyingine kwenye Dalali Trust: {{2}}
+- en: Your viewing request for {{1}} was declined. See other homes on Estate: {{2}}
+- sw: Ombi lako la kuangalia {{1}} halikukubaliwa. Ona nyumba nyingine kwenye Estate: {{2}}
 
 `dalali_listing_published` — variables: listing title, public listing link
 
-- en: Your listing {{1}} has been reviewed and is now live on Dalali Trust: {{2}}
-- sw: Tangazo lako {{1}} limekaguliwa na sasa liko hewani kwenye Dalali Trust: {{2}}
+- en: Your listing {{1}} has been reviewed and is now live on Estate: {{2}}
+- sw: Tangazo lako {{1}} limekaguliwa na sasa liko hewani kwenye Estate: {{2}}
 
 `dalali_listing_not_approved` — variables: listing title, moderator's note, listing link
 

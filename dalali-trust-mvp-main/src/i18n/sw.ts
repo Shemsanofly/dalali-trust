@@ -6,12 +6,12 @@ import type { Dictionary } from "./en";
  */
 export const sw: Dictionary = {
   meta: {
-    title: "Dalali Trust — Tafuta nyumba za kupanga Tanzania kwa uhakika",
+    title: "Estate — Tafuta nyumba za kupanga Tanzania kwa uhakika",
     description:
       "Tafuta vyumba, apartment na nyumba za kupanga Tanzania zenye gharama wazi, matangazo yaliyokaguliwa na njia ya kuripoti matatizo.",
   },
   brand: {
-    name: "Dalali Trust",
+    name: "Estate",
     mission: "Kufanya utafutaji wa nyumba Tanzania kuwa wazi zaidi, wenye uwajibikaji na wa kuaminika.",
   },
   nav: {
@@ -56,7 +56,7 @@ export const sw: Dictionary = {
         body: "Nauli na siku ya kazi vinapotea kwa nyumba ambayo haikuwa kama ilivyotangazwa.",
       },
     ],
-    howTitle: "Dalali Trust inavyosaidia",
+    howTitle: "Estate inavyosaidia",
     how: [
       {
         title: "Kila tangazo hukaguliwa",
@@ -82,7 +82,7 @@ export const sw: Dictionary = {
       "Tangaza bure, jenga sifa iliyothibitishwa, na upokee maombi ya kuangalia nyumba kutoka kwa wapangaji makini.",
     advertiserCta: "Anza kutangaza",
     disclaimer:
-      "Dalali Trust hukagua matangazo na kufanya uthibitisho wa mkono, lakini hatuwezi kumhakikishia kila mtangazaji au kila nyumba. Usilipe pesa kabla ya kuona nyumba na kuthibitisha unashughulika na nani.",
+      "Estate hukagua matangazo na kufanya uthibitisho wa mkono, lakini hatuwezi kumhakikishia kila mtangazaji au kila nyumba. Usilipe pesa kabla ya kuona nyumba na kuthibitisha unashughulika na nani.",
     emptyLatest: "Bado hakuna nyumba zilizochapishwa. Rudi baadaye — au tangaza yako.",
     titleHighlight: "ujue unachokiendea.",
     popularAreas: "Maeneo maarufu",
@@ -92,7 +92,7 @@ export const sw: Dictionary = {
     compare: {
       label: "Mfano",
       vagueTab: "Tangazo la kawaida",
-      clearTab: "Kwenye Dalali Trust",
+      clearTab: "Kwenye Estate",
       vagueAd:
         "CHUMBA KIZURI SINZA 🔥🔥 bei poa sana!! Maji na umeme vipo. Wahi mapema — piga sasa 07XX XXX XXX",
       vagueMeta: "Limetumwa mara nyingi",
@@ -124,7 +124,7 @@ export const sw: Dictionary = {
       months: "Miezi {count}",
       total: "Pesa zinazohitajika kabla ya kuhamia",
       breakdown: "{advance} kodi ya mapema + {deposit} amana + {fee} ada ya dalali",
-      note: "Kila tangazo kwenye Dalali Trust linaonyesha kiasi hiki kabla hujasafiri.",
+      note: "Kila tangazo kwenye Estate linaonyesha kiasi hiki kabla hujasafiri.",
       cta: "Tafuta nyumba za kodi hii",
     },
   },
@@ -200,13 +200,13 @@ export const sw: Dictionary = {
     approximateLocation: "Mahali pa kukadiria tu. Anwani kamili hutolewa na mtangazaji.",
     paymentTerms: "Masharti ya malipo",
     advertiserTitle: "Imetangazwa na",
-    memberSince: "Yupo Dalali Trust tangu {date}",
+    memberSince: "Yupo Estate tangu {date}",
     roles: { LANDLORD: "Mwenye nyumba", AGENT: "Dalali", TENANT: "Mpangaji", ADMIN: "Msimamizi" },
     contact: "Wasiliana na mtangazaji",
     call: "Piga simu",
     whatsapp: "WhatsApp",
     signInToContact: "Ingia ili kuona namba za mawasiliano na kuomba kuangalia nyumba.",
-    noPhone: "Mtangazaji huyu anapendelea maombi ya kuangalia nyumba kupitia Dalali Trust.",
+    noPhone: "Mtangazaji huyu anapendelea maombi ya kuangalia nyumba kupitia Estate.",
     save: "Hifadhi",
     saved: "Imehifadhiwa",
     report: "Ripoti tangazo hili",
@@ -244,10 +244,10 @@ export const sw: Dictionary = {
     share: "Shiriki",
     shareWhatsapp: "Shiriki WhatsApp",
     linkCopied: "Kiungo kimenakiliwa",
-    shareText: "{title} — {price} {perMonth}, {area}. Gharama zote kwenye Dalali Trust:",
+    shareText: "{title} — {price} {perMonth}, {area}. Gharama zote kwenye Estate:",
     previewTitle: "{price} {perMonth} · {title}",
     previewDescription:
-      "{area}. Jumla kabla ya kuhamia: {total}. Matangazo ya Dalali Trust huonyesha gharama zote na hukaguliwa kabla ya kuchapishwa.",
+      "{area}. Jumla kabla ya kuhamia: {total}. Matangazo ya Estate huonyesha gharama zote na hukaguliwa kabla ya kuchapishwa.",
     safetyReminder: "Usitume pesa kabla ya kuona nyumba. Ukiombwa kulipa mapema, ripoti.",
   },
   trust: {
@@ -267,7 +267,7 @@ export const sw: Dictionary = {
     verifiedOn: "Ilikaguliwa {date}",
     expiresOn: "halali hadi {date}",
     listingReviewed: "Tangazo lilikaguliwa na msimamizi kabla ya kuchapishwa",
-    notOwnership: "Hakuna ukaguzi wowote wa Dalali Trust unaothibitisha umiliki halali wa nyumba.",
+    notOwnership: "Hakuna ukaguzi wowote wa Estate unaothibitisha umiliki halali wa nyumba.",
   },
   viewing: {
     title: "Omba kuangalia nyumba",
@@ -333,7 +333,7 @@ export const sw: Dictionary = {
     acceptTerms: "Nakubali Masharti na Sera ya Faragha",
     submitSignIn: "Ingia",
     submitSignUp: "Fungua akaunti",
-    noAccount: "Mgeni Dalali Trust?",
+    noAccount: "Mgeni Estate?",
     haveAccount: "Tayari una akaunti?",
     forgot: "Umesahau nywila?",
     forgotTitle: "Badilisha nywila",
@@ -389,7 +389,7 @@ export const sw: Dictionary = {
     goHome: "Nenda ukurasa wa mwanzo",
     genericError: "Kuna hitilafu. Tafadhali jaribu tena.",
     feedback: "Tuma maoni",
-    feedbackPrompt: "Tunawezaje kuiboresha Dalali Trust?",
+    feedbackPrompt: "Tunawezaje kuiboresha Estate?",
     feedbackThanks: "Asante — tunasoma kila ujumbe.",
     status: "Hali",
   },
@@ -527,7 +527,7 @@ export const sw: Dictionary = {
     verification: {
       subtitle: "Ukaguzi wa hiari unaofanywa na mtu, unaowasaidia wapangaji kujua wanashughulika na nani.",
       privacy:
-        "Nyaraka huhifadhiwa kwa siri. Ni wewe na wakaguzi wa Dalali Trust tu wanaoweza kuzifungua, kila mkaguzi anapozifungua hurekodiwa, na hufutwa ukifuta akaunti yako. Pakia nyaraka unazoruhusiwa kushiriki tu.",
+        "Nyaraka huhifadhiwa kwa siri. Ni wewe na wakaguzi wa Estate tu wanaoweza kuzifungua, kila mkaguzi anapozifungua hurekodiwa, na hufutwa ukifuta akaunti yako. Pakia nyaraka unazoruhusiwa kushiriki tu.",
       whatEachMeans: "Maana ya kila ukaguzi",
       help: {
         IDENTITY:
@@ -638,6 +638,6 @@ export const sw: Dictionary = {
     terms: "Masharti",
     verification: "Uthibitisho unavyofanya kazi",
     disclaimer:
-      "Dalali Trust ni jukwaa la matangazo na uthibitisho. Hatukusanyi kodi, amana wala ada, na sisi si sehemu ya mkataba wowote wa upangaji.",
+      "Estate ni jukwaa la matangazo na uthibitisho. Hatukusanyi kodi, amana wala ada, na sisi si sehemu ya mkataba wowote wa upangaji.",
   },
 };

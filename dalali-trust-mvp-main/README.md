@@ -1,8 +1,8 @@
-# Dalali Trust
+# Estate
 
 > Making property search in Tanzania more transparent, accountable, and trustworthy.
 
-Dalali Trust is a mobile-first rental platform for Tanzania. Tenants search rooms, apartments and houses with **the full cost shown up front**. A person **reviews every listing before it goes live**. Advertisers can complete **manual verification checks with a clearly stated scope**. A structured **reporting and moderation** process handles problems.
+Estate is a mobile-first rental platform for Tanzania. Tenants search rooms, apartments and houses with **the full cost shown up front**. A person **reviews every listing before it goes live**. Advertisers can complete **manual verification checks with a clearly stated scope**. A structured **reporting and moderation** process handles problems.
 
 This directory contains the Next.js application. The original SahaShares prototype (Express + MongoDB + Vite) is kept, unchanged, in [`legacy-sahashares/`](legacy-sahashares/). See [docs/MIGRATION.md](docs/MIGRATION.md) for what happened to each legacy feature.
 
@@ -151,7 +151,7 @@ docs/                   architecture, security, deployment, operations, audit, m
 
 ## Important limitations
 
-- Verification is a **manual review of documents** supplied by advertisers. Dalali Trust has no integration with NIDA, the Ministry of Lands or any other registry, and no badge proves legal ownership. See [docs/OPERATIONS.md](docs/OPERATIONS.md).
+- Verification is a **manual review of documents** supplied by advertisers. Estate has no integration with NIDA, the Ministry of Lands or any other registry, and no badge proves legal ownership. See [docs/OPERATIONS.md](docs/OPERATIONS.md).
 - Legal pages are **drafts**. Have them reviewed by a Tanzanian lawyer, and complete any registration required under the Personal Data Protection Act, 2022, before launching publicly or collecting identity documents.
 - Swahili copy is a first draft and needs review by a native speaker. Administrator screens are English-only.
 - The problems listed on the home page are product hypotheses to validate with real users. The site makes no statistical claims.

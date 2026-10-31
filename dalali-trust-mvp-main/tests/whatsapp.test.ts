@@ -53,7 +53,7 @@ describe("WhatsApp templates", () => {
     expect(
       renderTemplate("dalali_viewing_declined", "sw", ["Chumba Sinza", "https://x.test/properties"]),
     ).toBe(
-      "Ombi lako la kuangalia Chumba Sinza halikukubaliwa. Ona nyumba nyingine kwenye Dalali Trust: https://x.test/properties",
+      "Ombi lako la kuangalia Chumba Sinza halikukubaliwa. Ona nyumba nyingine kwenye Estate: https://x.test/properties",
     );
   });
   it("formats viewing times in East Africa Time", () => {

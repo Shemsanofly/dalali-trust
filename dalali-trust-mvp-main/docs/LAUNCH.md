@@ -1,6 +1,6 @@
 # Launch checklist (Render)
 
-A plain step-by-step guide to putting Dalali Trust online. Allow about half a day, plus a
+A plain step-by-step guide to putting Estate online. Allow about half a day, plus a
 few days of waiting for Meta if you also switch on WhatsApp updates. Prices and screen
 names at Render, Cloudflare and Resend change: check them as you go.
 
@@ -22,7 +22,7 @@ names at Render, Cloudflare and Resend change: check them as you go.
 
 1. Create a Resend account and **add your domain**; add the DNS records it shows at your
    domain registrar and wait until the domain shows _Verified_.
-2. Create an **API key**. Your sender will be e.g. `Dalali Trust <no-reply@dalalitrust.co.tz>`.
+2. Create an **API key**. Your sender will be e.g. `Estate <no-reply@dalalitrust.co.tz>`.
 
 ## 3. Website, database and scheduled jobs (Render)
 
@@ -32,15 +32,15 @@ names at Render, Cloudflare and Resend change: check them as you go.
    scheduled jobs (morning summary, nightly verification expiry, WhatsApp retries).
 3. Fill in the values it asks for:
 
-   | Setting                              | What to enter                               |
-   | ------------------------------------ | ------------------------------------------- |
-   | `APP_URL` and `BETTER_AUTH_URL`      | `https://dalalitrust.co.tz` (your domain)   |
-   | `S3_BUCKET`                          | `dalali-private`                            |
-   | `S3_ENDPOINT`                        | the R2 endpoint from step 1                 |
-   | `S3_ACCESS_KEY_ID` / `S3_SECRET_...` | the R2 keys from step 1                     |
-   | `RESEND_API_KEY`                     | the Resend key from step 2                  |
-   | `EMAIL_FROM`                         | `Dalali Trust <no-reply@dalalitrust.co.tz>` |
-   | `SUPPORT_EMAIL`                      | the address people can write to             |
+   | Setting                              | What to enter                             |
+   | ------------------------------------ | ----------------------------------------- |
+   | `APP_URL` and `BETTER_AUTH_URL`      | `https://dalalitrust.co.tz` (your domain) |
+   | `S3_BUCKET`                          | `dalali-private`                          |
+   | `S3_ENDPOINT`                        | the R2 endpoint from step 1               |
+   | `S3_ACCESS_KEY_ID` / `S3_SECRET_...` | the R2 keys from step 1                   |
+   | `RESEND_API_KEY`                     | the Resend key from step 2                |
+   | `EMAIL_FROM`                         | `Estate <no-reply@dalalitrust.co.tz>`     |
+   | `SUPPORT_EMAIL`                      | the address people can write to           |
 
 4. **Apply**. The first build takes a few minutes. When the website shows _Live_, open its
    `….onrender.com` address and check that the home page loads.

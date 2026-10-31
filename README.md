@@ -1,4 +1,4 @@
-# Dalali Trust
+# Estate
 
 Transparent, accountable rental property discovery and verification for Tanzania.
 

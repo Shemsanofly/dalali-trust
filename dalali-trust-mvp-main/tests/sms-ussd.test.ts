@@ -123,10 +123,10 @@ describe("SMS updates", () => {
 
 describe("USSD menu", () => {
   it("starts with a language choice, then the main menu", async () => {
-    expect(await dial("")).toBe("CON Dalali Trust\n1. English\n2. Kiswahili");
-    expect(await dial("1")).toMatch(/^CON Dalali Trust\n1\. Find a home to rent/);
-    expect(await dial("2")).toMatch(/^CON Dalali Trust\n1\. Tafuta nyumba/);
-    expect(await dial("7")).toMatch(/^CON Invalid choice\.\nDalali Trust\n1\. English/);
+    expect(await dial("")).toBe("CON Estate\n1. English\n2. Kiswahili");
+    expect(await dial("1")).toMatch(/^CON Estate\n1\. Find a home to rent/);
+    expect(await dial("2")).toMatch(/^CON Estate\n1\. Tafuta nyumba/);
+    expect(await dial("7")).toMatch(/^CON Invalid choice\.\nEstate\n1\. English/);
   });
 
   it("finds homes by region and budget and sends details by SMS", async () => {
@@ -174,7 +174,7 @@ describe("USSD menu", () => {
     expect(await dial("1*1*1*1")).toBe("CON No homes match. Try a higher budget.\n0. Back");
     expect(await dial("1*1*1*1*0")).toMatch(/^CON Dar es Salaam: monthly rent\?/);
     expect(await dial("1*1*1*1*0*0")).toMatch(/^CON Choose region:/);
-    expect(await dial("1*1*1*3*00")).toMatch(/^CON Dalali Trust\n1\. Find a home/);
+    expect(await dial("1*1*1*3*00")).toMatch(/^CON Estate\n1\. Find a home/);
     expect(await dial("1*1*1*5")).toContain("1. Mwenge, bedsitter 450k");
   });
 
@@ -252,7 +252,7 @@ describe("USSD callback route", () => {
     });
     expect(res.status).toBe(200);
     expect(res.headers.get("content-type")).toContain("text/plain");
-    expect(await res.text()).toBe("CON Dalali Trust\n1. English\n2. Kiswahili");
+    expect(await res.text()).toBe("CON Estate\n1. English\n2. Kiswahili");
     expect((await call(process.env.USSD_CALLBACK_TOKEN!, { text: "" })).status).toBe(400);
   });
 });

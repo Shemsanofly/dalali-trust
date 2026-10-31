@@ -16,7 +16,7 @@ async function run() {
   if (!to) throw new Error("Usage: npm run sms:test -- +2557XXXXXXXX");
   const e = env();
   console.log(`Provider: ${e.SMS_PROVIDER}, Africa's Talking username: ${e.AT_USERNAME}`);
-  const result = await sendSms(to, "Dalali Trust test message. SMS is set up correctly.");
+  const result = await sendSms(to, "Estate test message. SMS is set up correctly.");
   if (!result.ok) throw new Error(`Not sent: ${result.error}`);
   console.log(`Sent to ${to}${result.messageId ? ` (message id ${result.messageId})` : ""}.`);
 }

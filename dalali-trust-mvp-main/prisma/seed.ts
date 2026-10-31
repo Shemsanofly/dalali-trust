@@ -326,7 +326,7 @@ async function main() {
         slug: `sample-${l.neighborhood.toLowerCase().replace(/\W+/g, "-")}-${i + 1}`,
         advertiserId: advertiser.id,
         title: `[SAMPLE] ${l.title}`,
-        description: `FICTIONAL LISTING FOR DEVELOPMENT AND TESTING ONLY.\n\nThis sample ${l.type.toLowerCase()} in ${l.neighborhood} shows how a complete Dalali Trust listing looks: clear costs, utilities, amenities and availability. It does not describe a real property.`,
+        description: `FICTIONAL LISTING FOR DEVELOPMENT AND TESTING ONLY.\n\nThis sample ${l.type.toLowerCase()} in ${l.neighborhood} shows how a complete Estate listing looks: clear costs, utilities, amenities and availability. It does not describe a real property.`,
         propertyType: l.type,
         region: l.region,
         district: l.district,

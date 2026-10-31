@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
-/** Lets phones install Dalali Trust from the browser ("Add to home screen"). */
+/** Lets phones install Estate from the browser ("Add to home screen"). */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Dalali Trust",
-    short_name: "Dalali Trust",
+    name: "Estate",
+    short_name: "Estate",
     description:
       "Rental homes in Tanzania with the full cost up front and listings reviewed by people. Nyumba za kupanga Tanzania zenye gharama kamili.",
     id: "/",

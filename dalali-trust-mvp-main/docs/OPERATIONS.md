@@ -45,7 +45,7 @@ Open **Admin → Reports**. A report is an **allegation**, not a finding.
    - _Dismiss_ with a short reason.
 4. Write facts, not labels. Never call anyone a "scammer" or "criminal" in responses or notes.
 5. Appeals: either party can appeal once. If possible, a **different** moderator should handle the appeal.
-6. If someone has lost money, advise them to report to the police and their mobile-money provider. Dalali Trust does not investigate crimes.
+6. If someone has lost money, advise them to report to the police and their mobile-money provider. Estate does not investigate crimes.
 
 Prioritise: `ADVANCE_PAYMENT_REQUEST` and `IMPERSONATION` the same day. Other categories within 3 working days.
 
@@ -76,4 +76,4 @@ Every update appears as an in-app notification. **WhatsApp updates** for viewing
 
 ## 7. Payments: not in the MVP
 
-Dalali Trust does not take deposits, rent or fees and does not hold funds. Before any payment feature, assess licensing (e.g. Bank of Tanzania rules on payment systems and e-money), consumer protection, fraud and chargeback handling, provider integration and tax with qualified advisers.
+Estate does not take deposits, rent or fees and does not hold funds. Before any payment feature, assess licensing (e.g. Bank of Tanzania rules on payment systems and e-money), consumer protection, fraud and chargeback handling, provider integration and tax with qualified advisers.

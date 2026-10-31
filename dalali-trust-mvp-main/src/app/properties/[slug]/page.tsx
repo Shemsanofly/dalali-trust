@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const images = [
     cover
       ? { url: `/api/media/${cover.id}?size=og`, width: 1200, height: 630, alt: p.title }
-      : { url: DEFAULT_PREVIEW_IMAGE, width: 1200, height: 630, alt: "Dalali Trust" },
+      : { url: DEFAULT_PREVIEW_IMAGE, width: 1200, height: 630, alt: "Estate" },
   ];
   return {
     title: p.title,
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     alternates: { canonical: `/properties/${p.slug}` },
     openGraph: {
       type: "website",
-      siteName: "Dalali Trust",
+      siteName: "Estate",
       url: `/properties/${p.slug}`,
       title: previewTitle,
       description: previewDescription,

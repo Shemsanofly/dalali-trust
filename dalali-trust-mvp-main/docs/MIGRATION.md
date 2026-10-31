@@ -27,6 +27,6 @@ The repository contains no database dump, and the production MongoDB was not acc
    npm install --no-save mongodb@6
    LEGACY_MONGODB_URI="mongodb+srv://..." npm run legacy:export -- ./legacy-export
    ```
-3. Contact legacy users (phone numbers) to tell them about the change and invite them to register on Dalali Trust. Legacy passwords are not reused: they were bcrypt hashes tied to phone logins, and accounts now need an email.
+3. Contact legacy users (phone numbers) to tell them about the change and invite them to register on Estate. Legacy passwords are not reused: they were bcrypt hashes tied to phone logins, and accounts now need an email.
 4. Recreate genuine rental listings manually with the advertisers. Legacy "properties" lack rent, region and availability data and were "verified" by a simulated process, so they must not be imported as reviewed or verified.
 5. Store the export as confidential data and delete it when no longer needed.

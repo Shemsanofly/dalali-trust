@@ -34,7 +34,7 @@ export const USSD_BUDGETS = [150_000, 300_000, 500_000, 1_000_000] as const;
 
 const T = {
   en: {
-    main: "Dalali Trust\n1. Find a home to rent\n2. Safety tips\n3. Contact us",
+    main: "Estate\n1. Find a home to rent\n2. Safety tips\n3. Contact us",
     chooseRegion: "Choose region:",
     noListings: "No homes are listed right now. Please try again later.",
     more: "More",
@@ -57,8 +57,8 @@ const T = {
     smsLimit: "Too many SMS requests. Please try again later.",
     smsFailed: "Sorry, we could not send the SMS. Please try again later.",
     safety:
-      "Stay safe: never pay rent, deposit or fees before you see the home and meet the advertiser. Report problems on Dalali Trust.",
-    contact: (where: string) => `Dalali Trust\n${where}`,
+      "Stay safe: never pay rent, deposit or fees before you see the home and meet the advertiser. Report problems on Estate.",
+    contact: (where: string) => `Estate\n${where}`,
     tooMany: "Too many requests. Please try again in a few minutes.",
     sms: {
       contact: "Contact",
@@ -66,7 +66,7 @@ const T = {
     },
   },
   sw: {
-    main: "Dalali Trust\n1. Tafuta nyumba ya kupanga\n2. Ushauri wa usalama\n3. Wasiliana nasi",
+    main: "Estate\n1. Tafuta nyumba ya kupanga\n2. Ushauri wa usalama\n3. Wasiliana nasi",
     chooseRegion: "Chagua mkoa:",
     noListings: "Hakuna nyumba zilizotangazwa sasa. Tafadhali jaribu baadaye.",
     more: "Zaidi",
@@ -99,8 +99,8 @@ const T = {
     smsLimit: "Maombi mengi ya SMS. Tafadhali jaribu baadaye.",
     smsFailed: "Samahani, hatukuweza kutuma SMS. Tafadhali jaribu baadaye.",
     safety:
-      "Kuwa salama: usilipe kodi, amana au ada kabla ya kuona nyumba na kukutana na mtangazaji. Ripoti matatizo kwenye Dalali Trust.",
-    contact: (where: string) => `Dalali Trust\n${where}`,
+      "Kuwa salama: usilipe kodi, amana au ada kabla ya kuona nyumba na kukutana na mtangazaji. Ripoti matatizo kwenye Estate.",
+    contact: (where: string) => `Estate\n${where}`,
     tooMany: "Maombi mengi mno. Tafadhali jaribu tena baada ya dakika chache.",
     sms: {
       contact: "Mawasiliano",
@@ -220,7 +220,7 @@ async function render(screen: Screen, lang: Lang, error: boolean): Promise<Reply
   const prefix = error ? `${t.invalid}\n` : "";
   switch (screen.kind) {
     case "lang":
-      return { end: false, body: `${prefix}Dalali Trust\n1. English\n2. Kiswahili` };
+      return { end: false, body: `${prefix}Estate\n1. English\n2. Kiswahili` };
     case "main":
       return { end: false, body: `${prefix}${t.main}` };
     case "region": {
@@ -329,7 +329,7 @@ async function sendListingSms(listingId: string, lang: Lang, phoneNumber: string
   const profile = p.advertiser.advertiserProfile;
   const phone = p.contactPhone ?? (profile?.showPhone ? profile.contactPhone : null);
   const text = [
-    `Dalali Trust: ${p.title}`,
+    `Estate: ${p.title}`,
     `${p.neighborhood}, ${p.district}, ${regionName(p.region)}`,
     `${t.rent} ${formatTZS(p.rentAmount, lang)}${t.perMonth}. ${t.moveIn} ${formatTZS(moveInCost(p).total, lang)}`,
     ...(phone ? [`${t.sms.contact}: ${phone}`] : []),

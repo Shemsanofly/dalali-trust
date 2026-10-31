@@ -26,11 +26,11 @@ const APPLICANT_EDITABLE: VerificationStatus[] = ["DRAFT", "MORE_INFO_REQUIRED"]
  */
 export const DEFAULT_SCOPE: Record<VerificationType, string> = {
   IDENTITY:
-    "A Dalali Trust reviewer compared a government-issued photo ID and a selfie submitted by this account holder with the name on the account. This confirms who operates the account. It does not confirm ownership of any property.",
+    "An Estate reviewer compared a government-issued photo ID and a selfie submitted by this account holder with the name on the account. This confirms who operates the account. It does not confirm ownership of any property.",
   ADVERTISER_ROLE:
-    "A Dalali Trust reviewer examined documents indicating this person is authorised to let property as a landlord or agent (for example a management agreement or an owner's authorisation letter). The documents were not confirmed with any government registry.",
+    "An Estate reviewer examined documents indicating this person is authorised to let property as a landlord or agent (for example a management agreement or an owner's authorisation letter). The documents were not confirmed with any government registry.",
   PROPERTY_EVIDENCE:
-    "A Dalali Trust reviewer examined documents and photos linking this advertiser to this specific property (for example a utility bill or the owner's authorisation). This is not a legal title search and does not prove legal ownership.",
+    "An Estate reviewer examined documents and photos linking this advertiser to this specific property (for example a utility bill or the owner's authorisation). This is not a legal title search and does not prove legal ownership.",
 };
 
 export const ALLOWED_EVIDENCE: Record<VerificationType, EvidenceKind[]> = {

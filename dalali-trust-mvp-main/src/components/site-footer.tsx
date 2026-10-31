@@ -19,7 +19,7 @@ export async function SiteFooter() {
           <p className="flex items-center gap-2.5 text-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.svg" alt="" width={30} height={30} />
-            <span className="font-display text-xl font-semibold">Dalali Trust</span>
+            <span className="font-display text-xl font-semibold">Estate</span>
           </p>
           <p className="mt-2 max-w-sm text-sm text-navy-200">{t.brand.mission}</p>
           <InstallButton
@@ -43,7 +43,7 @@ export async function SiteFooter() {
             ))}
           </nav>
           <p className="mt-6 text-xs leading-relaxed text-navy-300">{t.footer.disclaimer}</p>
-          <p className="mt-2 text-xs text-navy-400">© {new Date().getFullYear()} Dalali Trust</p>
+          <p className="mt-2 text-xs text-navy-400">© {new Date().getFullYear()} Estate</p>
         </div>
       </div>
     </footer>

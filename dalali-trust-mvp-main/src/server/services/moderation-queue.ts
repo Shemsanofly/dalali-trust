@@ -57,7 +57,7 @@ export function moderationDigest(
     ? Math.floor((now.getTime() - q.oldestListingSubmittedAt.getTime()) / 86_400_000)
     : null;
   const lines = [
-    "Good morning. This is waiting for review on Dalali Trust:",
+    "Good morning. This is waiting for review on Estate:",
     "",
     `- Listings awaiting review: ${q.listings}${waitingDays && waitingDays > 0 ? ` (oldest waiting ${waitingDays} day${waitingDays === 1 ? "" : "s"})` : ""}`,
     `- Verification requests: ${q.verifications}`,
@@ -69,7 +69,7 @@ export function moderationDigest(
   ];
   const urgent = q.urgentReports ? `, ${q.urgentReports} urgent` : "";
   return {
-    subject: `Dalali Trust: ${q.total} item${q.total === 1 ? "" : "s"} waiting for review${urgent}`,
+    subject: `Estate: ${q.total} item${q.total === 1 ? "" : "s"} waiting for review${urgent}`,
     text: lines.join("\n"),
   };
 }

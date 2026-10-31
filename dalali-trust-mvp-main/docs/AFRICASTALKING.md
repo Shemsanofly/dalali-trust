@@ -1,6 +1,6 @@
 # SMS and USSD (Africa's Talking)
 
-Dalali Trust can use [Africa's Talking](https://africastalking.com) for two things:
+Estate can use [Africa's Talking](https://africastalking.com) for two things:
 
 1. **SMS updates.** The same moments as the [WhatsApp updates](WHATSAPP.md) (viewing requested,
    accepted or declined; listing published or not approved), sent as SMS, which works on any phone.
@@ -51,7 +51,7 @@ Start with the **sandbox**: it is free, needs no approval and comes with a phone
    ```
 6. **Simulator.** Open [simulator.africastalking.com](https://simulator.africastalking.com), enter
    a phone number (e.g. `+255712345678`) and launch it.
-   - **USSD:** dial your code. You should see "Dalali Trust · 1. English · 2. Kiswahili". Search
+   - **USSD:** dial your code. You should see "Estate · 1. English · 2. Kiswahili". Search
      for a home (sample data: `npm run db:seed`), open one and choose "SMS me details".
    - **SMS:** the details SMS arrives in the simulator's **Messages** for the same number. To test
      notification SMS, put the same number on an account, tick "Send me important updates by SMS"
@@ -72,7 +72,7 @@ curl -X POST "http://localhost:3000/api/ussd?token=$USSD_CALLBACK_TOKEN" \
 ## USSD menu
 
 ```
-Dalali Trust                    1 English / 2 Kiswahili
+Estate                    1 English / 2 Kiswahili
 └─ 1 Find a home to rent  →  region (busiest first, 9 = more)
    →  budget (≤150k, ≤300k, ≤500k, ≤1M, any)
    →  homes, cheapest first, occupied ones hidden (4 per screen, 9 = more)
@@ -98,7 +98,7 @@ number; raw numbers are not stored. Analytics records only `ussd_listing_view` a
    one registered for each brand; this takes time).
 2. Get a **USSD code**: a shared-code channel from Africa's Talking, or a dedicated code. In
    Tanzania USSD and bulk SMS services are regulated by TCRA; Africa's Talking (as the licensed
-   aggregator) handles the network side, but check what registration Dalali Trust itself needs.
+   aggregator) handles the network side, but check what registration Estate itself needs.
 3. Set `AT_USERNAME` and `AT_API_KEY` to the live app's values, `AT_SENDER_ID` if approved,
    `SMS_PROVIDER=africastalking`, `USSD_ENABLED=true`, a long random `USSD_CALLBACK_TOKEN`, and
    point the live channel's callback URL at `https://<APP_URL host>/api/ussd?token=…`.

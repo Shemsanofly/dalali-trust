@@ -20,7 +20,7 @@ const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 /**
  * Hero illustration: the same room as a forwarded WhatsApp-style advert and as a
- * Dalali Trust listing sheet. The figures are a fixed, clearly labelled example.
+ * Estate listing sheet. The figures are a fixed, clearly labelled example.
  */
 export function AdvertCompare({ labels, locale }: { labels: Labels; locale: Locale }) {
   const id = useId();

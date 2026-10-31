@@ -10,7 +10,7 @@ import { consumeRateLimit, hashIdentifier } from "./rate-limit";
 const appUrl = process.env.BETTER_AUTH_URL ?? process.env.APP_URL ?? "http://localhost:3000";
 
 export const auth = betterAuth({
-  appName: "Dalali Trust",
+  appName: "Estate",
   baseURL: appUrl,
   secret: process.env.BETTER_AUTH_SECRET,
   trustedOrigins: [appUrl],
@@ -25,9 +25,9 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       await sendEmail({
         to: user.email,
-        subject: "Reset your Dalali Trust password",
+        subject: "Reset your Estate password",
         text:
-          `Hello ${user.name},\n\nSomeone (hopefully you) asked to reset your Dalali Trust password. ` +
+          `Hello ${user.name},\n\nSomeone (hopefully you) asked to reset your Estate password. ` +
           `Open this link within 30 minutes to choose a new password:\n\n${url}\n\n` +
           `If you did not ask for this, you can ignore this email — your password will not change.`,
       });

@@ -55,7 +55,7 @@ describe("daily moderation summary", () => {
       "https://dalalitrust.example",
       now,
     );
-    expect(digest?.subject).toBe("Dalali Trust: 3 items waiting for review, 1 urgent");
+    expect(digest?.subject).toBe("Estate: 3 items waiting for review, 1 urgent");
     expect(digest?.text).toContain("Listings awaiting review: 2 (oldest waiting 3 days)");
     expect(digest?.text).toContain("1 urgent");
     expect(digest?.text).toContain("https://dalalitrust.example/admin");

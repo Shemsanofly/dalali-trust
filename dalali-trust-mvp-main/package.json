@@ -1,8 +1,8 @@
 {
-  "name": "dalali-trust",
+  "name": "estate",
   "version": "0.1.0",
   "private": true,
-  "description": "Dalali Trust — transparent, accountable rental property discovery and verification for Tanzania",
+  "description": "Estate — transparent, accountable rental property discovery and verification for Tanzania",
   "engines": {
     "node": ">=20.19"
   },

@@ -70,9 +70,7 @@ export async function SiteHeader() {
         <Link href="/" className="flex shrink-0 items-center gap-2.5 text-navy-900">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="" width={34} height={34} />
-          <span className="font-display text-xl font-semibold tracking-tight whitespace-nowrap">
-            Dalali Trust
-          </span>
+          <span className="font-display text-xl font-semibold tracking-tight whitespace-nowrap">Estate</span>
         </Link>
 
         <nav className="hidden items-center gap-5 xl:flex" aria-label="Main">

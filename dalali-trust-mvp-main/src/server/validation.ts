@@ -295,7 +295,7 @@ export const signUpSchema = z
     name: trimmed(2, 80, "Name"),
     email: z.email("Enter a valid email address").trim().toLowerCase().max(254),
     password: z.string().min(10, "Use at least 10 characters").max(128, "Use at most 128 characters"),
-    role: z.enum(SELF_SERVICE_ROLES, { error: "Choose how you will use Dalali Trust" }),
+    role: z.enum(SELF_SERVICE_ROLES, { error: "Choose how you will use Estate" }),
     phoneNumber: optionalTzPhone,
     acceptTerms: z.literal(true, { error: "You must accept the terms to continue" }),
     whatsappUpdates: z.boolean().default(false),

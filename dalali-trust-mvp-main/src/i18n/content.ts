@@ -10,9 +10,9 @@ export type PageContent = { title: string; intro: string; sections: Section[] };
 
 const howItWorks: Record<Locale, PageContent> = {
   en: {
-    title: "How Dalali Trust works",
+    title: "How Estate works",
     intro:
-      "Dalali Trust is a rental listing platform with a human review step and transparent, clearly-scoped verification.",
+      "Estate is a rental listing platform with a human review step and transparent, clearly-scoped verification.",
     sections: [
       {
         h: "For tenants",
@@ -44,9 +44,9 @@ const howItWorks: Record<Locale, PageContent> = {
     ],
   },
   sw: {
-    title: "Dalali Trust inavyofanya kazi",
+    title: "Estate inavyofanya kazi",
     intro:
-      "Dalali Trust ni jukwaa la matangazo ya nyumba za kupanga lenye hatua ya ukaguzi wa binadamu na uthibitisho ulio wazi na wenye mipaka iliyoelezwa.",
+      "Estate ni jukwaa la matangazo ya nyumba za kupanga lenye hatua ya ukaguzi wa binadamu na uthibitisho ulio wazi na wenye mipaka iliyoelezwa.",
     sections: [
       {
         h: "Kwa wapangaji",
@@ -83,7 +83,7 @@ const verification: Record<Locale, PageContent> = {
   en: {
     title: "What our verification means",
     intro:
-      "Each badge on Dalali Trust refers to one specific, manual check. We show what was checked, who checked it (a Dalali Trust reviewer) and when. No badge proves legal ownership of a property.",
+      "Each badge on Estate refers to one specific, manual check. We show what was checked, who checked it (an Estate reviewer) and when. No badge proves legal ownership of a property.",
     sections: [
       {
         h: "Listing reviewed",
@@ -129,7 +129,7 @@ const verification: Record<Locale, PageContent> = {
   sw: {
     title: "Uthibitisho wetu unamaanisha nini",
     intro:
-      "Kila beji kwenye Dalali Trust inahusu ukaguzi mmoja maalum wa mkono. Tunaonyesha kilichokaguliwa, aliyekagua (mkaguzi wa Dalali Trust) na lini. Hakuna beji inayothibitisha umiliki halali wa nyumba.",
+      "Kila beji kwenye Estate inahusu ukaguzi mmoja maalum wa mkono. Tunaonyesha kilichokaguliwa, aliyekagua (mkaguzi wa Estate) na lini. Hakuna beji inayothibitisha umiliki halali wa nyumba.",
     sections: [
       {
         h: "Tangazo limekaguliwa",
@@ -201,7 +201,7 @@ const safety: Record<Locale, PageContent> = {
       {
         h: "If something goes wrong",
         ul: [
-          "Report the listing on Dalali Trust so a moderator can review it.",
+          "Report the listing on Estate so a moderator can review it.",
           "If you have lost money, report it to the police and to your mobile money provider immediately.",
           "Keep all messages, numbers and receipts as evidence.",
         ],
@@ -234,7 +234,7 @@ const safety: Record<Locale, PageContent> = {
       {
         h: "Jambo likienda vibaya",
         ul: [
-          "Ripoti tangazo kwenye Dalali Trust ili msimamizi alipitie.",
+          "Ripoti tangazo kwenye Estate ili msimamizi alipitie.",
           "Kama umepoteza pesa, toa taarifa polisi na kwa mtoa huduma wako wa pesa ya simu mara moja.",
           "Hifadhi jumbe zote, namba na risiti kama ushahidi.",
         ],
@@ -245,14 +245,14 @@ const safety: Record<Locale, PageContent> = {
 
 const about: Record<Locale, PageContent> = {
   en: {
-    title: "About Dalali Trust",
+    title: "About Estate",
     intro: "Our mission: making property search in Tanzania more transparent, accountable, and trustworthy.",
     sections: [
       {
         h: "Why we exist",
         p: [
           "Finding a rental home should not require luck. Many people lose time and transport money on adverts that are out of date, incomplete or misleading, and honest landlords and agents struggle to stand out.",
-          "Dalali Trust starts with simple, practical tools: complete cost information, human review of listings, clearly-scoped verification and a structured way to report problems.",
+          "Estate starts with simple, practical tools: complete cost information, human review of listings, clearly-scoped verification and a structured way to report problems.",
         ],
       },
       {
@@ -264,7 +264,7 @@ const about: Record<Locale, PageContent> = {
     ],
   },
   sw: {
-    title: "Kuhusu Dalali Trust",
+    title: "Kuhusu Estate",
     intro:
       "Dhamira yetu: kufanya utafutaji wa nyumba Tanzania kuwa wazi zaidi, wenye uwajibikaji na wa kuaminika.",
     sections: [
@@ -272,7 +272,7 @@ const about: Record<Locale, PageContent> = {
         h: "Kwa nini tupo",
         p: [
           "Kupata nyumba ya kupanga hakupaswi kuhitaji bahati. Watu wengi hupoteza muda na nauli kwa matangazo yaliyopitwa na wakati, yasiyokamilika au yanayopotosha, na wenye nyumba na madalali waaminifu hupata shida kujitofautisha.",
-          "Dalali Trust inaanza na zana rahisi: taarifa kamili za gharama, ukaguzi wa binadamu wa matangazo, uthibitisho wenye mipaka iliyo wazi na njia rasmi ya kuripoti matatizo.",
+          "Estate inaanza na zana rahisi: taarifa kamili za gharama, ukaguzi wa binadamu wa matangazo, uthibitisho wenye mipaka iliyo wazi na njia rasmi ya kuripoti matatizo.",
         ],
       },
       {
@@ -287,7 +287,7 @@ const about: Record<Locale, PageContent> = {
 
 const forAdvertisers: Record<Locale, PageContent> = {
   en: {
-    title: "List your property on Dalali Trust",
+    title: "List your property on Estate",
     intro: "Free for landlords and agents during our early launch. Build a reputation tenants can check.",
     sections: [
       {
@@ -318,7 +318,7 @@ const forAdvertisers: Record<Locale, PageContent> = {
     ],
   },
   sw: {
-    title: "Tangaza nyumba yako kwenye Dalali Trust",
+    title: "Tangaza nyumba yako kwenye Estate",
     intro:
       "Ni bure kwa wenye nyumba na madalali katika kipindi chetu cha mwanzo. Jenga sifa ambayo wapangaji wanaweza kuikagua.",
     sections: [
@@ -354,7 +354,7 @@ const forAdvertisers: Record<Locale, PageContent> = {
 const privacyEn: PageContent = {
   title: "Privacy policy (draft)",
   intro:
-    "This draft explains what personal data Dalali Trust collects and why. It must be reviewed by a qualified Tanzanian lawyer, and the operator must complete any registration required under the Personal Data Protection Act, 2022, before public launch.",
+    "This draft explains what personal data Estate collects and why. It must be reviewed by a qualified Tanzanian lawyer, and the operator must complete any registration required under the Personal Data Protection Act, 2022, before public launch.",
   sections: [
     {
       h: "What we collect",
@@ -420,7 +420,7 @@ const termsEn: PageContent = {
     {
       h: "The service",
       p: [
-        "Dalali Trust is a platform for advertising and finding rental property. We do not own, manage or let properties, we are not a party to any tenancy agreement, and we do not collect or hold rent, deposits or fees.",
+        "Estate is a platform for advertising and finding rental property. We do not own, manage or let properties, we are not a party to any tenancy agreement, and we do not collect or hold rent, deposits or fees.",
       ],
     },
     {

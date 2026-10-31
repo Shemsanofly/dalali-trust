@@ -5,20 +5,20 @@
  */
 export const WHATSAPP_TEMPLATES = {
   dalali_viewing_requested: {
-    en: "New viewing request for {{1}} on {{2}}. Accept or decline it in your Dalali Trust dashboard: {{3}}",
-    sw: "Ombi jipya la kuangalia {{1}} tarehe {{2}}. Likubali au ulikatae kwenye dashibodi yako ya Dalali Trust: {{3}}",
+    en: "New viewing request for {{1}} on {{2}}. Accept or decline it in your Estate dashboard: {{3}}",
+    sw: "Ombi jipya la kuangalia {{1}} tarehe {{2}}. Likubali au ulikatae kwenye dashibodi yako ya Estate: {{3}}",
   },
   dalali_viewing_accepted: {
     en: "Good news: your viewing request for {{1}} on {{2}} was accepted. Details: {{3}} Never pay before you have seen the home.",
     sw: "Habari njema: ombi lako la kuangalia {{1}} tarehe {{2}} limekubaliwa. Maelezo: {{3}} Usilipe kabla ya kuona nyumba.",
   },
   dalali_viewing_declined: {
-    en: "Your viewing request for {{1}} was declined. See other homes on Dalali Trust: {{2}}",
-    sw: "Ombi lako la kuangalia {{1}} halikukubaliwa. Ona nyumba nyingine kwenye Dalali Trust: {{2}}",
+    en: "Your viewing request for {{1}} was declined. See other homes on Estate: {{2}}",
+    sw: "Ombi lako la kuangalia {{1}} halikukubaliwa. Ona nyumba nyingine kwenye Estate: {{2}}",
   },
   dalali_listing_published: {
-    en: "Your listing {{1}} has been reviewed and is now live on Dalali Trust: {{2}}",
-    sw: "Tangazo lako {{1}} limekaguliwa na sasa liko hewani kwenye Dalali Trust: {{2}}",
+    en: "Your listing {{1}} has been reviewed and is now live on Estate: {{2}}",
+    sw: "Tangazo lako {{1}} limekaguliwa na sasa liko hewani kwenye Estate: {{2}}",
   },
   dalali_listing_not_approved: {
     en: "Your listing {{1}} was not approved yet. Moderator's note: {{2}}. Fix it and submit again: {{3}}",

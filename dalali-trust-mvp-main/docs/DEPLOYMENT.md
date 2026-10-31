@@ -1,6 +1,6 @@
 # Deployment
 
-Dalali Trust is a standard Node.js server (`next start`). It needs:
+Estate is a standard Node.js server (`next start`). It needs:
 
 1. A **PostgreSQL 16** database.
 2. A **private S3-compatible bucket** for photos and documents (local disk is fine only on a single server with persistent storage).

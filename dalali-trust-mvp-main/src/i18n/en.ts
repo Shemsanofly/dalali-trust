@@ -4,12 +4,12 @@
  */
 export const en = {
   meta: {
-    title: "Dalali Trust — Find rental homes in Tanzania with confidence",
+    title: "Estate — Find rental homes in Tanzania with confidence",
     description:
       "Search rooms, apartments and houses for rent in Tanzania with clear costs, reviewed listings and a way to report problems.",
   },
   brand: {
-    name: "Dalali Trust",
+    name: "Estate",
     mission: "Making property search in Tanzania more transparent, accountable, and trustworthy.",
   },
   nav: {
@@ -54,7 +54,7 @@ export const en = {
         body: "Transport money and a day off work, spent on a property that was never as advertised.",
       },
     ],
-    howTitle: "How Dalali Trust helps",
+    howTitle: "How Estate helps",
     how: [
       {
         title: "Every listing is reviewed",
@@ -80,7 +80,7 @@ export const en = {
       "List for free, build a verified reputation, and receive viewing requests from serious tenants.",
     advertiserCta: "Start listing",
     disclaimer:
-      "Dalali Trust reviews listings and performs manual verification checks, but we cannot guarantee every advertiser or property. Never pay money before you have viewed a property and confirmed who you are dealing with.",
+      "Estate reviews listings and performs manual verification checks, but we cannot guarantee every advertiser or property. Never pay money before you have viewed a property and confirmed who you are dealing with.",
     emptyLatest: "No homes are published yet. Check back soon — or list yours.",
     titleHighlight: "know what you are walking into.",
     popularAreas: "Popular areas",
@@ -90,7 +90,7 @@ export const en = {
     compare: {
       label: "Example",
       vagueTab: "A typical advert",
-      clearTab: "On Dalali Trust",
+      clearTab: "On Estate",
       vagueAd:
         "CHUMBA KIZURI SINZA 🔥🔥 bei poa sana!! Maji na umeme vipo. Wahi mapema — piga sasa 07XX XXX XXX",
       vagueMeta: "Forwarded many times",
@@ -126,7 +126,7 @@ export const en = {
       months: "{count} months",
       total: "Cash needed before moving in",
       breakdown: "{advance} advance rent + {deposit} deposit + {fee} agent fee",
-      note: "Every listing on Dalali Trust shows these amounts before you travel.",
+      note: "Every listing on Estate shows these amounts before you travel.",
       cta: "Find homes at this rent",
     },
   },
@@ -202,13 +202,13 @@ export const en = {
     approximateLocation: "Approximate location only. The exact address is shared by the advertiser.",
     paymentTerms: "Payment terms",
     advertiserTitle: "Advertised by",
-    memberSince: "On Dalali Trust since {date}",
+    memberSince: "On Estate since {date}",
     roles: { LANDLORD: "Landlord", AGENT: "Agent", TENANT: "Tenant", ADMIN: "Administrator" },
     contact: "Contact the advertiser",
     call: "Call",
     whatsapp: "WhatsApp",
     signInToContact: "Sign in to see contact details and request a viewing.",
-    noPhone: "This advertiser prefers viewing requests through Dalali Trust.",
+    noPhone: "This advertiser prefers viewing requests through Estate.",
     save: "Save",
     saved: "Saved",
     report: "Report this listing",
@@ -246,10 +246,10 @@ export const en = {
     share: "Share",
     shareWhatsapp: "Share on WhatsApp",
     linkCopied: "Link copied",
-    shareText: "{title} — {price} {perMonth}, {area}. Full costs on Dalali Trust:",
+    shareText: "{title} — {price} {perMonth}, {area}. Full costs on Estate:",
     previewTitle: "{price} {perMonth} · {title}",
     previewDescription:
-      "{area}. Total before moving in: {total}. Listings on Dalali Trust show the full costs and are reviewed before publishing.",
+      "{area}. Total before moving in: {total}. Listings on Estate show the full costs and are reviewed before publishing.",
     safetyReminder: "Never send money before viewing. If you are asked to pay in advance, report it.",
   },
   trust: {
@@ -269,7 +269,7 @@ export const en = {
     verifiedOn: "Checked {date}",
     expiresOn: "valid until {date}",
     listingReviewed: "Listing reviewed by a moderator before publishing",
-    notOwnership: "No check on Dalali Trust proves legal ownership of a property.",
+    notOwnership: "No check on Estate proves legal ownership of a property.",
   },
   viewing: {
     title: "Request a viewing",
@@ -335,7 +335,7 @@ export const en = {
     acceptTerms: "I agree to the Terms and Privacy Policy",
     submitSignIn: "Sign in",
     submitSignUp: "Create account",
-    noAccount: "New to Dalali Trust?",
+    noAccount: "New to Estate?",
     haveAccount: "Already have an account?",
     forgot: "Forgot your password?",
     forgotTitle: "Reset your password",
@@ -391,7 +391,7 @@ export const en = {
     goHome: "Go to the home page",
     genericError: "Something went wrong. Please try again.",
     feedback: "Send feedback",
-    feedbackPrompt: "How can we make Dalali Trust better?",
+    feedbackPrompt: "How can we make Estate better?",
     feedbackThanks: "Thank you — we read every message.",
     status: "Status",
   },
@@ -527,7 +527,7 @@ export const en = {
     verification: {
       subtitle: "Optional manual checks that let tenants see who they are dealing with.",
       privacy:
-        "Documents are stored privately. Only you and Dalali Trust reviewers can open them, every reviewer access is logged, and files are deleted if you delete your account. Upload only documents you are entitled to share.",
+        "Documents are stored privately. Only you and Estate reviewers can open them, every reviewer access is logged, and files are deleted if you delete your account. Upload only documents you are entitled to share.",
       whatEachMeans: "What each check means",
       help: {
         IDENTITY:
@@ -637,7 +637,7 @@ export const en = {
     terms: "Terms",
     verification: "Verification explained",
     disclaimer:
-      "Dalali Trust is a listing and verification platform. We do not collect rent, deposits or fees, and we are not a party to any tenancy agreement.",
+      "Estate is a listing and verification platform. We do not collect rent, deposits or fees, and we are not a party to any tenancy agreement.",
   },
 };
 
