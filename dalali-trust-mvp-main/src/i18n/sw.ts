@@ -324,6 +324,8 @@ export const sw: Dictionary = {
     email: "Barua pepe",
     password: "Nywila",
     passwordHelp: "Angalau herufi 10. Sentensi fupi ni rahisi kukumbuka.",
+    showPassword: "Onyesha nenosiri",
+    hidePassword: "Ficha nenosiri",
     name: "Jina kamili",
     phone: "Namba ya simu (si lazima)",
     role: "Nataka",
