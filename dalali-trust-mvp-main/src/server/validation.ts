@@ -265,6 +265,7 @@ export const EVIDENCE_KINDS = [
 ] as const;
 
 const NEEDS_PHONE = "Add your mobile number to get WhatsApp updates";
+const NEEDS_PHONE_SMS = "Add your mobile number to get SMS updates";
 
 export const profileSchema = z
   .object({
@@ -272,8 +273,10 @@ export const profileSchema = z
     phoneNumber: optionalTzPhone,
     locale: z.enum(["en", "sw"]).default("en"),
     whatsappUpdates: z.boolean().optional(),
+    smsUpdates: z.boolean().optional(),
   })
-  .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE });
+  .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE })
+  .refine((v) => !v.smsUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE_SMS });
 
 export const advertiserProfileSchema = z.object({
   displayName: trimmed(2, 80, "Display name"),
@@ -296,8 +299,10 @@ export const signUpSchema = z
     phoneNumber: optionalTzPhone,
     acceptTerms: z.literal(true, { error: "You must accept the terms to continue" }),
     whatsappUpdates: z.boolean().default(false),
+    smsUpdates: z.boolean().default(false),
   })
-  .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE });
+  .refine((v) => !v.whatsappUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE })
+  .refine((v) => !v.smsUpdates || v.phoneNumber, { path: ["phoneNumber"], message: NEEDS_PHONE_SMS });
 
 export const feedbackSchema = z.object({
   kind: z.enum(["FEEDBACK", "CONTACT"]).default("FEEDBACK"),

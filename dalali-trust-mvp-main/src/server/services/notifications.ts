@@ -3,13 +3,15 @@ import type { Prisma } from "@/generated/prisma/client";
 import type { Actor } from "../actor";
 import { assertActive } from "../actor";
 import { prisma } from "../db";
+import { scheduleSmsDelivery, smsEnabled } from "../sms";
 import { scheduleWhatsAppDelivery, whatsappEnabled } from "../whatsapp";
 import type { WhatsAppTemplate } from "../whatsapp-templates";
 
 /**
- * Creates an in-app notification. With `whatsapp`, a WhatsApp copy is also queued when
- * WhatsApp is configured and the recipient opted in with a mobile number; it is sent
- * after the response (see server/whatsapp.ts). No SMS or email is sent from here.
+ * Creates an in-app notification. With `whatsapp` (a message template and its values), a
+ * WhatsApp and/or SMS copy is also queued for each channel that is configured and that the
+ * recipient opted in to with a mobile number. Copies are sent after the response (see
+ * server/whatsapp.ts and server/sms.ts). No email is sent from here.
  */
 export async function notify(
   tx: Prisma.TransactionClient,
@@ -26,24 +28,29 @@ export async function notify(
 ) {
   const { whatsapp, ...rest } = n;
   let queueWhatsApp = false;
-  if (whatsapp && whatsappEnabled()) {
+  let queueSms = false;
+  if (whatsapp && (whatsappEnabled() || smsEnabled())) {
     const user = await tx.user.findUnique({
       where: { id: n.userId },
-      select: { phoneNumber: true, whatsappUpdates: true },
+      select: { phoneNumber: true, whatsappUpdates: true, smsUpdates: true },
     });
-    queueWhatsApp = Boolean(user?.whatsappUpdates && user.phoneNumber);
+    queueWhatsApp = whatsappEnabled() && Boolean(user?.whatsappUpdates && user.phoneNumber);
+    queueSms = smsEnabled() && Boolean(user?.smsUpdates && user.phoneNumber);
   }
   await tx.notification.create({
     data: {
       ...rest,
       link: n.link ?? null,
       data: n.data ? JSON.parse(JSON.stringify(n.data)) : undefined,
-      ...(queueWhatsApp && whatsapp
-        ? { whatsappStatus: "PENDING", whatsappTemplate: whatsapp.template, whatsappParams: whatsapp.params }
+      ...((queueWhatsApp || queueSms) && whatsapp
+        ? { whatsappTemplate: whatsapp.template, whatsappParams: whatsapp.params }
         : {}),
+      ...(queueWhatsApp ? { whatsappStatus: "PENDING" } : {}),
+      ...(queueSms ? { smsStatus: "PENDING" } : {}),
     },
   });
   if (queueWhatsApp) scheduleWhatsAppDelivery();
+  if (queueSms) scheduleSmsDelivery();
 }
 
 export async function listNotifications(actor: Actor, take = 50) {

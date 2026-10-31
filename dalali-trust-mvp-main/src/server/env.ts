@@ -26,6 +26,21 @@ const schema = z
       .string()
       .regex(/^v\d+\.\d+$/)
       .default("v21.0"),
+    SMS_PROVIDER: z.enum(["none", "console", "africastalking"]).default("none"),
+    /** Africa's Talking app username. "sandbox" uses the sandbox API and simulator. */
+    AT_USERNAME: z
+      .string()
+      .trim()
+      .optional()
+      .transform((v) => v || "sandbox"),
+    AT_API_KEY: z.string().optional(),
+    /** Registered alphanumeric sender ID or short code. Leave empty for the shared default. */
+    AT_SENDER_ID: z.string().trim().max(11).optional(),
+    USSD_ENABLED: z.enum(["true", "false"]).default("false"),
+    /** Secret added to the USSD callback URL (?token=...) so only Africa's Talking can call it. */
+    USSD_CALLBACK_TOKEN: z.string().optional(),
+    /** USSD code shown to people, e.g. "*384*12345#". Display only. */
+    USSD_SERVICE_CODE: z.string().trim().max(40).optional(),
     TRUST_PROXY_HEADERS: z.enum(["true", "false"]).default("false"),
     CLIENT_IP_HEADER: z
       .string()
@@ -64,6 +79,27 @@ const schema = z
         code: "custom",
         path: ["WHATSAPP_PROVIDER"],
         message: "console WhatsApp is not allowed in production",
+      });
+    }
+    if (env.SMS_PROVIDER === "africastalking" && !env.AT_API_KEY) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["AT_API_KEY"],
+        message: "AT_API_KEY is required for Africa's Talking SMS",
+      });
+    }
+    if (env.NODE_ENV === "production" && env.SMS_PROVIDER === "console") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["SMS_PROVIDER"],
+        message: "console SMS is not allowed in production",
+      });
+    }
+    if (env.USSD_ENABLED === "true" && (env.USSD_CALLBACK_TOKEN ?? "").length < 16) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["USSD_CALLBACK_TOKEN"],
+        message: "USSD_CALLBACK_TOKEN (at least 16 characters) is required when USSD is enabled",
       });
     }
     if (env.NODE_ENV === "production" && env.EMAIL_PROVIDER === "console") {

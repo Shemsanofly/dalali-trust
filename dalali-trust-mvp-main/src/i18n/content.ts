@@ -385,6 +385,14 @@ const privacyEn: PageContent = {
       ],
     },
     {
+      h: "SMS updates and USSD",
+      ul: [
+        "Only if you turn them on, we send the same updates by SMS to the mobile number on your account. You can turn them off at any time in Account settings.",
+        "If you use our USSD menu, we use your phone number only to answer you and, if you ask, to send you a listing's details by SMS. We keep a coded (hashed) form of the number for a short time to limit abuse, not the number itself.",
+        "SMS and USSD are delivered through Africa's Talking and your mobile network, which process your number and the message to deliver it.",
+      ],
+    },
+    {
       h: "Who can see it",
       ul: [
         "Public: published listings, an advertiser's display name, role and verification statuses.",

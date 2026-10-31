@@ -15,7 +15,8 @@ Only people who **opted in** (a checkbox at sign-up and in Account settings, whi
 number) receive messages, in the language saved on their account (English or Swahili). The
 checkbox is only shown once WhatsApp is configured, so nobody is promised messages that cannot be sent.
 
-There is no SMS. Free "chat on WhatsApp" links between tenants and advertisers already work
+The same updates can also go out by SMS through Africa's Talking: see [AFRICASTALKING.md](AFRICASTALKING.md).
+Free "chat on WhatsApp" links between tenants and advertisers already work
 without any of this; the setup below is only for the automatic messages above.
 
 ## One-time setup with Meta

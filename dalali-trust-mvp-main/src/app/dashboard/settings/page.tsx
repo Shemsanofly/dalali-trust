@@ -1,3 +1,4 @@
+import { smsEnabled } from "@/server/sms";
 import { whatsappEnabled } from "@/server/whatsapp";
 import { formatTzPhone } from "@/lib/phone";
 import { deleteAccountAction, updateProfileAction } from "@/app/actions/account";
@@ -58,6 +59,21 @@ export default async function SettingsPage() {
               <span>
                 {t.account.whatsappUpdates}
                 <span className="block text-xs text-navy-500">{t.account.whatsappHint}</span>
+              </span>
+            </label>
+          ) : null}
+          {smsEnabled() ? (
+            <label className="flex items-start gap-2 text-sm text-navy-700">
+              <input type="hidden" name="smsField" value="1" />
+              <input
+                type="checkbox"
+                name="smsUpdates"
+                defaultChecked={me.smsUpdates}
+                className="mt-0.5 h-5 w-5 shrink-0 accent-brand-600"
+              />
+              <span>
+                {t.account.smsUpdates}
+                <span className="block text-xs text-navy-500">{t.account.smsHint}</span>
               </span>
             </label>
           ) : null}

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { SignUpForm } from "@/components/auth/auth-forms";
 import { getDictionary } from "@/i18n/server";
 import { getActor } from "@/server/session";
+import { smsEnabled } from "@/server/sms";
 import { whatsappEnabled } from "@/server/whatsapp";
 
 export const metadata: Metadata = { title: "Create account", robots: { index: false } };
@@ -18,6 +19,7 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
         t={t.auth}
         defaultRole={role === "LANDLORD" || role === "AGENT" ? role : undefined}
         whatsapp={whatsappEnabled()}
+        sms={smsEnabled()}
       />
     </>
   );
