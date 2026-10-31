@@ -10,6 +10,7 @@ import {
 } from "@/app/actions/auth";
 import type { Dictionary } from "@/i18n";
 import { FieldError, FormMessage, SubmitButton } from "../ui/form";
+import { PasswordInput } from "../ui/password-input";
 
 type State = {
   ok: boolean;
@@ -46,11 +47,11 @@ export function SignInForm({ t, next, notice }: { t: A; next?: string; notice?: 
         <label className="label" htmlFor="password">
           {t.password}
         </label>
-        <input
-          className="input"
+        <PasswordInput
+          showLabel={t.showPassword}
+          hideLabel={t.hidePassword}
           id="password"
           name="password"
-          type="password"
           autoComplete="current-password"
           required
         />
@@ -196,11 +197,11 @@ export function SignUpForm({
         <label className="label" htmlFor="password">
           {t.password}
         </label>
-        <input
-          className="input"
+        <PasswordInput
+          showLabel={t.showPassword}
+          hideLabel={t.hidePassword}
           id="password"
           name="password"
-          type="password"
           autoComplete="new-password"
           required
           minLength={10}
@@ -269,11 +270,11 @@ export function ResetPasswordForm({ t, token }: { t: A; token: string }) {
         <label className="label" htmlFor="password">
           {t.newPassword}
         </label>
-        <input
-          className="input"
+        <PasswordInput
+          showLabel={t.showPassword}
+          hideLabel={t.hidePassword}
           id="password"
           name="password"
-          type="password"
           autoComplete="new-password"
           required
           minLength={10}

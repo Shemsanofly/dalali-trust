@@ -326,6 +326,8 @@ export const en = {
     email: "Email address",
     password: "Password",
     passwordHelp: "At least 10 characters. A short sentence is easy to remember.",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
     name: "Full name",
     phone: "Mobile number (optional)",
     role: "I want to",

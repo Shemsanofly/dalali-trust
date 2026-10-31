@@ -4,6 +4,7 @@ import { formatTzPhone } from "@/lib/phone";
 import { deleteAccountAction, updateProfileAction } from "@/app/actions/account";
 import { changePasswordAction } from "@/app/actions/auth";
 import { ActionForm } from "@/components/ui/action-form";
+import { PasswordInput } from "@/components/ui/password-input";
 import { PageHeader } from "@/components/ui/basics";
 import { getDictionary } from "@/i18n/server";
 import { requirePageActor } from "@/server/session";
@@ -96,11 +97,11 @@ export default async function SettingsPage() {
             <label className="label" htmlFor="currentPassword">
               {t.account.currentPassword}
             </label>
-            <input
-              className="input"
+            <PasswordInput
+              showLabel={t.auth.showPassword}
+              hideLabel={t.auth.hidePassword}
               id="currentPassword"
               name="currentPassword"
-              type="password"
               autoComplete="current-password"
               required
             />
@@ -109,11 +110,11 @@ export default async function SettingsPage() {
             <label className="label" htmlFor="newPassword">
               {t.auth.newPassword}
             </label>
-            <input
-              className="input"
+            <PasswordInput
+              showLabel={t.auth.showPassword}
+              hideLabel={t.auth.hidePassword}
               id="newPassword"
               name="newPassword"
-              type="password"
               autoComplete="new-password"
               minLength={10}
               required
