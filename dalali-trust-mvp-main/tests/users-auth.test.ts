@@ -20,6 +20,7 @@ import {
   setUserSuspended,
   toggleSaved,
   updateProfile,
+  upsertAdvertiserProfile,
 } from "@/server/services/users";
 import { createUser, pngFile, withCleanDatabase, validListingInput } from "./helpers/factories";
 
@@ -96,6 +97,20 @@ describe("sign-up and roles", () => {
     await expect(
       auth.api.signInEmail({ body: { email: "zuhura@example.test", password: "wrong-password-123" } }),
     ).rejects.toBeTruthy();
+  });
+});
+
+describe("company-only public contacts", () => {
+  it.each(["LANDLORD", "AGENT"] as const)("ignores public contact fields supplied by %s", async (role) => {
+    const advertiser = await createUser(role);
+    await upsertAdvertiserProfile(advertiser, {
+      displayName: "Asha Mussa",
+      contactPhone: "+255712345678",
+      whatsappNumber: "+255754111222",
+      showPhone: true,
+    });
+    const profile = await prisma.advertiserProfile.findUniqueOrThrow({ where: { userId: advertiser.id } });
+    expect(profile).toMatchObject({ contactPhone: null, whatsappNumber: null, showPhone: false });
   });
 });
 

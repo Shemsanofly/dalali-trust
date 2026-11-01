@@ -85,15 +85,9 @@ describe("listing creation and editing", () => {
   });
 
   it("calculates the agent fee from the rent and never charges an owner", async () => {
-    const cheap = await createListing(
-      await createUser("AGENT"),
-      validListingInput({ rentAmount: 40_000 }),
-    );
+    const cheap = await createListing(await createUser("AGENT"), validListingInput({ rentAmount: 40_000 }));
     expect(cheap.agentFeeAmount).toBe(34_000);
-    const mid = await createListing(
-      await createUser("AGENT"),
-      validListingInput({ rentAmount: 150_000 }),
-    );
+    const mid = await createListing(await createUser("AGENT"), validListingInput({ rentAmount: 150_000 }));
     expect(mid.agentFeeAmount).toBe(60_000);
     const premium = await createListing(
       await createUser("AGENT"),
@@ -105,6 +99,63 @@ describe("listing creation and editing", () => {
       validListingInput({ rentAmount: 150_000 }),
     );
     expect(owned.agentFeeAmount).toBe(0);
+  });
+
+  it.each([
+    [49_999, 42_499],
+    [50_000, 30_000],
+    [99_999, 59_999],
+    [100_000, 40_000],
+    [499_999, 200_000],
+    [500_000, 125_000],
+    [999_999, 250_000],
+    [1_000_000, 100_000],
+  ])(
+    "recalculates the fee for rent %i on update, ignoring submitted fees and contacts",
+    async (rent, fee) => {
+      const agent = await createUser("AGENT");
+      const listing = await createListing(agent, validListingInput());
+      const updated = await updateListing(
+        agent,
+        listing.id,
+        validListingInput({
+          rentAmount: rent,
+          agentFeeAmount: 1,
+          contactPhone: "+255712345678",
+          contactWhatsapp: "+255754111222",
+        }),
+      );
+      expect(updated).toMatchObject({ agentFeeAmount: fee, contactPhone: null, contactWhatsapp: null });
+    },
+  );
+
+  it("clears legacy fees and personal contacts when an owner edits a listing", async () => {
+    const owner = await createUser("LANDLORD");
+    const listing = await createListing(
+      owner,
+      validListingInput({
+        agentFeeAmount: 999_999,
+        agentFeeNote: "Pay the owner a fee",
+        contactPhone: "+255712345678",
+      }),
+    );
+    expect(listing).toMatchObject({ agentFeeAmount: 0, agentFeeNote: null, contactPhone: null });
+    await prisma.property.update({
+      where: { id: listing.id },
+      data: {
+        agentFeeAmount: 150_000,
+        agentFeeNote: "Old fee",
+        contactPhone: "+255712345678",
+        contactWhatsapp: "+255754111222",
+      },
+    });
+    const updated = await updateListing(owner, listing.id, validListingInput({ rentAmount: 1_000_000 }));
+    expect(updated).toMatchObject({
+      agentFeeAmount: 0,
+      agentFeeNote: null,
+      contactPhone: null,
+      contactWhatsapp: null,
+    });
   });
 
   it("does not let one advertiser edit or archive another's listing", async () => {

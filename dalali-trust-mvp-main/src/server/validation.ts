@@ -280,9 +280,6 @@ export const advertiserProfileSchema = z.object({
   bio: optionalText(1000),
   agencyName: optionalText(120),
   serviceRegions: z.array(z.enum(REGION_SLUGS)).max(31).default([]),
-  contactPhone: optionalTzPhone,
-  whatsappNumber: optionalTzPhone,
-  showPhone: z.boolean().default(true),
 });
 
 export const SELF_SERVICE_ROLES = ["TENANT", "LANDLORD", "AGENT"] as const;

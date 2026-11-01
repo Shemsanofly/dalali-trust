@@ -3,6 +3,7 @@
 import { Forward, X } from "lucide-react";
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { Dictionary, Locale } from "@/i18n";
+import { agentFeeAmount } from "@/lib/fees";
 import { formatTZS, moveInCost } from "@/lib/money";
 
 type Labels = Dictionary["home"]["compare"];
@@ -12,7 +13,7 @@ const EXAMPLE = {
   rentAmount: 180_000,
   advanceMonths: 6,
   depositAmount: 0,
-  agentFeeAmount: 180_000,
+  agentFeeAmount: agentFeeAmount(180_000),
   charges: [],
 };
 

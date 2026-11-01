@@ -36,9 +36,6 @@ export async function advertiserProfileAction(_prev: ActionState, form: FormData
       bio: str(form, "bio"),
       agencyName: str(form, "agencyName"),
       serviceRegions: form.getAll("serviceRegions").filter((v): v is string => typeof v === "string"),
-      contactPhone: str(form, "contactPhone"),
-      whatsappNumber: str(form, "whatsappNumber"),
-      showPhone: form.get("showPhone") === "on",
     });
     revalidatePath("/dashboard/profile");
   }, "Public profile saved.");

@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useId, useState } from "react";
 import { fmt, type Locale } from "@/i18n";
+import { agentFeeAmount, agentFeePercent } from "@/lib/fees";
 import { formatTZS, moveInCost } from "@/lib/money";
 import { useTweened } from "../motion/use-tweened";
 
@@ -74,10 +75,9 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
   const [rent, setRent] = useState(300_000);
   const [advance, setAdvance] = useState(6);
   const [depositMonths, setDepositMonths] = useState(1);
-  const [feePct, setFeePct] = useState(100);
 
   const deposit = rent * depositMonths;
-  const agentFee = Math.round((rent * feePct) / 100);
+  const agentFee = agentFeeAmount(rent);
   const cost = moveInCost({
     rentAmount: rent,
     advanceMonths: advance,
@@ -104,7 +104,7 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
             label={labels.rent}
             value={rent}
             display={money(rent)}
-            min={50_000}
+            min={10_000}
             max={2_000_000}
             step={10_000}
             onChange={setRent}
@@ -129,16 +129,14 @@ export function CostCalculator({ labels, locale }: { labels: Labels; locale: Loc
             step={1}
             onChange={setDepositMonths}
           />
-          <Slider
-            id={`${id}-fee`}
-            label={labels.agentFee}
-            value={feePct}
-            display={money(agentFee)}
-            min={0}
-            max={100}
-            step={10}
-            onChange={setFeePct}
-          />
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="text-sm font-semibold text-navy-800">
+              {labels.agentFee} ({agentFeePercent(rent)}%)
+            </span>
+            <output className="text-sm font-bold text-brand-700 tabular-nums" aria-live="polite">
+              {money(agentFee)}
+            </output>
+          </div>
         </div>
       </div>
 

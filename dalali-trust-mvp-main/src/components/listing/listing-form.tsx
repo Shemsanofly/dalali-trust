@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { fmt, type Dictionary } from "@/i18n";
+import { listingAgentFeeAmount } from "@/lib/fees";
 import { REGIONS } from "@/lib/locations";
-import { formatTZS } from "@/lib/money";
+import { formatTZS, parseTZS } from "@/lib/money";
 import { FieldError, FormMessage, SubmitButton } from "../ui/form";
 
 type State = {
@@ -54,12 +55,14 @@ const UTILITIES = [
 
 export function ListingForm({
   action,
+  role,
   defaults,
   t,
   tf,
   submitLabel,
 }: {
   action: Action;
+  role: "LANDLORD" | "AGENT";
   defaults: ListingDefaults;
   t: Dictionary["property"];
   tf: Dictionary["landlord"]["form"];
@@ -230,15 +233,13 @@ export function ListingForm({
       </Section>
 
       <Section title={tf.costs} description={tf.costsHelp}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Text
-            name="rentAmount"
-            label={tf.rent}
-            inputMode="numeric"
-            defaultValue={val("rentAmount", defaults.rentAmount)}
-            errors={err.rentAmount}
-            required
-          />
+        <RentAndFee
+          key={formKey}
+          role={role}
+          initialRent={val("rentAmount", defaults.rentAmount)}
+          tf={tf}
+          errors={err.rentAmount}
+        >
           <Text
             name="advanceMonths"
             label={tf.advanceMonths}
@@ -255,25 +256,17 @@ export function ListingForm({
             defaultValue={val("depositAmount", defaults.depositAmount ?? 0)}
             errors={err.depositAmount}
           />
-          <div>
-            <span className="label">{tf.agentFee}</span>
-            <p className="rounded-lg bg-navy-50 px-3 py-2 font-semibold text-navy-900">
-              {defaults.agentFeeAmount !== undefined
-                ? formatTZS(defaults.agentFeeAmount)
-                : tf.agentFeeCalculatedOnSave}
-            </p>
-            <p className="mt-1 text-xs text-navy-500">{tf.agentFeeAuto}</p>
-            <p className="mt-1 text-xs text-navy-500">{tf.agentFeeOwnerFree}</p>
-          </div>
-        </div>
-        <Text
-          name="agentFeeNote"
-          label={tf.agentFeeNote}
-          hint={tf.agentFeeNoteHint}
-          defaultValue={val("agentFeeNote", defaults.agentFeeNote)}
-          errors={err.agentFeeNote}
-          maxLength={200}
-        />
+        </RentAndFee>
+        {role === "AGENT" ? (
+          <Text
+            name="agentFeeNote"
+            label={tf.agentFeeNote}
+            hint={tf.agentFeeNoteHint}
+            defaultValue={val("agentFeeNote", defaults.agentFeeNote)}
+            errors={err.agentFeeNote}
+            maxLength={200}
+          />
+        ) : null}
         <Text
           name="paymentTerms"
           label={tf.paymentTerms}
@@ -400,6 +393,46 @@ export function ListingForm({
         <SubmitButton className="btn-primary w-full sm:w-auto">{submitLabel}</SubmitButton>
       </div>
     </form>
+  );
+}
+
+function RentAndFee({
+  role,
+  initialRent,
+  tf,
+  errors,
+  children,
+}: {
+  role: "LANDLORD" | "AGENT";
+  initialRent: string;
+  tf: Dictionary["landlord"]["form"];
+  errors?: string[];
+  children: React.ReactNode;
+}) {
+  const [rent, setRent] = useState(initialRent);
+  const amount = parseTZS(rent);
+  const fee = role === "LANDLORD" ? 0 : amount === null ? null : listingAgentFeeAmount(role, amount);
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <Text
+        name="rentAmount"
+        label={tf.rent}
+        inputMode="numeric"
+        value={rent}
+        onChange={(event) => setRent(event.target.value)}
+        errors={errors}
+        required
+      />
+      {children}
+      <div>
+        <span className="label">{tf.agentFee}</span>
+        <p className="rounded-lg bg-navy-50 px-3 py-2 font-semibold text-navy-900" aria-live="polite">
+          {fee === null ? tf.agentFeeCalculatedOnSave : formatTZS(fee)}
+        </p>
+        {role === "AGENT" ? <p className="mt-1 text-xs text-navy-500">{tf.agentFeeAuto}</p> : null}
+        <p className="mt-1 text-xs text-navy-500">{tf.agentFeeOwnerFree}</p>
+      </div>
+    </div>
   );
 }
 

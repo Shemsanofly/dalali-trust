@@ -36,7 +36,7 @@ export function publicListingWhere(): Prisma.PropertyWhereInput {
   return { status: "PUBLISHED", advertiser: { status: "ACTIVE" } };
 }
 
-function listingData(input: ListingInput) {
+function listingData(input: ListingInput, role: Actor["role"]) {
   return {
     title: input.title,
     description: input.description,
@@ -50,7 +50,7 @@ function listingData(input: ListingInput) {
     rentAmount: input.rentAmount,
     advanceMonths: input.advanceMonths,
     depositAmount: input.depositAmount,
-    agentFeeNote: input.agentFeeNote ?? null,
+    agentFeeNote: role === "AGENT" ? (input.agentFeeNote ?? null) : null,
     paymentTerms: input.paymentTerms ?? null,
     bedrooms: input.bedrooms,
     bathrooms: input.bathrooms,
@@ -79,7 +79,7 @@ export async function createListing(actor: Actor, raw: unknown) {
   return prisma.$transaction(async (tx) => {
     const property = await tx.property.create({
       data: {
-        ...listingData(input),
+        ...listingData(input, actor.role),
         // Agent fee is derived from the rent; owners are never charged. Contacts are
         // company contacts now, so any per-listing number is cleared.
         agentFeeAmount: listingAgentFeeAmount(actor.role, input.rentAmount),
@@ -119,7 +119,7 @@ export async function updateListing(actor: Actor, propertyId: string, raw: unkno
     const updated = await tx.property.update({
       where: { id: propertyId },
       data: {
-        ...listingData(input),
+        ...listingData(input, actor.role),
         agentFeeAmount: listingAgentFeeAmount(actor.role, input.rentAmount),
         contactPhone: null,
         contactWhatsapp: null,
@@ -505,9 +505,6 @@ export async function getPublicListing(slug: string, viewer: Actor | null) {
             select: {
               displayName: true,
               agencyName: true,
-              contactPhone: true,
-              whatsappNumber: true,
-              showPhone: true,
             },
           },
         },

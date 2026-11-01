@@ -125,9 +125,9 @@ export async function upsertAdvertiserProfile(actor: Actor, raw: unknown) {
     bio: input.bio ?? null,
     agencyName: input.agencyName ?? null,
     serviceRegions: input.serviceRegions,
-    contactPhone: input.contactPhone ?? null,
-    whatsappNumber: input.whatsappNumber ?? null,
-    showPhone: input.showPhone,
+    contactPhone: null,
+    whatsappNumber: null,
+    showPhone: false,
   };
   await prisma.$transaction(async (tx) => {
     await tx.advertiserProfile.upsert({
@@ -179,7 +179,7 @@ export async function setInitialRole(
     if (role === "LANDLORD" || role === "AGENT") {
       await tx.advertiserProfile.upsert({
         where: { userId },
-        create: { userId, displayName: user.name, contactPhone: phoneNumber ?? null },
+        create: { userId, displayName: user.name, showPhone: false },
         update: {},
       });
     }

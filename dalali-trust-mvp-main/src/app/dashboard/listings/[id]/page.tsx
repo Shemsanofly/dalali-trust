@@ -211,6 +211,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           <div className="border-t border-navy-100 p-4 sm:p-5">
             <ListingForm
               action={updateListingAction}
+              role={actor.role === "AGENT" ? "AGENT" : "LANDLORD"}
               t={t.property}
               tf={tl.form}
               submitLabel={listing.status === "PUBLISHED" ? tl.saveChangesReview : tl.saveChanges}

@@ -7,6 +7,7 @@ process.env.USSD_CALLBACK_TOKEN = "test-ussd-token-1234567890";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/ussd/route";
 import { prisma } from "@/server/db";
+import * as environment from "@/server/env";
 import {
   addListingImages,
   createListing,
@@ -155,7 +156,7 @@ describe("USSD menu", () => {
     const detail = await dial("1*1*1*1*1");
     expect(detail).toMatch(/^CON Mwenge, bedsitter\n/);
     expect(detail).toContain("Rent TSh 150,000/mo");
-    expect(detail).toContain("Move-in TSh 500,000"); // 3 months advance + agent fee
+    expect(detail).toContain("Move-in TSh 450,000"); // 3 months advance; owner fee is zero
     expect(detail).toContain("1. SMS me details");
     expect(detail).not.toContain("ID checked");
 
@@ -165,9 +166,30 @@ describe("USSD menu", () => {
     );
     const sms = log.mock.calls.flat().join("\n");
     expect(sms).toContain(`[sms:console] to=${PHONE}`);
-    expect(sms).toContain(`http://localhost:3000/properties/${listing.slug}`);
+    expect(sms).toContain(`${environment.env().APP_URL.replace(/\/$/, "")}/properties/${listing.slug}`);
     expect(await prisma.analyticsEvent.count({ where: { name: "ussd_sms_details" } })).toBe(1);
   });
+
+  it.each(["+255755111222", undefined])(
+    "uses only company contacts in SMS details (support phone: %s)",
+    async (supportPhone) => {
+      const { landlord, listing } = await publishedListing();
+      const privatePhone = "+255788111222";
+      await prisma.property.update({ where: { id: listing.id }, data: { contactPhone: privatePhone } });
+      await prisma.advertiserProfile.update({
+        where: { userId: landlord.id },
+        data: { contactPhone: "+255799111222", showPhone: true },
+      });
+      vi.spyOn(environment, "env").mockReturnValue({ ...environment.env(), SUPPORT_PHONE: supportPhone });
+      const log = vi.spyOn(console, "info").mockImplementation(() => {});
+      expect(await dial("1*1*1*1*1*1")).toMatch(/^END Details sent by SMS/);
+      const sms = log.mock.calls.flat().join("\n");
+      if (supportPhone) expect(sms).toContain(`Contact: ${supportPhone}`);
+      else expect(sms).not.toContain("Contact:");
+      expect(sms).not.toContain(privatePhone);
+      expect(sms).not.toContain("+255799111222");
+    },
+  );
 
   it("supports back (0), main menu (00), and budgets with no matches", async () => {
     await publishedListing({ rentAmount: 450000 });

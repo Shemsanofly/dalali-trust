@@ -126,7 +126,7 @@ export const en = {
       months: "{count} months",
       total: "Cash needed before moving in",
       breakdown: "{advance} advance rent + {deposit} deposit + {fee} agent fee",
-      note: "Every listing on Estate shows these amounts before you travel.",
+      note: "Agent fees are calculated from the rent. Owner listings have no agent fee. Every listing shows its costs before you travel.",
       cta: "Find homes at this rent",
     },
   },
@@ -208,8 +208,7 @@ export const en = {
     call: "Call",
     whatsapp: "WhatsApp",
     signInToContact: "Sign in to see contact details and request a viewing.",
-    noPhone:
-      "Contact numbers are not available yet. Send a viewing request and our team will call you back.",
+    noPhone: "Contact numbers are not available yet. Send a viewing request and our team will call you back.",
     save: "Save",
     saved: "Saved",
     report: "Report this listing",
@@ -502,7 +501,7 @@ export const en = {
       agentFeeOwnerFree: "Agents only — property owners are never charged.",
       agentFeeCalculatedOnSave: "Calculated from the rent when you save",
       agentFeeNote: "Agent fee details (optional)",
-      agentFeeNoteHint: "E.g. one month's rent, paid after signing the agreement",
+      agentFeeNoteHint: "E.g. paid after signing the agreement. The fee amount is calculated automatically.",
       paymentTerms: "Payment terms (optional)",
       paymentTermsHint: "E.g. 6 months upfront, then quarterly. Payment only after viewing and signing.",
       otherCharges: "Other charges (security, garbage collection, service charge…)",
@@ -591,6 +590,7 @@ export const en = {
     },
     profile: {
       subtitle: "Shown to tenants on your listings.",
+      companyContacts: "Company phone and WhatsApp contacts are displayed on every listing.",
       regions: "Regions you serve",
       showPhone:
         "Show my phone and WhatsApp to signed-in tenants (otherwise tenants can only send viewing requests)",

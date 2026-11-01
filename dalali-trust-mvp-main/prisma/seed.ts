@@ -16,6 +16,7 @@ import { hashPassword } from "better-auth/crypto";
 import sharp from "sharp";
 import { PrismaClient } from "../src/generated/prisma/client";
 import type { PropertyType } from "../src/generated/prisma/enums";
+import { listingAgentFeeAmount } from "../src/lib/fees";
 import { LocalStorage } from "../src/server/storage/local";
 import { S3Storage } from "../src/server/storage/s3";
 import type { ObjectStorage } from "../src/server/storage/types";
@@ -146,7 +147,6 @@ type SampleListing = {
   rent: number;
   advance: number;
   deposit: number;
-  agentFee: number;
   beds: number;
   baths: number;
   amenities: string[];
@@ -165,7 +165,6 @@ const LISTINGS: SampleListing[] = [
     rent: 180000,
     advance: 6,
     deposit: 0,
-    agentFee: 180000,
     beds: 1,
     baths: 1,
     amenities: ["water_tank", "perimeter_wall", "tiled_floors", "near_public_transport"],
@@ -182,7 +181,6 @@ const LISTINGS: SampleListing[] = [
     rent: 750000,
     advance: 6,
     deposit: 750000,
-    agentFee: 750000,
     beds: 2,
     baths: 2,
     amenities: ["parking", "security_guard", "backup_power", "private_kitchen", "balcony"],
@@ -199,7 +197,6 @@ const LISTINGS: SampleListing[] = [
     rent: 90000,
     advance: 3,
     deposit: 0,
-    agentFee: 50000,
     beds: 1,
     baths: 1,
     amenities: ["water_tank", "near_public_transport"],
@@ -214,7 +211,6 @@ const LISTINGS: SampleListing[] = [
     rent: 1500000,
     advance: 6,
     deposit: 1500000,
-    agentFee: 1500000,
     beds: 3,
     baths: 2,
     amenities: ["parking", "perimeter_wall", "gate", "security_guard", "cctv", "pets_allowed"],
@@ -231,7 +227,6 @@ const LISTINGS: SampleListing[] = [
     rent: 300000,
     advance: 3,
     deposit: 300000,
-    agentFee: 0,
     beds: 1,
     baths: 1,
     amenities: ["tiled_floors", "ceiling_board", "private_kitchen"],
@@ -246,7 +241,6 @@ const LISTINGS: SampleListing[] = [
     rent: 450000,
     advance: 6,
     deposit: 0,
-    agentFee: 200000,
     beds: 2,
     baths: 1,
     amenities: ["water_tank", "parking", "perimeter_wall"],
@@ -263,7 +257,6 @@ const LISTINGS: SampleListing[] = [
     rent: 150000,
     advance: 6,
     deposit: 0,
-    agentFee: 75000,
     beds: 1,
     baths: 1,
     amenities: ["tiled_floors", "wardrobe"],
@@ -278,7 +271,6 @@ const LISTINGS: SampleListing[] = [
     rent: 400000,
     advance: 3,
     deposit: 400000,
-    agentFee: 200000,
     beds: 2,
     baths: 1,
     amenities: ["parking", "internet"],
@@ -336,8 +328,8 @@ async function main() {
         rentAmount: l.rent,
         advanceMonths: l.advance,
         depositAmount: l.deposit,
-        agentFeeAmount: l.agentFee,
-        agentFeeNote: l.agentFee ? "Paid after signing the tenancy agreement" : null,
+        agentFeeAmount: listingAgentFeeAmount(advertiser.role, l.rent),
+        agentFeeNote: advertiser.role === "AGENT" ? "Paid after signing the tenancy agreement" : null,
         paymentTerms: `${l.advance} months upfront, paid only after viewing and signing a written agreement.`,
         bedrooms: l.beds,
         bathrooms: l.baths,

@@ -124,7 +124,7 @@ export const sw: Dictionary = {
       months: "Miezi {count}",
       total: "Pesa zinazohitajika kabla ya kuhamia",
       breakdown: "{advance} kodi ya mapema + {deposit} amana + {fee} ada ya dalali",
-      note: "Kila tangazo kwenye Estate linaonyesha kiasi hiki kabla hujasafiri.",
+      note: "Ada ya dalali huhesabiwa kutokana na kodi. Matangazo ya wenye nyumba hayana ada ya dalali. Kila tangazo linaonyesha gharama kabla hujasafiri.",
       cta: "Tafuta nyumba za kodi hii",
     },
   },
@@ -499,7 +499,7 @@ export const sw: Dictionary = {
       agentFeeOwnerFree: "Ni kwa madalali tu — wenyewe nyumba hawalipishwi ada.",
       agentFeeCalculatedOnSave: "Huhesabiwa kutokana na kodi unapohifadhi",
       agentFeeNote: "Maelezo ya ada ya dalali (si lazima)",
-      agentFeeNoteHint: "Mf. kodi ya mwezi mmoja, hulipwa baada ya kusaini mkataba",
+      agentFeeNoteHint: "Mf. hulipwa baada ya kusaini mkataba. Kiasi cha ada huhesabiwa kiotomatiki.",
       paymentTerms: "Masharti ya malipo (si lazima)",
       paymentTermsHint:
         "Mf. miezi 6 mwanzoni, kisha kila miezi 3. Malipo baada ya kuona nyumba na kusaini tu.",
@@ -590,6 +590,7 @@ export const sw: Dictionary = {
     },
     profile: {
       subtitle: "Huonyeshwa kwa wapangaji kwenye matangazo yako.",
+      companyContacts: "Mawasiliano ya simu na WhatsApp ya kampuni huonyeshwa kwenye kila tangazo.",
       regions: "Mikoa unayohudumia",
       showPhone:
         "Onyesha simu na WhatsApp yangu kwa wapangaji walioingia (vinginevyo wapangaji wanaweza kutuma maombi ya kuangalia tu)",

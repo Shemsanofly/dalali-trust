@@ -1,4 +1,3 @@
-import { formatTzPhone } from "@/lib/phone";
 import Link from "next/link";
 import { advertiserProfileAction } from "@/app/actions/account";
 import { ActionForm } from "@/components/ui/action-form";
@@ -66,43 +65,7 @@ export default async function AdvertiserProfilePage() {
               defaultValue={p?.bio ?? ""}
             />
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <label className="label" htmlFor="contactPhone">
-                Contact phone
-              </label>
-              <input
-                className="input"
-                id="contactPhone"
-                name="contactPhone"
-                type="tel"
-                defaultValue={p?.contactPhone ? formatTzPhone(p.contactPhone) : ""}
-                placeholder="07XX XXX XXX"
-              />
-            </div>
-            <div>
-              <label className="label" htmlFor="whatsappNumber">
-                WhatsApp number
-              </label>
-              <input
-                className="input"
-                id="whatsappNumber"
-                name="whatsappNumber"
-                type="tel"
-                defaultValue={p?.whatsappNumber ? formatTzPhone(p.whatsappNumber) : ""}
-                placeholder="07XX XXX XXX"
-              />
-            </div>
-          </div>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              name="showPhone"
-              defaultChecked={p?.showPhone ?? true}
-              className="h-5 w-5 accent-brand-600"
-            />
-            {t.landlord.profile.showPhone}
-          </label>
+          <p className="text-sm text-navy-600">{t.landlord.profile.companyContacts}</p>
           <fieldset>
             <legend className="label">{t.landlord.profile.regions}</legend>
             <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">

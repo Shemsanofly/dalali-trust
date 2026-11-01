@@ -10,7 +10,7 @@ export default async function NewListingPage({
 }: {
   searchParams: Promise<{ welcome?: string }>;
 }) {
-  await requirePageActor({ roles: ["LANDLORD", "AGENT"] });
+  const actor = await requirePageActor({ roles: ["LANDLORD", "AGENT"] });
   const { welcome } = await searchParams;
   const { t } = await getDictionary();
   return (
@@ -24,6 +24,7 @@ export default async function NewListingPage({
       ) : null}
       <ListingForm
         action={createListingAction}
+        role={actor.role === "AGENT" ? "AGENT" : "LANDLORD"}
         defaults={{}}
         t={t.property}
         tf={t.landlord.form}

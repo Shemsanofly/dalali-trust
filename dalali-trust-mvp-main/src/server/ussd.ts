@@ -200,10 +200,8 @@ async function loadListing(id: string) {
       depositAmount: true,
       agentFeeAmount: true,
       availabilityStatus: true,
-      contactPhone: true,
       advertiserId: true,
       charges: { select: { amount: true, frequency: true } },
-      advertiser: { select: { advertiserProfile: { select: { contactPhone: true, showPhone: true } } } },
     },
   });
 }
@@ -326,8 +324,7 @@ async function sendListingSms(listingId: string, lang: Lang, phoneNumber: string
   if (!limit.allowed) return { end: true, body: t.smsLimit };
   const p = await loadListing(listingId);
   if (!p) return { end: true, body: t.listingGone };
-  const profile = p.advertiser.advertiserProfile;
-  const phone = p.contactPhone ?? (profile?.showPhone ? profile.contactPhone : null);
+  const phone = env().SUPPORT_PHONE;
   const text = [
     `Estate: ${p.title}`,
     `${p.neighborhood}, ${p.district}, ${regionName(p.region)}`,
